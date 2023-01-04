@@ -1,13 +1,17 @@
 + TestClass : class
 {
-    purpose { "content and anything else" }
     attributes 
     {
-        + TestAttribute : string
+        + Name : string
+        + Name : string
     }
     methods
     {
-        + TestMethod (parameter1 : string) : void 
-        { purpose { "some random purpose" } }
+        + PerformSomething (Parameter1 : string) : string
+        + PerformSomething (Parameter1 : string) : string
+    }
+    relationships
+    {
+        depends TestClass2
     }
 }
