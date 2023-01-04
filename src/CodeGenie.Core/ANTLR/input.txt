@@ -1,4 +1,13 @@
-+ class TestClassName
++ TestClass : class
 {
-    purpose : { }
+    purpose { "content and anything else" }
+    attributes 
+    {
+        + TestAttribute : string
+    }
+    methods
+    {
+        + TestMethod (parameter1 : string) : void 
+        { purpose { "some random purpose" } }
+    }
 }
