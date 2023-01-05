@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeGenie.Core.Models.Definitions
+namespace CodeGenie.Core.Models.ComponentDefinitions
 {
     public enum Scope
     {

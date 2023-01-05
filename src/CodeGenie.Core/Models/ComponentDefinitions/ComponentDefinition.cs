@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeGenie.Core.Models.Definitions
+namespace CodeGenie.Core.Models.ComponentDefinitions
 {
     /// <summary> A class or interface </summary>
     public class ComponentDefinition
