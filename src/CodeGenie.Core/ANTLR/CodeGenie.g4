@@ -1,7 +1,7 @@
 grammar CodeGenie;
 
 /* Class Definitions */
-class_definition    : component (component)*;
+componentDefinition    : component (component)*;
 
 /* Component Definition */
 component           :   access_scope            // The access_scope of this component

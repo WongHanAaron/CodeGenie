@@ -42,7 +42,7 @@ public partial class CodeGenieParser : Parser {
 		DIVIDER=24, LIST_DIVIDER=25, INTERFACE=26, CLASS=27, NAME=28, NUMBER=29, 
 		STRING=30, WS=31;
 	public const int
-		RULE_class_definition = 0, RULE_component = 1, RULE_component_type = 2, 
+		RULE_componentDefinition = 0, RULE_component = 1, RULE_component_type = 2, 
 		RULE_component_details = 3, RULE_tags = 4, RULE_tag = 5, RULE_purpose = 6, 
 		RULE_attributes = 7, RULE_attribute = 8, RULE_attribute_details = 9, RULE_methods = 10, 
 		RULE_method = 11, RULE_parameter = 12, RULE_method_details = 13, RULE_relationships = 14, 
@@ -53,7 +53,7 @@ public partial class CodeGenieParser : Parser {
 		RULE_specializes_details = 27, RULE_access_scope = 28, RULE_value = 29, 
 		RULE_type = 30;
 	public static readonly string[] ruleNames = {
-		"class_definition", "component", "component_type", "component_details", 
+		"componentDefinition", "component", "component_type", "component_details", 
 		"tags", "tag", "purpose", "attributes", "attribute", "attribute_details", 
 		"methods", "method", "parameter", "method_details", "relationships", "relationship", 
 		"cardinality", "cardinality_count", "dependency", "dependency_details", 
@@ -106,30 +106,30 @@ public partial class CodeGenieParser : Parser {
 		Interpreter = new ParserATNSimulator(this, _ATN, decisionToDFA, sharedContextCache);
 	}
 
-	public partial class Class_definitionContext : ParserRuleContext {
+	public partial class ComponentDefinitionContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ComponentContext[] component() {
 			return GetRuleContexts<ComponentContext>();
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ComponentContext component(int i) {
 			return GetRuleContext<ComponentContext>(i);
 		}
-		public Class_definitionContext(ParserRuleContext parent, int invokingState)
+		public ComponentDefinitionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_class_definition; } }
+		public override int RuleIndex { get { return RULE_componentDefinition; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ICodeGenieVisitor<TResult> typedVisitor = visitor as ICodeGenieVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitClass_definition(this);
+			if (typedVisitor != null) return typedVisitor.VisitComponentDefinition(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public Class_definitionContext class_definition() {
-		Class_definitionContext _localctx = new Class_definitionContext(Context, State);
-		EnterRule(_localctx, 0, RULE_class_definition);
+	public ComponentDefinitionContext componentDefinition() {
+		ComponentDefinitionContext _localctx = new ComponentDefinitionContext(Context, State);
+		EnterRule(_localctx, 0, RULE_componentDefinition);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);

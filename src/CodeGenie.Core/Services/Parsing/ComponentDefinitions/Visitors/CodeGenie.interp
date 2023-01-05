@@ -67,7 +67,7 @@ STRING
 WS
 
 rule names:
-class_definition
+componentDefinition
 component
 component_type
 component_details

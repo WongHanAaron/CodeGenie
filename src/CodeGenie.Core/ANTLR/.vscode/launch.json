@@ -8,7 +8,7 @@
             "input": "input.txt",
             "grammar": "CodeGenie.g4",
             "actionFile": "Actions.js",
-            "startRule": "class_definition",
+            "startRule": "componentDefinition",
             "printParseTree": true,
             "visualParseTree": true
         }

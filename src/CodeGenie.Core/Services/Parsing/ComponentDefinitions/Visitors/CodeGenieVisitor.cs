@@ -32,11 +32,11 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface ICodeGenieVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CodeGenieParser.class_definition"/>.
+	/// Visit a parse tree produced by <see cref="CodeGenieParser.componentDefinition"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitClass_definition([NotNull] CodeGenieParser.Class_definitionContext context);
+	Result VisitComponentDefinition([NotNull] CodeGenieParser.ComponentDefinitionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CodeGenieParser.component"/>.
 	/// </summary>

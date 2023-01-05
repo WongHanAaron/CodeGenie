@@ -19,6 +19,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         }
 
         [TestCase("+ TestClass : class", 1)]
+        [TestCase("+ TestClass : class - TestClass2 : class + TestClass3 : interface", 3)]
         public void Component_Parse_Matches_Count(string script, int expectedCount)
         {
             var components = Parser.Parse(script);
