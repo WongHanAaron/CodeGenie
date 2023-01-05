@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
 {
-    public interface IDefinitionParsers
+    public interface IDefinitionParser
     {
         List<ParsedComponentDefinition> Parse(string classScript);
     }
