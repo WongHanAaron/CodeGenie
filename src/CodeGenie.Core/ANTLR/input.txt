@@ -1,0 +1,17 @@
++ TestClass : class
+{
+    attributes 
+    {
+        + Name : string
+        + Name : string
+    }
+    methods
+    {
+        + PerformSomething (Parameter1 : string) : string
+        + PerformSomething (Parameter1 : string) : string
+    }
+    relationships
+    {
+        depends TestClass2
+    }
+}
