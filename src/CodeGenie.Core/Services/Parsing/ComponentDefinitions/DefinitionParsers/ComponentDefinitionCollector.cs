@@ -3,6 +3,7 @@ using CodeGenie.Core.Models.ComponentDefinitions;
 using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
@@ -18,13 +19,64 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
 
         public override object VisitComponent([NotNull] CodeGenieParser.ComponentContext context)
         {
-            var name = context.NAME().Symbol.Text;
-            var component = new ParsedComponentDefinition()
+            var component = new ParsedComponentDefinition();
+            component.Name = context.NAME().Symbol.Text;
+            component.IsInterface = IsInterface(context.component_type().GetText());
+            
+            var details = VisitComponent_details(context.component_details()) as ParsedComponentDetails;
+            if (details != null)
             {
-                Name = name
+                component.Purpose = details.Purpose;
+                component.Attributes = details.Attributes.Select(a => a as AttributeDefinition).ToList();
             };
+
             _componentDefinitions.Add(component);
             return component;
         }
+
+        protected bool IsInterface(string componentType)
+        {
+            return componentType.Equals("interface", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public override object VisitComponent_details([NotNull] CodeGenieParser.Component_detailsContext context)
+        {
+            if (context == null) return null;
+
+            var componentDetails = new ParsedComponentDetails();
+
+            var collectedParsedAttributes = new List<ParsedAttributeDefinition>();
+            foreach (var attributes in context.attributes() ?? new CodeGenieParser.AttributesContext[0])
+            {
+                var parsedAttributes = VisitAttributes(attributes) as IEnumerable<ParsedAttributeDefinition>;
+                if (parsedAttributes != null) collectedParsedAttributes.AddRange(parsedAttributes);
+            }
+            componentDetails.Attributes = collectedParsedAttributes;
+
+
+            return componentDetails;
+        }
+
+        public override object VisitAttributes([NotNull] CodeGenieParser.AttributesContext context)
+        {
+            if (context == null) return null;
+
+            var attributes = new List<ParsedAttributeDefinition>();
+            foreach (var attribute in context.attribute())
+            {
+                attributes.Add(LoadAttributeDefinition(attribute));
+            }
+            return attributes;
+        }
+
+        protected ParsedAttributeDefinition LoadAttributeDefinition([NotNull] CodeGenieParser.AttributeContext context)
+        {
+            var parsedAttribute = new ParsedAttributeDefinition();
+            parsedAttribute.Name = context.NAME().GetText();
+            parsedAttribute.Type = context.type().GetText();
+            return parsedAttribute;
+        }
+
+
     }
 }

@@ -25,5 +25,33 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             var components = Parser.Parse(script);
             Assert.AreEqual(expectedCount, components.Count(), "The returned count of components do not match the expected count");
         }
+
+        [TestCase("+ TestClass : class", "TestClass", "", false)]
+        [TestCase("+ TestClass2 : interface", "TestClass2", "", true)]
+        [TestCase("+ TestClass3 : interface { purpose : \"Something\"}", "TestClass3", "Something", true)]
+        public void Component_Parse_Matches_Name(string script, string expectedName, string purpose, bool expectIsInterface)
+        {
+            var components = Parser.Parse(script);
+            var first = components.FirstOrDefault();
+            Assert.AreEqual(expectedName, first.Name);
+            Assert.AreEqual(expectIsInterface, first.IsInterface);
+        }
+
+        [TestCase("+ TestClass : class { attributes { + Attribute : string } }", 1)]
+        public void Component_Parse_Attribute_Count_Matches(string script, int expectedAttributeCount)
+        {
+            var components = Parser.Parse(script);
+            Assert.AreEqual(expectedAttributeCount, components.FirstOrDefault().Attributes.Count());
+        }
+
+        [TestCase("+ TestClass : class { attributes { + Attribute : string} }", "Attribute", "string")]
+        public void Component_Parse_Attribute_Name_And_Type_Matches(string script, string expectedName, string expectedType)
+        {
+            var components = Parser.Parse(script);
+            var first = components.FirstOrDefault();
+            var attribute = first.Attributes.FirstOrDefault();
+            Assert.AreEqual(expectedName, attribute.Name);
+            Assert.AreEqual(expectedType, attribute.Type);
+        }
     }
 }

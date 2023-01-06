@@ -13,6 +13,9 @@ namespace CodeGenie.Core.Models.ComponentDefinitions
         /// <summary> The scope of this class </summary>
         public Scope Scope { get; set; }
 
+        /// <summary> Whether this component is an interface or not </summary>
+        public bool IsInterface { get; set; }
+
         /// <summary> The purpose of this component </summary>
         public string Purpose { get; set; }
 
