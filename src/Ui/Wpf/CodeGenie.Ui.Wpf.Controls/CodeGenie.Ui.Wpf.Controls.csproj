@@ -7,7 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CodeEditor\Resources\ComponentDefinitionHighlighting.xshd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CodeEditor\Resources\ComponentDefinitionHighlighting.xshd" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CodeEditor\Models\" />
   </ItemGroup>
 
 </Project>

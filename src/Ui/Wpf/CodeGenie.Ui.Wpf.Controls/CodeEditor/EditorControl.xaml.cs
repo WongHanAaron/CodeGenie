@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
         public EditorControl()
         {
             InitializeComponent();
+            LoadComponents();
+        }
+
+        public void LoadComponents()
+        {
+            TextEditor.SyntaxHighlighting = new HighlightingDefinitionAccessor().GetHighlightingDefinition();
         }
     }
 }

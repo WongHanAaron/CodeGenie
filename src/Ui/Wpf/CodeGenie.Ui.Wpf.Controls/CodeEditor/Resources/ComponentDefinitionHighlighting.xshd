@@ -1,0 +1,71 @@
+﻿<SyntaxDefinition name="CodeGenie"
+        xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="String" foreground="DarkBlue" />
+  <Color name="Name" foreground="Teal" />
+  <Color name="Type" foreground="Teal" fontWeight="bold"/>
+  <Color name="ComponentType" foreground="Blue" />
+  <Color name="DetailKeyword" foreground="Blue" fontWeight="bold"/>
+  <Color name="Scope" foreground="Blue" fontWeight="bold"/>
+
+  <!-- This is the main ruleset. -->
+  <RuleSet>
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- nested span for escape sequences -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <Keywords color="DetailKeyword">
+      <Word>tags</Word>
+      <Word>purpose</Word>
+      <Word>attributes</Word>
+      <Word>methods</Word>
+      <Word>relationships</Word>
+      <Word>cardinality</Word>
+      <Word>depends</Word>
+      <Word>composes</Word>
+      <Word>aggregates</Word>
+      <Word>realizes</Word>
+      <Word>specializes</Word>
+    </Keywords>
+
+    <Rule color="Name">
+      \b
+      [\d\w_]+
+      (?=\s+:)
+    </Rule>
+
+    <!--<Rule color="Type">
+      (?&lt;!:\s+)
+      [\w][]
+      (?=\s)
+    </Rule>-->
+
+    <Keywords color="ComponentType">
+      <Word>class</Word>
+      <Word>interface</Word>
+    </Keywords>
+
+    <Keywords color="Scope">
+      <Word>+</Word>
+      <Word>public</Word>
+      <Word>-</Word>
+      <Word>private</Word>
+      <Word>#</Word>
+      <Word>protected</Word>
+    </Keywords>
+
+    <!-- Digits -->
+    <Rule foreground="DarkBlue">
+      \b0[xX][0-9a-fA-F]+  # hex number
+      |    \b
+      (    \d+(\.[0-9]+)?   #number with optional floating point
+      |    \.[0-9]+         #or just starting with floating point
+      )
+      ([eE][+-]?[0-9]+)? # optional exponent
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>
