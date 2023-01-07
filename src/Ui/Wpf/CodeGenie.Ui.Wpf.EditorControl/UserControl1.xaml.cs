@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CodeGenie.Core.Ui.Wpf.EditorControl
+namespace CodeGenie.Ui.Wpf.EditorControl
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
