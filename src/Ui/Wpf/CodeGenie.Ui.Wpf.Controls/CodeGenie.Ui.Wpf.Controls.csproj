@@ -10,8 +10,4 @@
     <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\CodeGenie.Core\CodeGenie.Core.csproj" />
-  </ItemGroup>
-
 </Project>

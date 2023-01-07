@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CodeGenie.Ui.Wpf.EditorControl
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for EditorControl.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class EditorControl : UserControl
     {
-        public UserControl1()
+        public EditorControl()
         {
             InitializeComponent();
         }

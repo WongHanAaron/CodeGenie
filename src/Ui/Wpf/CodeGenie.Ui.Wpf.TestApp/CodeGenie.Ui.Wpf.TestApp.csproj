@@ -7,4 +7,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\CodeGenie.Core\CodeGenie.Core.csproj" />
+    <ProjectReference Include="..\CodeGenie.Ui.Wpf.Controls\CodeGenie.Ui.Wpf.Controls.csproj" />
+  </ItemGroup>
+
 </Project>
