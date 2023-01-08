@@ -12,24 +12,63 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
     /// </summary>
     public class DefinitionParser : IDefinitionParser
     {
-        public List<ParsedComponentDefinition> Parse(string classScript)
+        public ParsingResult Parse(string classScript)
         {
-            var definitionContext = GetContext(classScript);
+            var contextParseResult = GetContext(classScript);
+
+            if (contextParseResult.HasErrors) return contextParseResult;
+
             var collector = new ComponentDefinitionCollector();
-            collector.Visit(definitionContext);
-            return collector.ComponentDefinitions.ToList();
+
+            collector.Visit(contextParseResult.Context);
+            
+            var components = collector.ComponentDefinitions.ToList();
+
+            return new ParsingResult(components, contextParseResult.Context);
         }
 
         // Returns the component definition context that can be used to visit the syntax tree
         // Reference: https://tomassetti.me/getting-started-with-antlr-in-csharp/
-        public CodeGenieParser.ComponentDefinitionContext GetContext(string classScript)
+        public ParsingResult GetContext(string classScript)
         {
+            var errors = new List<ParsingError>();
+
+            var lexingErrorCollector = new CodeGenieErrorCollector<int>();
+
+            var parsingErrorCollector = new CodeGenieErrorCollector<IToken>();
+
             var inputStream = new AntlrInputStream(classScript);
+
             var speakLexer = new CodeGenieLexer(inputStream);
+            
+            speakLexer.AddErrorListener(lexingErrorCollector);
+            
             var commonTokenStream = new CommonTokenStream(speakLexer);
+            
             var speakParser = new CodeGenieParser(commonTokenStream);
+            
+            speakParser.AddErrorListener(parsingErrorCollector);
+
             var context = speakParser.componentDefinition();
-            return context;
+
+            if (lexingErrorCollector.Errors.Any())
+            {
+                errors.AddRange(lexingErrorCollector.Errors);
+            }
+            
+            if (parsingErrorCollector.Errors.Any())
+            {
+                errors.AddRange(parsingErrorCollector.Errors);
+            }
+
+            if (errors.Any())
+            {
+                return new ParsingResult(errors);
+            }
+            else
+            {
+                return new ParsingResult(context);
+            }
         }
     }
 }

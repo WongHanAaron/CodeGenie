@@ -7,6 +7,6 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
 {
     public interface IDefinitionParser
     {
-        List<ParsedComponentDefinition> Parse(string classScript);
+        ParsingResult Parse(string classScript);
     }
 }
