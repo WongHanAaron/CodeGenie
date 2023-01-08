@@ -1,10 +1,10 @@
 ﻿<SyntaxDefinition name="CodeGenie"
         xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
   <Color name="String" foreground="DarkBlue" />
-  <Color name="Name" foreground="Teal" />
-  <Color name="Type" foreground="Teal" fontWeight="bold"/>
+  <Color name="Name" foreground="Teal" fontWeight="bold"/>
+  <Color name="Type" foreground="Teal" />
   <Color name="ComponentType" foreground="Blue" />
-  <Color name="DetailKeyword" foreground="Blue" fontWeight="bold"/>
+  <Color name="DetailKeyword" foreground="Blue" />
   <Color name="Scope" foreground="Blue" fontWeight="bold"/>
 
   <!-- This is the main ruleset. -->
@@ -35,14 +35,18 @@
     <Rule color="Name">
       \b
       [\d\w_]+
-      (?=\s+:)
+      (?=\s*:)
     </Rule>
 
-    <!--<Rule color="Type">
-      (?&lt;!:\s+)
-      [\w][]
-      (?=\s)
-    </Rule>-->
+    <Rule color="Type">
+      (?&lt;=:\s+)
+      [\w][\w0-9]*\b
+    </Rule>
+
+    <Rule color="Name">
+      (?&lt;=(depends|composes|aggregates|realizes|specializes)\s+)
+      [\w][\w0-9]*\b
+    </Rule>
 
     <Keywords color="ComponentType">
       <Word>class</Word>
