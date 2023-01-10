@@ -11,12 +11,12 @@ using CodeGenie.Ui.Wpf.Controls.CodeEditor.Resources;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services
 {
-    public interface IHighlightSchemaAccessor
+    public interface IHighlightDefinitionAccessor
     {
         IHighlightingDefinition GetHighlightingDefinition();
     }
 
-    public class HighlightingDefinitionAccessor : IHighlightSchemaAccessor
+    public class HighlightingDefinitionAccessor : IHighlightDefinitionAccessor
     {
         public IHighlightingDefinition GetHighlightingDefinition()
         {

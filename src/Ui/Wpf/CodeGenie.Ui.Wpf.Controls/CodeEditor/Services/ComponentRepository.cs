@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services
 {
     /// <summary> The component for storing the defined components in this session </summary>
-    public interface IComponentRepository
+    public interface IComponentRepository : IComponentDefinitionProvider
     {
         /// <summary> Update the list of components within the repository </summary>
         void UpdateComponents(ParsingResult result);
@@ -21,22 +21,21 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services
         public ParsingResult CurrentComponents { get; }
     }
 
-    public class ComponentRepository : IComponentDefinitionProvider, IComponentRepository
+    public class ComponentRepository : IComponentRepository
     {
-        public ParsingResult LastValidComponents => throw new NotImplementedException();
+        public ParsingResult LastValidComponents { get; protected set; }
 
-        public ParsingResult CurrentComponents => throw new NotImplementedException();
+        public ParsingResult CurrentComponents { get; protected set; }
 
-        public EventHandler<ParsingResult> OnComponentDefinitionsDefined { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public EventHandler<ParsingResult> OnComponentDefinitionsDefined { get; set; }
 
-        public ParsingResult GetCurrentlyDefinedComponents()
-        {
-            throw new NotImplementedException();
-        }
+        public ParsingResult GetCurrentlyDefinedComponents() => CurrentComponents;
 
         public void UpdateComponents(ParsingResult result)
         {
-            throw new NotImplementedException();
+            CurrentComponents = result;
+            if (!CurrentComponents.HasErrors) LastValidComponents = result;
+            OnComponentDefinitionsDefined?.Invoke(this, CurrentComponents);
         }
     }
 }

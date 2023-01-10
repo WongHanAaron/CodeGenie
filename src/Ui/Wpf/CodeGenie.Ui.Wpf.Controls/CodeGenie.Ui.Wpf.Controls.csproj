@@ -16,13 +16,12 @@
 
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.2.0.78" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CodeEditor\Models\" />
-    <Folder Include="CodeEditor\Services\Compiling\" />
-    <Folder Include="CodeEditor\Services\EditorTrackers\" />
     <Folder Include="MessageBoard\Services\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>

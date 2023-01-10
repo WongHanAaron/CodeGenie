@@ -1,6 +1,6 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
     /// <summary>
     /// Interaction logic for EditorControl.xaml
     /// </summary>
-    public partial class EditorControl : UserControl, IComponentDefinitionProvider
+    public partial class EditorControl : UserControl
     {
         public EditorControl()
         {
@@ -32,15 +32,9 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
 
         public void LoadComponents()
         {
-            var configurer = ServiceProvider.GetService<IAvalonEditConfigurer>();
-            configurer.Configure(TextEditor);
+            var setupService = ServiceProvider.GetService<ICodeEditorSetupService>();
+            setupService.Setup(TextEditor);
         }
-
-        public ParsingResult GetCurrentlyDefinedComponents()
-        {
-            return null;
-        }
-
 
         #region Dependency Properties
         public static readonly DependencyProperty ServiceProviderProperty =
@@ -57,14 +51,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
                 editor.LoadComponents();
             }
         }
-
-        public static readonly DependencyProperty OnComponentDefinitionsDefinedProperty = 
-            DependencyProperty.Register(nameof(OnComponentDefinitionsDefined), 
-                typeof(EventHandler<ParsingResult>), 
-                typeof(EditorControl));
-        public EventHandler<ParsingResult> OnComponentDefinitionsDefined { get => (EventHandler<ParsingResult>)GetValue(ServiceProviderProperty); set => SetValue(ServiceProviderProperty, value); }
-
-
         #endregion
     }
 }
