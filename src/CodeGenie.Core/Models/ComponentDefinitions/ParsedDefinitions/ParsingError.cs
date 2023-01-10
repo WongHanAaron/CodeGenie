@@ -8,6 +8,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
     /// <summary> The erroneously parsed token or location </summary>
     public class ScriptError : ParsedToken
     {
+        public ScriptError() { }
         public Exception Exception { get; set; }
     }
 }

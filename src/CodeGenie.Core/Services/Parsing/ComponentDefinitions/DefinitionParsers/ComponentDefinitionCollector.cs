@@ -22,14 +22,20 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
             var component = new ParsedComponentDefinition();
             component.Name = context.NAME().Symbol.Text;
             component.IsInterface = IsInterface(context.component_type().GetText());
-            
-            var details = VisitComponent_details(context.component_details()) as ParsedComponentDetails;
+
+            var start = context.Start;
+            var stop = context.Stop;
+
+            var componentDetailsContext = context.component_details();
+            var details = VisitComponent_details(componentDetailsContext) as ParsedComponentDetails;
             if (details != null)
             {
                 component.Purpose = details.Purpose;
                 component.Attributes = details.Attributes.Select(a => a as AttributeDefinition).ToList();
+                stop = componentDetailsContext.Stop;
             };
 
+            component.ParsedToken = ParsedToken.Create<ParsedToken>(start, stop);
             _componentDefinitions.Add(component);
             return component;
         }
@@ -45,6 +51,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
 
             var componentDetails = new ParsedComponentDetails();
 
+            // Parse Attributes
             var collectedParsedAttributes = new List<ParsedAttributeDefinition>();
             foreach (var attributes in context.attributes() ?? new CodeGenieParser.AttributesContext[0])
             {

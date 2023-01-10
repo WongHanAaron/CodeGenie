@@ -54,13 +54,31 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.AreEqual(expectedType, attribute.Type);
         }
 
-        [TestCase("+ Testclass : somehing", true)]
+        [TestCase("+ Testclass : something", true)]
         [TestCase("TestClass : class",  true)]
         public void Component_Parsing_Error(string script, bool expectError)
         {
             var result = Parser.Parse(script);
 
             Assert.AreEqual(expectError, result.HasErrors);
+        }
+
+        [TestCase("+ TestClass : class", "TestClass", 0, 18, 1, 0)]
+        [TestCase("+ TestClass : class\n+ TestClass2 : class", "TestClass2", 20, 39, 2, 0)]
+        public void Component_Parse_Correct_Positions(string script, string componentToTest, int startIndex, int endIndex, int lineNumber, int columnPosition)
+        {
+            var result = Parser.Parse(script);
+
+            Assert.AreEqual(false, result.HasErrors, "Don't expect any parsing errors from this");
+
+            var component = result.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
+
+            Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
+
+            Assert.AreEqual(startIndex, component.ParsedToken.StartIndex);
+            Assert.AreEqual(endIndex, component.ParsedToken.EndIndex);
+            Assert.AreEqual(lineNumber, component.ParsedToken.LineNumber);
+            Assert.AreEqual(columnPosition, component.ParsedToken.ColumnIndex);
         }
     }
 }

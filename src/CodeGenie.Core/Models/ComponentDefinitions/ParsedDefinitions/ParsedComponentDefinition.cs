@@ -6,6 +6,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
 {
     public class ParsedComponentDefinition : ComponentDefinition
     {
-
+        /// <summary> The parsed token for this component </summary>
+        public ParsedToken ParsedToken { get; set; }
     }
 }

@@ -27,11 +27,9 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidator
         {
             foreach (var c in duplicatedComponents)
             {
-                yield return new ScriptError()
-                {
-                    // TODO: Include line information for script error
-                    Exception = new DuplicateComponentDefinitionException(c.Name)
-                };
+                var returned = ParsedToken.Create<ScriptError>(c.ParsedToken.Token);
+                returned.Exception = new DuplicateComponentDefinitionException(c.Name);
+                yield return returned;
             }
         }
 

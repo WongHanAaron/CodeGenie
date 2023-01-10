@@ -12,19 +12,19 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
         public List<ScriptError> Errors { get; set; } = new List<ScriptError>();
         public void SyntaxError(TextWriter output, IRecognizer recognizer, T offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
         {
-            IToken errorSymbol = null;
+            ScriptError error = null;
             if (offendingSymbol is IToken offendingToken)
             {
-                errorSymbol = offendingToken;
+                error = ParsedToken.Create<ScriptError>(offendingToken);
+            }
+            else
+            {
+                error = new ScriptError();
             }
 
-            Errors.Add(new ScriptError()
-            {
-                Token = errorSymbol,
-                Exception = e,
-                LineNumber = line,
-                CharacterPositionInLine = charPositionInLine
-            });
+            error.Exception = e;
+
+            Errors.Add(error);
         }
     }
 }

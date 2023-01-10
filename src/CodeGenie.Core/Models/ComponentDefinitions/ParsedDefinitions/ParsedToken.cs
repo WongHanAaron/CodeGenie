@@ -10,6 +10,32 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
     {
         public IToken Token { get; set; }
         public int LineNumber { get; set; }
-        public int CharacterPositionInLine { get; set; }
+        public int ColumnIndex { get; set; }
+        public int StartIndex { get; set; }
+        public int EndIndex { get; set; }
+
+        public static TToken Create<TToken>(IToken token) where TToken : ParsedToken, new()
+        {
+            return new TToken()
+            {
+                Token = token,
+                LineNumber = token.Line,
+                ColumnIndex = token.Column,
+                StartIndex = token.StartIndex,
+                EndIndex = token.StopIndex
+            };
+        }
+
+        public static TToken Create<TToken>(IToken start, IToken end) where TToken : ParsedToken, new()
+        {
+            return new TToken()
+            {
+                Token = start,
+                LineNumber = start.Line,
+                ColumnIndex = start.Column,
+                StartIndex = start.StartIndex,
+                EndIndex = end.StopIndex
+            };
+        }
     }
 }
