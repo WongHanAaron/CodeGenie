@@ -34,6 +34,9 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidator
                 errors.AddRange(priorParsingResult.Errors);
             }
 
+            if (priorParsingResult.Components == null) 
+                return new ParsingResult(errors);
+
             foreach (var validator in Validators)
             {
                 var parsingErrors = validator.Validate(priorParsingResult.Components);

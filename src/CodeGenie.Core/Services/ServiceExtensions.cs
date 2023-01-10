@@ -1,4 +1,5 @@
 ﻿using CodeGenie.Core.Models.Configuration;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators.Validations;
@@ -21,6 +22,7 @@ namespace CodeGenie.Core.Services
             serviceCollection.AddLoggerProviders(options);
             serviceCollection.AddDefinitionParserDependencies();
             serviceCollection.AddSemanticValidatorDependencies();
+            serviceCollection.AddTransient<IComponentCompiler, ComponentCompiler>();
         }
 
         private static void AddLoggerProviders(this IServiceCollection serviceCollection, ServiceCreationOptions options)
@@ -42,13 +44,14 @@ namespace CodeGenie.Core.Services
 
         private static void AddDefinitionParserDependencies(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddTransient<IComponentDefinitionParser, DefinitionParser>();
+            serviceCollection.AddTransient<IComponentDefinitionParser, ComponentDefinitionParser>();
         }
 
         private static void AddSemanticValidatorDependencies(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<ISemanticValidator, ClusteredSemanticValidator>();
             serviceCollection.AddTransient<IComponentValidation, DuplicateComponentValidation>();
+            serviceCollection.AddTransient<IComponentValidation, EmptyNameValidation>();
         }
     }
 }

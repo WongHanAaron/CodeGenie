@@ -10,7 +10,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
     /// <summary>
     /// The implementation to parse a string script into a list of parsed out component definitions
     /// </summary>
-    public class DefinitionParser : IComponentDefinitionParser
+    public class ComponentDefinitionParser : IComponentDefinitionParser
     {
         public ParsingResult Parse(string classScript)
         {
@@ -22,7 +22,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
 
             collector.Visit(contextParseResult.Context);
             
-            var components = collector.ComponentDefinitions.ToList();
+            var components = collector.ComponentDefinitions.Where(c => c!= null).ToList();
 
             return new ParsingResult(components, contextParseResult.Context);
         }

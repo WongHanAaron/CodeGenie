@@ -7,6 +7,6 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidator
 {
     public interface IComponentValidation
     {
-        IEnumerable<ScriptError> Validate(IEnumerable<ParsedComponentDefinition> components);
+        IEnumerable<ScriptError> Validate(IEnumerable<ParsedComponentDefinition> results);
     }
 }

@@ -12,7 +12,9 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidator
         {
             var errors = new List<ScriptError>();
 
-            var duplicateComponentNames = components.GroupBy(c => c.Name).Where(g => g.Count() > 1);
+            var duplicateComponentNames = components.Where(c => !string.IsNullOrEmpty(c.Name))
+                                                    .GroupBy(c => c.Name)
+                                                    .Where(g => g.Count() > 1);
             
             foreach (var duplicate in duplicateComponentNames)
             {

@@ -37,5 +37,16 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
                 EndIndex = end.StopIndex
             };
         }
+        public static TToken Create<TToken>(ParsedToken token) where TToken : ParsedToken, new()
+        {
+            return new TToken()
+            {
+                Token = token.Token,
+                LineNumber = token.LineNumber,
+                ColumnIndex = token.ColumnIndex,
+                StartIndex = token.StartIndex,
+                EndIndex = token.EndIndex
+            };
+        }
     }
 }
