@@ -1,5 +1,7 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers;
 using CodeGenie.Ui.Wpf.Controls.Shared.Services;
 using ICSharpCode.AvalonEdit;
 using Microsoft.Extensions.Logging;
@@ -27,17 +29,26 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
         protected readonly IDateTimeProvider DateTimeProvider;
         protected readonly IHighlightDefinitionAccessor HighlightSchemaAccessor;
         protected readonly ITextUpdateListener TextUpdateListener;
+        protected readonly ITextMarkerService TextMarkerService;
+        protected readonly ITextViewEventListener TextViewEventListener;
+        protected readonly IComponentDefinitionMarker ComponentDefinitionMarker;
 
         protected TextEditor LastConfiguredEditor { get; set; }
         public AvalonEditConfigurer(ILogger<AvalonEditConfigurer> logger,
                                     IDateTimeProvider dateTimeProvider,
                                     IHighlightDefinitionAccessor highlightSchemaAccessor,
-                                    ITextUpdateListener textUpdateListener)
+                                    ITextUpdateListener textUpdateListener,
+                                    ITextMarkerService textMarkerService,
+                                    ITextViewEventListener textViewEventListener,
+                                    IComponentDefinitionMarker componentDefinitionMarker)
         {
             Logger = logger;
             DateTimeProvider = dateTimeProvider;
             HighlightSchemaAccessor = highlightSchemaAccessor;
             TextUpdateListener = textUpdateListener;
+            TextMarkerService = textMarkerService;
+            TextViewEventListener = textViewEventListener;
+            ComponentDefinitionMarker = componentDefinitionMarker;
         }
 
         public void Configure(TextEditor textEditor)
@@ -45,7 +56,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
             LastConfiguredEditor = textEditor;
             ConfigureSyntaxHighlighting(textEditor);
             ConfigureErrorHighlighting(textEditor);
-            ConfigureTextUpdateListener(textEditor);
+            ConfigureTrackers(textEditor);
         }
 
         protected void ConfigureSyntaxHighlighting(TextEditor textEditor)
@@ -55,12 +66,14 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
 
         protected void ConfigureErrorHighlighting(TextEditor textEditor)
         {
-
+            TextMarkerService.InjectEditor(textEditor);
+            ComponentDefinitionMarker.InjectEditor(textEditor);
         }
 
-        protected void ConfigureTextUpdateListener(TextEditor textEditor)
+        protected void ConfigureTrackers(TextEditor textEditor)
         {
             textEditor.TextChanged += TextEditor_TextChanged;
+            TextViewEventListener.InjectEditor(textEditor);
         }
 
         private void TextEditor_TextChanged(object? sender, EventArgs e)
@@ -75,6 +88,9 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
         public void TearDown(TextEditor textEditor)
         {
             textEditor.TextChanged -= TextEditor_TextChanged;
+            TextMarkerService.TearDownEditor(textEditor);
+            TextViewEventListener.TearDownEditor(textEditor);
+            ComponentDefinitionMarker.TearDownEditor(textEditor);
         }
     }
 }

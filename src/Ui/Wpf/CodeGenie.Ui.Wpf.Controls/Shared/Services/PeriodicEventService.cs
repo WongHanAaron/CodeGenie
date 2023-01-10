@@ -47,7 +47,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Shared.Services
             {
                 try
                 {
-                    Logger.LogTrace($"Invoking '{OnPeriodElapsed}' for {MillisecondPeriod}ms period");
+                    // Logger.LogTrace($"Invoking '{nameof(OnPeriodElapsed)}' for {MillisecondPeriod}ms period");
                     OnPeriodElapsed?.Invoke(this, new EventArgs());
                 }
                 catch (Exception ex)

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using CodeGenie.Core.Models.Configuration;
 using Microsoft.Extensions.Logging.Debug;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
 {
@@ -41,9 +42,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
             serviceCollection.AddSingleton<ICodeEditorSetupService, CodeEditorSetupService>();
             serviceCollection.AddTransient<IHighlightDefinitionAccessor, HighlightingDefinitionAccessor>();
             serviceCollection.AddSingleton<ITextUpdateListener, TextUpdateListener>();
+            serviceCollection.AddSingleton<ITextViewEventListener, TextViewEventListener>();
             serviceCollection.AddSingleton<IComponentRepository, ComponentRepository>();
             serviceCollection.AddTransient<IComponentDefinitionProvider>(s => s.GetService<IComponentRepository>());
             serviceCollection.AddSingleton<IComponentCompilationService, ComponentCompilationService>();
+            serviceCollection.AddSingleton<IComponentDefinitionMarker, ComponentDefinitionErrorMarker>();
+            serviceCollection.AddSingleton<ITextMarkerService, TextMarkerService>();
+            serviceCollection.AddSingleton<IComponentDefinitionMarker, ComponentDefinitionErrorMarker>();
         }
     }
 }
