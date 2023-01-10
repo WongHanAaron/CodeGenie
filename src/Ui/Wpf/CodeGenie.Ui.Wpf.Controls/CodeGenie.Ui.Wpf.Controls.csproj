@@ -20,7 +20,13 @@
 
   <ItemGroup>
     <Folder Include="CodeEditor\Models\" />
-    <Folder Include="CodeEditor\Services\NewFolder\" />
+    <Folder Include="CodeEditor\Services\Compiling\" />
+    <Folder Include="CodeEditor\Services\EditorTrackers\" />
+    <Folder Include="MessageBoard\Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\CodeGenie.Core\CodeGenie.Core.csproj" />
   </ItemGroup>
 
 </Project>

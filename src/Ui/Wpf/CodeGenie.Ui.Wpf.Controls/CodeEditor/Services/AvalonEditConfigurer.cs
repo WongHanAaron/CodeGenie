@@ -18,6 +18,12 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services
 
     public class AvalonEditConfigurer : IAvalonEditConfigurer
     {
+        protected readonly IHighlightSchemaAccessor HighlightSchemaAccessor;
+        public AvalonEditConfigurer(IHighlightSchemaAccessor highlightSchemaAccessor)
+        {
+            HighlightSchemaAccessor = highlightSchemaAccessor;
+        }
+
         public void Configure(TextEditor textEditor)
         {
             ConfigureSyntaxHighlighting(textEditor);
@@ -26,7 +32,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services
 
         protected void ConfigureSyntaxHighlighting(TextEditor textEditor)
         {
-            textEditor.SyntaxHighlighting = new HighlightingDefinitionAccessor().GetHighlightingDefinition();
+            textEditor.SyntaxHighlighting = HighlightSchemaAccessor.GetHighlightingDefinition();
         }
 
         protected void ConfigureErrorHighlighting(TextEditor textEditor)

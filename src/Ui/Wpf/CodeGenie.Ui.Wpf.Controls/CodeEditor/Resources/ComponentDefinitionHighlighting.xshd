@@ -1,7 +1,7 @@
 ﻿<SyntaxDefinition name="CodeGenie"
         xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
   <Color name="String" foreground="DarkBlue" />
-  <Color name="Name" foreground="Teal" fontWeight="bold"/>
+  <Color name="Name" foreground="Teal" />
   <Color name="Type" foreground="Teal" />
   <Color name="ComponentType" foreground="Blue" />
   <Color name="DetailKeyword" foreground="Blue" />

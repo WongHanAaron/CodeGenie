@@ -5,9 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CodeGenie.Ui.Wpf.TestApp"
         xmlns:editor="clr-namespace:CodeGenie.Ui.Wpf.Controls.CodeEditor;assembly=CodeGenie.Ui.Wpf.Controls"
+        xmlns:ctree="clr-namespace:CodeGenie.Ui.Wpf.Controls.ComponentTree;assembly=CodeGenie.Ui.Wpf.Controls"
+        xmlns:message="clr-namespace:CodeGenie.Ui.Wpf.Controls.MessageBoard;assembly=CodeGenie.Ui.Wpf.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <editor:EditorControl />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+        <editor:EditorControl/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+        <ctree:ComponentTreeControl Grid.Column="2"/>
+        <GridSplitter Grid.ColumnSpan="3" Grid.Row="1" HorizontalAlignment="Stretch"/>
+        <message:MessageBoardControl Grid.ColumnSpan="3" Grid.Row="2"/>
     </Grid>
 </Window>
