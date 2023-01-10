@@ -1,8 +1,12 @@
 ﻿using CodeGenie.Core.Models.Configuration;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators.Validations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CodeGenie.Core.Services
@@ -14,12 +18,37 @@ namespace CodeGenie.Core.Services
         {
             var options = new ServiceCreationOptions();
             creationOptions?.Invoke(options);
-            AddDefinitionParserDependencies(serviceCollection);
+            serviceCollection.AddLoggerProviders(options);
+            serviceCollection.AddDefinitionParserDependencies();
+            serviceCollection.AddSemanticValidatorDependencies();
         }
 
-        private static void AddDefinitionParserDependencies(IServiceCollection serviceCollection)
+        private static void AddLoggerProviders(this IServiceCollection serviceCollection, ServiceCreationOptions options)
         {
-            serviceCollection.AddTransient<IDefinitionParser, DefinitionParser>();
+            if (options == null) return;
+            if (options.LoggerProviders == null) return;
+            if (!options.LoggerProviders.Any()) return;
+
+            serviceCollection.AddLogging(builder => 
+            {
+                builder.ClearProviders();
+                builder.SetMinimumLevel(LogLevel.Trace);
+                foreach (var provider in options.LoggerProviders)
+                {
+                    builder.AddProvider(provider);
+                }
+            });
+        }
+
+        private static void AddDefinitionParserDependencies(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<IComponentDefinitionParser, DefinitionParser>();
+        }
+
+        private static void AddSemanticValidatorDependencies(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<ISemanticValidator, ClusteredSemanticValidator>();
+            serviceCollection.AddTransient<IComponentValidation, DuplicateComponentValidation>();
         }
     }
 }

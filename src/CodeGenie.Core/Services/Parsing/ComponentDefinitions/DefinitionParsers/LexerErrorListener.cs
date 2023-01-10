@@ -9,7 +9,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
 {
     public class CodeGenieErrorCollector<T> : IAntlrErrorListener<T>
     {
-        public List<ParsingError> Errors { get; set; } = new List<ParsingError>();
+        public List<ScriptError> Errors { get; set; } = new List<ScriptError>();
         public void SyntaxError(TextWriter output, IRecognizer recognizer, T offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
         {
             IToken errorSymbol = null;
@@ -18,7 +18,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
                 errorSymbol = offendingToken;
             }
 
-            Errors.Add(new ParsingError()
+            Errors.Add(new ScriptError()
             {
                 Token = errorSymbol,
                 Exception = e,

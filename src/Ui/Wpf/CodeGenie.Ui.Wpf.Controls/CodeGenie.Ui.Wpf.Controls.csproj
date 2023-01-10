@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="CodeEditor\Models\" />
+    <Folder Include="CodeEditor\Services\NewFolder\" />
   </ItemGroup>
 
 </Project>

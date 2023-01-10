@@ -29,7 +29,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
 
         public void LoadComponents()
         {
-            TextEditor.SyntaxHighlighting = new HighlightingDefinitionAccessor().GetHighlightingDefinition();
+            var configurer = new AvalonEditConfigurer();
+            configurer.Configure(TextEditor);
         }
     }
 }

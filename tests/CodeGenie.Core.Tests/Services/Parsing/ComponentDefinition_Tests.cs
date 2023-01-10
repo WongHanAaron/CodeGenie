@@ -8,13 +8,13 @@ namespace CodeGenie.Core.Tests.Services.Parsing
     [TestFixture]
     public class ComponentDefinition_Tests : ComponentDefinitionParserTestBase
     {
-        IDefinitionParser Parser;
+        IComponentDefinitionParser Parser;
 
         [SetUp]
         public void SetUp()
         {
             ServiceProvider = BuildServiceProvider();
-            Parser = ServiceProvider.GetService<IDefinitionParser>();
+            Parser = ServiceProvider.GetService<IComponentDefinitionParser>();
             Assert.IsNotNull(Parser, "The parser could not be injected");
         }
 

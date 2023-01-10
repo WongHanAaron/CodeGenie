@@ -5,11 +5,9 @@ using System.Text;
 
 namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
 {
-    public class ParsingError
+    /// <summary> The erroneously parsed token or location </summary>
+    public class ScriptError : ParsedToken
     {
-        public IToken Token { get; set; }
-        public int LineNumber { get; set; }
-        public int CharacterPositionInLine { get; set; }
-        public RecognitionException Exception { get; set; }
+        public Exception Exception { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
     /// <summary>
     /// The implementation to parse a string script into a list of parsed out component definitions
     /// </summary>
-    public class DefinitionParser : IDefinitionParser
+    public class DefinitionParser : IComponentDefinitionParser
     {
         public ParsingResult Parse(string classScript)
         {
@@ -31,7 +31,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
         // Reference: https://tomassetti.me/getting-started-with-antlr-in-csharp/
         public ParsingResult GetContext(string classScript)
         {
-            var errors = new List<ParsingError>();
+            var errors = new List<ScriptError>();
 
             var lexingErrorCollector = new CodeGenieErrorCollector<int>();
 

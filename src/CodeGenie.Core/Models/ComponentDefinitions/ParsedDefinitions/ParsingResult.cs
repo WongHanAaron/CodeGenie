@@ -15,14 +15,14 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
             Context = context;
         }
 
-        public ParsingResult(List<ParsingError> errors)
+        public ParsingResult(List<ScriptError> errors)
         {
             Errors = errors;
         }
 
         public CodeGenieParser.ComponentDefinitionContext Context { get; protected set; }
         public List<ParsedComponentDefinition> Components { get; protected set; }
-        public List<ParsingError> Errors { get; protected set; } = new List<ParsingError>();
+        public List<ScriptError> Errors { get; protected set; } = new List<ScriptError>();
         public bool HasErrors => Errors.Any();
     }
 }

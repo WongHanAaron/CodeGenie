@@ -15,7 +15,10 @@ namespace CodeGenie.Core.Tests.Utilities
 
         public IServiceProvider BuildServiceProvider(Action<MockableServiceCollection> mockServicesMethod = null)
         {
-            MockableServiceCollection.AddCodeGenie();
+            MockableServiceCollection.AddCodeGenie(builder => 
+            {
+                builder.LoggerProviders.Add(new DebugLoggerProvider());
+            });
             mockServicesMethod?.Invoke(MockableServiceCollection);
             return MockableServiceCollection.BuildMockedServiceProvider();
         }
