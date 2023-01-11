@@ -40,7 +40,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
             TextView textView = textEditor.TextArea.TextView;
             textView.BackgroundRenderers.Add(this);
             textView.LineTransformers.Add(this);
-            textView.Services.AddService(typeof(TextMarkerService), this);
         }
 
         public void TearDownEditor(TextEditor textEditor)

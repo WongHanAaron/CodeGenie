@@ -6,15 +6,17 @@
              xmlns:local="clr-namespace:CodeGenie.Ui.Wpf.Controls.MessageBoard"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <TabControl>
-        <TabItem Header="Output">
-            
-        </TabItem>
-        <TabItem Header="Logs">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:MessageBoardControl}}">
+        <TabControl>
+            <TabItem Header="Output">
 
-        </TabItem>
-        <TabItem Header="Errors">
+            </TabItem>
+            <TabItem Header="Logs" IsSelected="True">
+                <local:LogBoardControl ServiceProvider="{Binding ServiceProvider}"/>
+            </TabItem>
+            <TabItem Header="Errors">
 
-        </TabItem>
-    </TabControl>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>

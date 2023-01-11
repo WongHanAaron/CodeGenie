@@ -23,20 +23,20 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
         {
             var collection = new ServiceCollection();
             collection.AddControlSharedServices();
-            collection.AddEditorServices(o => 
+            collection.AddCodeEditorServices(o => 
             {
                 o.LoggerProviders.Add(new DebugLoggerProvider());
             });
             return collection.BuildServiceProvider();
         }
 
-        public static void AddEditorServices(this IServiceCollection serviceCollection, Action<ServiceCreationOptions> optionsUpdater = null)
+        public static void AddCodeEditorServices(this IServiceCollection serviceCollection, Action<ServiceCreationOptions> optionsUpdater = null)
         {
             serviceCollection.AddEditorUiServices();
             serviceCollection.AddCodeGenie(optionsUpdater);
         }
 
-        public static void AddEditorUiServices(this IServiceCollection serviceCollection)
+        private static void AddEditorUiServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IAvalonEditConfigurer, AvalonEditConfigurer>();
             serviceCollection.AddSingleton<ICodeEditorSetupService, CodeEditorSetupService>();

@@ -79,7 +79,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling
                 
                 if (parsedComponents.HasErrors)
                 {
-                    Logger.LogError($"There were {parsedComponents.Errors.Count()} errors in compiled script");
+                    Logger.LogError($"There were {parsedComponents.Errors.Count()} errors in compiled script. {parsedComponents.Errors.FirstOrDefault(e => e.Exception != null)?.Exception?.Message}");
                 }
                 else
                 {

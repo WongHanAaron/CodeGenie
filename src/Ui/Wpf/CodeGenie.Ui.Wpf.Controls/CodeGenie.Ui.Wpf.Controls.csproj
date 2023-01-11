@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MessageBoard\Services\" />
+    <Folder Include="ComponentTree\Services\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 

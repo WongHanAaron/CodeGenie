@@ -32,6 +32,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
 
         public void LoadComponents()
         {
+            if (ServiceProvider == null) return;
             var setupService = ServiceProvider.GetService<ICodeEditorSetupService>();
             setupService.Setup(TextEditor);
         }

@@ -7,8 +7,10 @@
         xmlns:editor="clr-namespace:CodeGenie.Ui.Wpf.Controls.CodeEditor;assembly=CodeGenie.Ui.Wpf.Controls"
         xmlns:ctree="clr-namespace:CodeGenie.Ui.Wpf.Controls.ComponentTree;assembly=CodeGenie.Ui.Wpf.Controls"
         xmlns:message="clr-namespace:CodeGenie.Ui.Wpf.Controls.MessageBoard;assembly=CodeGenie.Ui.Wpf.Controls"
+        xmlns:shared="clr-namespace:CodeGenie.Ui.Wpf.Controls.Shared;assembly=CodeGenie.Ui.Wpf.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        DataContext="{shared:ServiceProviderContainer ServiceType={x:Type local:MainViewModel}}"
+        Title="{Binding Title}" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -20,10 +22,17 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
-        <editor:EditorControl/>
+        <editor:EditorControl ServiceProvider="{Binding ServiceProvider}"/>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
-        <ctree:ComponentTreeControl Grid.Column="2"/>
+        <TabControl Grid.Column="2">
+            <TabItem Header="UML Diagram">
+
+            </TabItem>
+            <TabItem Header="Component Tree" IsSelected="True">
+                <ctree:ComponentTreeControl ServiceProvider="{Binding ServiceProvider}"/>
+            </TabItem>
+        </TabControl>
         <GridSplitter Grid.ColumnSpan="3" Grid.Row="1" HorizontalAlignment="Stretch"/>
-        <message:MessageBoardControl Grid.ColumnSpan="3" Grid.Row="2"/>
+        <message:MessageBoardControl Grid.ColumnSpan="3" Grid.Row="2" ServiceProvider="{Binding ServiceProvider}"/>
     </Grid>
 </Window>

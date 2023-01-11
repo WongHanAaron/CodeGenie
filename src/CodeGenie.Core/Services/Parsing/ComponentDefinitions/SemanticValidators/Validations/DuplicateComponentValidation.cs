@@ -1,4 +1,5 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
+using CodeGenie.Core.Models.Exceptions.ComponentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,17 +31,8 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidator
             foreach (var c in duplicatedComponents)
             {
                 var returned = ParsedToken.Create<ScriptError>(c.ParsedToken.Token);
-                returned.Exception = new DuplicateComponentDefinitionException(c.Name);
+                returned.Exception = new DuplicateNameException(c.Name);
                 yield return returned;
-            }
-        }
-
-        public class DuplicateComponentDefinitionException : Exception
-        {
-            public string DuplicatedComponentName { get; protected set; }
-            public DuplicateComponentDefinitionException(string duplicatedComponentName)
-            {
-                DuplicatedComponentName = duplicatedComponentName;
             }
         }
     }

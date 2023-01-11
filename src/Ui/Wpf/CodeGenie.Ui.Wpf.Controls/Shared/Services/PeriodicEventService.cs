@@ -28,7 +28,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Shared.Services
             SetPeriod(MillisecondPeriod);
         }
 
-        private int _millisecondPeriod = 1000;
+        private int _millisecondPeriod = 2000;
         public int MillisecondPeriod
         {
             get => _millisecondPeriod;

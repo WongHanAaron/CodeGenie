@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CodeGenie.Ui.Wpf.Controls.Shared;
+using CodeGenie.Ui.Wpf.Controls.Shared.Services;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +15,10 @@ namespace CodeGenie.Ui.Wpf.TestApp
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            ServiceProviderContainer.Provider = 
+                ServiceRegistration.GetServiceProvider(new DispatcherService(App.Current.Dispatcher));
+        }
     }
 }

@@ -23,6 +23,30 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard
         public MessageBoardControl()
         {
             InitializeComponent();
+            ServiceProvider = MessageBoardServiceExtensions.CreateDefaultServiceProvider();
         }
+
+        public void LoadComponents()
+        {
+            if (ServiceProvider == null) return;
+        }
+
+
+        #region Dependency Properties
+        public static readonly DependencyProperty ServiceProviderProperty =
+            DependencyProperty.Register(nameof(ServiceProvider),
+                typeof(IServiceProvider),
+                typeof(MessageBoardControl), new PropertyMetadata(OnServiceProviderChanged));
+        public IServiceProvider ServiceProvider { get => (IServiceProvider)GetValue(ServiceProviderProperty); set => SetValue(ServiceProviderProperty, value); }
+
+        private static void OnServiceProviderChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is MessageBoardControl messageBoard)
+            {
+                messageBoard.ServiceProvider = e.NewValue as IServiceProvider;
+                messageBoard.LoadComponents();
+            }
+        }
+        #endregion
     }
 }
