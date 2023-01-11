@@ -11,6 +11,7 @@ namespace CodeGenie.Ui.Wpf.TestApp
     {
         public MainViewModel(IServiceProvider serviceProvider)
         {
+            Title = "CodeGenie TestApp";
             ServiceProvider = serviceProvider;
         }
 

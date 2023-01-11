@@ -44,6 +44,7 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard
             serviceCollection.AddSingleton<IMessageChannelRepository, MessageChannelRepository>();
             serviceCollection.AddTransient<ISingleMessageUpdateListener, SingleMessageUpdateListener>();
             serviceCollection.AddSingleton<LogBoardViewModel>();
+            serviceCollection.AddSingleton<StatusBoardViewModel>();
         }
     }
 }

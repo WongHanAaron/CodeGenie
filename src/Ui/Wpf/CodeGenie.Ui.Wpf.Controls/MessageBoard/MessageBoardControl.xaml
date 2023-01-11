@@ -8,14 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:MessageBoardControl}}">
         <TabControl>
-            <TabItem Header="Output">
-
+            <TabItem Header="Status">
+                <local:StatusBoardControl ServiceProvider="{Binding ServiceProvider}"/>
             </TabItem>
-            <TabItem Header="Logs" IsSelected="True">
+            <TabItem Header="Logs">
                 <local:LogBoardControl ServiceProvider="{Binding ServiceProvider}"/>
-            </TabItem>
-            <TabItem Header="Errors">
-
             </TabItem>
         </TabControl>
     </Grid>
