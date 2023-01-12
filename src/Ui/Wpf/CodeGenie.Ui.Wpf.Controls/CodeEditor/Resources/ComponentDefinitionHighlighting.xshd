@@ -32,10 +32,18 @@
       <Word>specializes</Word>
     </Keywords>
 
+    <!-- Property Names -->
     <Rule color="Name">
       \b
       [\d\w_]+
       (?=\s*:)
+    </Rule>
+
+    <!-- Method Names -->
+    <Rule color="Name">
+      \b
+      [\d\w_]+
+      (?=\s*\()
     </Rule>
 
     <Rule color="Type">
