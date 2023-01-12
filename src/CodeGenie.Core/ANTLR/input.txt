@@ -1,17 +1,12 @@
-+ TestClass : class
++ TestClass : class 
 {
+    purpose: "somepurpose"
     attributes 
     {
-        + Name : string
-        + Name : string
-    }
-    methods
+        + Attribute1 : string
+    } 
+    tags 
     {
-        + PerformSomething (Parameter1 : string) : string
-        + PerformSomething (Parameter1 : string) : string
-    }
-    relationships
-    {
-        depends TestClass2
+        "test1" "test2"
     }
 }

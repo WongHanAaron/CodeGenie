@@ -80,5 +80,20 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.AreEqual(lineNumber, component.ParsedToken.LineNumber);
             Assert.AreEqual(columnPosition, component.ParsedToken.ColumnIndex);
         }
+
+        [TestCase("+ TestClass : class { tags { \"test1\" \"test2\"} }", "TestClass", "test1,test2")]
+        [TestCase("+ TestClass : class { purpose: \"somepurpose\" attributes { + Attribute1 : string } tags { \"test1\" \"test2\"} }", "TestClass", "test1,test2")]
+        public void Component_Parse_Correct_Tags(string script, string componentToTest, string expectedCommaSeparatedTags)
+        {
+            var result = Parser.Parse(script);
+            
+            var expectedTags = expectedCommaSeparatedTags.Split(",").ToList();
+
+            var component = result.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
+
+            Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
+
+            Assert.AreEqual(expectedTags, component.Tags);
+        }
     }
 }

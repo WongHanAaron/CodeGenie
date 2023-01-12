@@ -32,6 +32,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
             {
                 component.Purpose = details.Purpose;
                 component.Attributes = details.Attributes.Select(a => a as AttributeDefinition).ToList();
+                component.Tags = details.Tags;
                 stop = componentDetailsContext.Stop;
             };
 
@@ -60,6 +61,17 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
             }
             componentDetails.Attributes = collectedParsedAttributes;
 
+            // Parse Tags
+            var collectedTags = new List<string>();
+            foreach (var tags in context.tags() ?? new CodeGenieParser.TagsContext[0])
+            {
+                var t = VisitTags(tags) as List<string>;
+                if (t != null && t.Any())
+                {
+                    collectedTags.AddRange(t);
+                }
+            }
+            componentDetails.Tags = collectedTags; 
 
             return componentDetails;
         }
@@ -74,6 +86,26 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
                 attributes.Add(LoadAttributeDefinition(attribute));
             }
             return attributes;
+        }
+
+        public override object VisitTags([NotNull] CodeGenieParser.TagsContext context)
+        {
+            var tags = new List<string>();
+            foreach (var tag in context?.tag() ?? new CodeGenieParser.TagContext[0])
+            {
+                var t = VisitTag(tag);
+                if (t is string stringTag && !string.IsNullOrWhiteSpace(stringTag))
+                {
+                    tags.Add(stringTag);
+                }
+            }
+            return tags;
+        }
+
+        public override object VisitTag([NotNull] CodeGenieParser.TagContext context)
+        {
+            var value = context.STRING().GetText().Trim('\"');
+            return value;
         }
 
         protected ParsedAttributeDefinition LoadAttributeDefinition([NotNull] CodeGenieParser.AttributeContext context)
