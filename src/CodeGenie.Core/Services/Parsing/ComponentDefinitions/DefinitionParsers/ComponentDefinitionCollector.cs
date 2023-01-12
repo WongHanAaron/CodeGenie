@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using CodeGenie.Core.Models.ComponentDefinitions;
 using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using System;
@@ -16,6 +17,15 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
     {
         public IReadOnlyList<ParsedComponentDefinition> ComponentDefinitions => _componentDefinitions;
         protected List<ParsedComponentDefinition> _componentDefinitions = new List<ParsedComponentDefinition>();
+        public IReadOnlyList<ScriptError> Errors => _errors;
+        protected List<ScriptError> _errors = new List<ScriptError>();
+
+        public override object Visit(IParseTree tree)
+        {
+            _componentDefinitions.Clear();
+            _errors.Clear();
+            return base.Visit(tree);
+        }
 
         public override object VisitComponent([NotNull] CodeGenieParser.ComponentContext context)
         {
@@ -71,7 +81,19 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
                     collectedTags.AddRange(t);
                 }
             }
-            componentDetails.Tags = collectedTags; 
+            componentDetails.Tags = collectedTags;
+
+            // Parse Purpose
+            var purposes = context.purpose();
+            if (purposes.Count() > 1)
+            {
+                purposes.Skip(1).ToList().ForEach(c => 
+                {
+                    _errors.Add(ParsedToken.Create<ScriptError>(c.Start, c.Stop));
+                });
+            }
+
+            componentDetails.Purpose = VisitPurpose(purposes.FirstOrDefault()) as string;
 
             return componentDetails;
         }
@@ -105,6 +127,12 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
         public override object VisitTag([NotNull] CodeGenieParser.TagContext context)
         {
             var value = context.STRING().GetText().Trim('\"');
+            return value;
+        }
+
+        public override object VisitPurpose([NotNull] CodeGenieParser.PurposeContext context)
+        {
+            var value = context?.value()?.STRING()?.GetText()?.Trim('\"');
             return value;
         }
 

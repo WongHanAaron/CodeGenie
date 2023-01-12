@@ -24,7 +24,9 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
             
             var components = collector.ComponentDefinitions.Where(c => c!= null).ToList();
 
-            return new ParsingResult(components, contextParseResult.Context);
+            var errors = collector.Errors.ToList();
+
+            return new ParsingResult(components, contextParseResult.Context, errors);
         }
 
         // Returns the component definition context that can be used to visit the syntax tree

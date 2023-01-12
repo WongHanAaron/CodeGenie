@@ -83,6 +83,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
         [TestCase("+ TestClass : class { tags { \"test1\" \"test2\"} }", "TestClass", "test1,test2")]
         [TestCase("+ TestClass : class { purpose: \"somepurpose\" attributes { + Attribute1 : string } tags { \"test1\" \"test2\"} }", "TestClass", "test1,test2")]
+        [TestCase("+ TestClass : class { purpose: \"somepurpose\" attributes { + Attribute1 : string } tags { \"test1\" \"test2\"} } + TestClass2 : class { tags { \"test3\" } }", "TestClass2", "test3")]
         public void Component_Parse_Correct_Tags(string script, string componentToTest, string expectedCommaSeparatedTags)
         {
             var result = Parser.Parse(script);
@@ -94,6 +95,22 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
 
             Assert.AreEqual(expectedTags, component.Tags);
+        }
+
+        [TestCase("+TestClass:class{purpose:\"some purpose\"}", "TestClass", "some purpose", false)]
+        [TestCase("+TestClass:class{purpose:\"some purpose\"}+TestClass2:class{purpose:\"some purpose as well\"}", "TestClass2", "some purpose as well", false)]
+        [TestCase("+TestClass:class{purpose:\"some purpose\"purpose:\"some other purpose\"}", "TestClass", "some purpose", true)]
+        public void Component_Parse_Correct_Purpose(string script, string componentToTest, string expectedPurpose, bool expectError)
+        {
+            var result = Parser.Parse(script);
+
+            var component = result.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
+
+            Assert.AreEqual(expectError, result.Errors.Any());
+
+            Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
+
+            Assert.AreEqual(expectedPurpose, component.Purpose);
         }
     }
 }
