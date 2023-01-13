@@ -1,5 +1,6 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers;
 using CodeGenie.Ui.Wpf.Controls.Shared.Services;
@@ -32,6 +33,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
         protected readonly ITextMarkerService TextMarkerService;
         protected readonly ITextViewEventListener TextViewEventListener;
         protected readonly IComponentDefinitionMarker ComponentDefinitionMarker;
+        protected readonly ICompletionWindowFactory CompletionWindowFactory;
 
         protected TextEditor LastConfiguredEditor { get; set; }
         public AvalonEditConfigurer(ILogger<AvalonEditConfigurer> logger,
@@ -40,7 +42,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
                                     ITextUpdateListener textUpdateListener,
                                     ITextMarkerService textMarkerService,
                                     ITextViewEventListener textViewEventListener,
-                                    IComponentDefinitionMarker componentDefinitionMarker)
+                                    IComponentDefinitionMarker componentDefinitionMarker,
+                                    ICompletionWindowFactory completionWindowFactory)
         {
             Logger = logger;
             DateTimeProvider = dateTimeProvider;
@@ -49,6 +52,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
             TextMarkerService = textMarkerService;
             TextViewEventListener = textViewEventListener;
             ComponentDefinitionMarker = componentDefinitionMarker;
+            CompletionWindowFactory = completionWindowFactory;
         }
 
         public void Configure(TextEditor textEditor)
@@ -66,8 +70,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
 
         protected void ConfigureErrorHighlighting(TextEditor textEditor)
         {
+            TextUpdateListener.InjectEditor(textEditor);
             TextMarkerService.InjectEditor(textEditor);
+            TextViewEventListener.InjectEditor(textEditor);
             ComponentDefinitionMarker.InjectEditor(textEditor);
+            CompletionWindowFactory.InjectEditor(textEditor);
         }
 
         protected void ConfigureTrackers(TextEditor textEditor)
@@ -82,6 +89,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
             TextMarkerService.TearDownEditor(textEditor);
             TextViewEventListener.TearDownEditor(textEditor);
             ComponentDefinitionMarker.TearDownEditor(textEditor);
+            CompletionWindowFactory.InjectEditor(textEditor);
         }
     }
 }

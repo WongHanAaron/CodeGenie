@@ -66,7 +66,9 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.ViewModels
                 var stream = scriptError.Token.InputStream;
                 var min = Math.Min(scriptError.StartIndex, scriptError.EndIndex);
                 var max = Math.Max(scriptError.StartIndex, scriptError.EndIndex);
-                line = $" '{stream.GetText(Interval.Of(min, max))}'";
+                
+                if (min >= 0 && max >= 0) 
+                    line = $" '{stream.GetText(Interval.Of(min, max))}'";
             }
 
             var errorDescription = $"line {scriptError.LineNumber}, column {scriptError.ColumnIndex} ({scriptError.StartIndex}-{scriptError.EndIndex}){line}";

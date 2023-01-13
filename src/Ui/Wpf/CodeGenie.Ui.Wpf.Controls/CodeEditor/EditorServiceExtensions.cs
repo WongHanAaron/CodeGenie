@@ -14,15 +14,16 @@ using CodeGenie.Core.Models.Configuration;
 using Microsoft.Extensions.Logging.Debug;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
 {
     public static class EditorServiceExtensions
     {
-        public static ServiceProvider CreateDefaultServiceProvider()
+        public static ServiceProvider CreateDefaultServiceProvider(IDispatcherService dispatcherService = null)
         {
             var collection = new ServiceCollection();
-            collection.AddControlSharedServices();
+            collection.AddControlSharedServices(dispatcherService);
             collection.AddCodeEditorServices(o => 
             {
                 o.LoggerProviders.Add(new DebugLoggerProvider());
@@ -49,6 +50,10 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
             serviceCollection.AddSingleton<IComponentDefinitionMarker, ComponentDefinitionErrorMarker>();
             serviceCollection.AddSingleton<ITextMarkerService, TextMarkerService>();
             serviceCollection.AddSingleton<IComponentDefinitionMarker, ComponentDefinitionErrorMarker>();
+            serviceCollection.AddSingleton<IAutoCompleter, AutoCompleter>();
+            serviceCollection.AddSingleton<ICompletionDataSuggester, CompletionDataSuggester>();
+            serviceCollection.AddSingleton<ICompletionWindowFactory, CompletionWindowFactory>();
+
         }
     }
 }

@@ -39,19 +39,19 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
 
         protected void AttachEvents()
         {
-            _editor.TextChanged += _editor_TextChanged;
+            _editor.TextChanged += Text_TextChanged;
             _editor.TextArea.TextEntered += TextArea_TextEntered;
             _editor.TextArea.TextEntering += TextArea_TextEntering;
         }
 
         protected void DetachEvents()
         {
-            _editor.TextChanged -= _editor_TextChanged;
+            _editor.TextChanged -= Text_TextChanged;
             _editor.TextArea.TextEntered -= TextArea_TextEntered;
             _editor.TextArea.TextEntering -= TextArea_TextEntering;
         }
 
-        private void _editor_TextChanged(object? sender, EventArgs e)
+        private void Text_TextChanged(object? sender, EventArgs e)
         {
             if (OnTextUpdated != null)
             {
@@ -69,15 +69,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 var lineDetails = GetCurrentLineDetails();
                 if (!lineDetails.Line.IsDeleted)
                 {
-                    OnTextEntered?.Invoke(sender, new TextEnterEventArgs()
-                    {
-                        DateTime = DateTimeProvider.Now,
-                        DocumentLine = lineDetails.Line,
-                        Offset = lineDetails.Offset.Value,
-                        Length = lineDetails.Length.Value,
-                        LineNumber = lineDetails.LineNumber.Value,
-                        LineContent= lineDetails.LineContent
-                    });
+                    OnTextEntered?.Invoke(sender, CreateTextEnterArgs(lineDetails, e));
                 }
             }
         }
@@ -89,20 +81,40 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 var lineDetails = GetCurrentLineDetails();
                 if (!lineDetails.Line.IsDeleted)
                 {
-                    OnTextEntered?.Invoke(sender, new TextEnterEventArgs()
-                    {
-                        DateTime = DateTimeProvider.Now,
-                        DocumentLine = lineDetails.Line,
-                        Offset = lineDetails.Offset.Value,
-                        Length = lineDetails.Length.Value,
-                        LineNumber = lineDetails.LineNumber.Value,
-                        LineContent = lineDetails.LineContent
-                    });
+                    OnTextEntering?.Invoke(sender, CreateTextEnterArgs(lineDetails, e));
                 }
             }
         }
 
-        protected (DocumentLine Line, int? LineNumber, int? Offset, int? Length, string LineContent) GetCurrentLineDetails()
+        protected TextEnterEventArgs CreateTextEnterArgs(CurrentLineDetails lineDetails, TextCompositionEventArgs e)
+        {
+            if (lineDetails.Offset.HasValue &&
+                lineDetails.Length.HasValue &&
+                lineDetails.LineNumber.HasValue)
+            {
+                return new TextEnterEventArgs()
+                {
+                    DateTime = DateTimeProvider.Now,
+                    Text = e.Text,
+                    DocumentLine = lineDetails.Line,
+                    Offset = lineDetails.Offset.Value,
+                    Length = lineDetails.Length.Value,
+                    LineNumber = lineDetails.LineNumber.Value,
+                    LineContent = lineDetails.LineContent
+                };
+            }
+            else
+            {
+                return new TextEnterEventArgs()
+                {
+                    DateTime = DateTimeProvider.Now,
+                    Text = e.Text,
+                    LineContent = lineDetails.LineContent
+                };
+            }
+        }
+
+        protected CurrentLineDetails GetCurrentLineDetails()
         {
             int editorOffset = _editor.CaretOffset;
             DocumentLine line = _editor.Document.GetLineByOffset(editorOffset);
@@ -112,12 +124,31 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 var offset = line.Offset;
                 var length = line.Length;
                 var lineString = _editor.Document.GetText(offset, length);
-                return (line, lineNumber, offset, length, lineString);
+                return new CurrentLineDetails
+                {
+                    Line = line,
+                    LineNumber = lineNumber,
+                    Offset = offset,
+                    Length = length,
+                    LineContent = lineString
+                };
             }
             else
             {
-                return (line, null, null, null, null);
+                return new CurrentLineDetails()
+                {
+                    Line = line
+                };
             }
+        }
+
+        public sealed class CurrentLineDetails
+        {
+            public DocumentLine Line { get; set; }
+            public int? LineNumber { get; set; }
+            public int? Offset { get; set; }
+            public int? Length { get; set; }
+            public string LineContent { get; set; }
         }
 
         public void TearDownEditor(TextEditor editor)

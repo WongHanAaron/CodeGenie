@@ -9,7 +9,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events
 {
     public class TextEnterEventArgs : DateTimeEventArgs
     {
+        /// <summary> Document Line object from the Code Editor </summary>
         public DocumentLine DocumentLine { get; set; }
+
+        /// <summary> The text that raised the event </summary>
+        public string Text { get; set; }
+
+        /// <summary> Line number that is currently being edited </summary>
         public int LineNumber { get; set; }
 
         /// <summary> Offset within the document </summary>

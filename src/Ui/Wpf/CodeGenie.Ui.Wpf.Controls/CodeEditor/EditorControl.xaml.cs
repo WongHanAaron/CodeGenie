@@ -1,6 +1,7 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup;
+using CodeGenie.Ui.Wpf.Controls.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
         public EditorControl()
         {
             InitializeComponent();
-            ServiceProvider = EditorServiceExtensions.CreateDefaultServiceProvider();
+            ServiceProvider = EditorServiceExtensions.CreateDefaultServiceProvider(new DispatcherService(this.Dispatcher));
         }
 
         public void LoadComponents()

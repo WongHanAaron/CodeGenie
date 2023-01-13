@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeGenie.Ui.Wpf.Controls.Shared.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace CodeGenie.Ui.Wpf.Controls.ComponentTree
         public ComponentTreeControl()
         {
             InitializeComponent();
-            ServiceProvider = ComponentTreeServiceExtensions.CreateDefaultServiceProvider();
+            ServiceProvider = ComponentTreeServiceExtensions.CreateDefaultServiceProvider(new DispatcherService(this.Dispatcher));
         }
 
         public void LoadComponents()

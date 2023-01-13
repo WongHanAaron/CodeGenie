@@ -2,6 +2,7 @@
 using CodeGenie.Ui.Wpf.Controls.MessageBoard.Models;
 using CodeGenie.Ui.Wpf.Controls.MessageBoard.Services;
 using CodeGenie.Ui.Wpf.Controls.MessageBoard.ViewModels;
+using CodeGenie.Ui.Wpf.Controls.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,9 +15,10 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard
 {
     public static class MessageBoardServiceExtensions
     {
-        public static IServiceProvider CreateDefaultServiceProvider()
+        public static IServiceProvider CreateDefaultServiceProvider(IDispatcherService dispatcherService = null)
         {
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddControlSharedServices(dispatcherService);
             serviceCollection.AddMessageBoardServices();
             return serviceCollection.BuildServiceProvider();
         }
