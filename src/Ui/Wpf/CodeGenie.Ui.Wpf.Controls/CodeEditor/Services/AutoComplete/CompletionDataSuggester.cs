@@ -24,9 +24,9 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         {
             var line = eventArgs.LineContent;
 
-            if (Regex.IsMatch(line, @"((\+|-|#)\s?\w+\s?:)\s*$"))
+            if (Regex.IsMatch(line, @"((\+|-|#)\s*\w+\s*:)\s*$"))
                 return AfterComponentDivider(eventArgs);
-            else if (Regex.IsMatch(line, @"((\+|-|#)\s?\w+\s?:)\s*(class|interface)\s*$"))
+            else if (Regex.IsMatch(line, @"((\+|-|#)\s*\w+\s*:)\s*(class|interface)\s*$"))
                 return AfterComponentDetails(eventArgs);
 
             return new List<ICompletionData>();

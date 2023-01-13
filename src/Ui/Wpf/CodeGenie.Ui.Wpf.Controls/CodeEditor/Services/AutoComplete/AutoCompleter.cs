@@ -1,5 +1,7 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking;
 using CodeGenie.Ui.Wpf.Controls.Shared.Contracts;
 using CodeGenie.Ui.Wpf.Controls.Shared.Services;
 using ICSharpCode.AvalonEdit;
@@ -27,6 +29,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         protected readonly ITextUpdateListener TextUpdateListener;
         protected readonly ICompletionDataSuggester CompletionSuggester;
         protected readonly ICompletionWindowFactory CompletionWindowFactory;
+        protected readonly ICaretController CaretController;
         protected readonly IDispatcherService DispatcherService;
 
         public AutoCompleter(ILogger<AutoCompleter> logger, 
@@ -35,6 +38,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
                              ICompletionDataSuggester completionSuggester,
                              ICompletionWindowFactory completionWindowFactory,
                              IPeriodicEventService periodicEventService,
+                             ICaretController caretController,
                              IDispatcherService dispatcherService)
         {
             Logger = logger;
@@ -42,6 +46,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             TextUpdateListener = textUpdateListener;
             CompletionSuggester = completionSuggester;
             CompletionWindowFactory = completionWindowFactory;
+            CaretController = caretController;
             DispatcherService = dispatcherService;
             AttachEvents();
         }
@@ -49,7 +54,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         protected void AttachEvents()
         {
             TextUpdateListener.OnTextEntered += TextEntered;
-            TextUpdateListener.OnTextEntering += TextEntering;
         }
 
         protected void TextEntered(object sender, TextEnterEventArgs args)
@@ -89,25 +93,10 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             return suggestions;
         }
 
-        protected void TextEntering(object sender, TextEnterEventArgs args)
-        {
-            // If the tab character is entered,
-            // load the current suggestion
-            var lastChar = args.Text.LastOrDefault();
-
-            if (lastChar == default(char)) return;
-
-            if (lastChar.Equals('\t'))
-            {
-                _completionWindow.CompletionList.RequestInsertion(args);
-                var selected = _completionWindow.CompletionList.SelectedItem;
-                _completionWindow.Close();
-            }
-        }
-
         protected bool IsCompletionWindowOpen()
             => _completionWindow != null;
 
+        protected ICompletionData _lastSelectedItem;
         protected void EnsureCompletionWindowCreated()
         {
             if (_completionWindow != null)
@@ -119,7 +108,23 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             _completionWindow = CompletionWindowFactory.Create();
             _completionWindow.Closed += delegate
             {
+                _lastSelectedItem = _completionWindow.CompletionList.SelectedItem;
                 _completionWindow = null;
+            };
+
+            _completionWindow.CompletionList.InsertionRequested += delegate
+            {
+                var selected = _completionWindow?.CompletionList?.SelectedItem ?? _lastSelectedItem;
+
+                if (selected is AutoCompletionBase auto)
+                {
+                    if (auto.CaretLineNumberPlacement.HasValue)
+                        CaretController.MoveCaretToLineNumber(auto.CaretLineNumberPlacement.Value);
+                    if (auto.CaretColumnPlacement.HasValue)
+                        CaretController.MoveCaretToColumn(auto.CaretColumnPlacement.Value);
+
+                    TextUpdateListener.TextWasEntered(this, auto.ReplacementText);
+                }
             };
         }
     }

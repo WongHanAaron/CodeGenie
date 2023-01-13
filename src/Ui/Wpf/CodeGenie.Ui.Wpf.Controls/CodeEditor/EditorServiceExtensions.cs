@@ -53,7 +53,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
             serviceCollection.AddSingleton<IAutoCompleter, AutoCompleter>();
             serviceCollection.AddSingleton<ICompletionDataSuggester, CompletionDataSuggester>();
             serviceCollection.AddSingleton<ICompletionWindowFactory, CompletionWindowFactory>();
-
+            serviceCollection.AddSingleton<ICaretController, CaretController>();
         }
     }
 }

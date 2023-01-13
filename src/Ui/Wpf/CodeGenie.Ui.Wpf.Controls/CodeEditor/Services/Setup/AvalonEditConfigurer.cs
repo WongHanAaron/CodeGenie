@@ -34,6 +34,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
         protected readonly ITextViewEventListener TextViewEventListener;
         protected readonly IComponentDefinitionMarker ComponentDefinitionMarker;
         protected readonly ICompletionWindowFactory CompletionWindowFactory;
+        protected readonly ICaretController CaretController;
 
         protected TextEditor LastConfiguredEditor { get; set; }
         public AvalonEditConfigurer(ILogger<AvalonEditConfigurer> logger,
@@ -43,7 +44,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
                                     ITextMarkerService textMarkerService,
                                     ITextViewEventListener textViewEventListener,
                                     IComponentDefinitionMarker componentDefinitionMarker,
-                                    ICompletionWindowFactory completionWindowFactory)
+                                    ICompletionWindowFactory completionWindowFactory,
+                                    ICaretController caretController)
         {
             Logger = logger;
             DateTimeProvider = dateTimeProvider;
@@ -53,6 +55,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
             TextViewEventListener = textViewEventListener;
             ComponentDefinitionMarker = componentDefinitionMarker;
             CompletionWindowFactory = completionWindowFactory;
+            CaretController = caretController;
         }
 
         public void Configure(TextEditor textEditor)
@@ -75,6 +78,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
             TextViewEventListener.InjectEditor(textEditor);
             ComponentDefinitionMarker.InjectEditor(textEditor);
             CompletionWindowFactory.InjectEditor(textEditor);
+            CaretController.InjectEditor(textEditor);
         }
 
         protected void ConfigureTrackers(TextEditor textEditor)
@@ -89,7 +93,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
             TextMarkerService.TearDownEditor(textEditor);
             TextViewEventListener.TearDownEditor(textEditor);
             ComponentDefinitionMarker.TearDownEditor(textEditor);
-            CompletionWindowFactory.InjectEditor(textEditor);
+            CompletionWindowFactory.TearDownEditor(textEditor);
+            CaretController.TearDownEditor(textEditor);
         }
     }
 }

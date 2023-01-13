@@ -13,13 +13,22 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts
     /// </summary>
     public interface ITextUpdateListener : IInjectsEditor
     {
+        /// <summary> Tells the TextUpdateListener that the text was updated </summary>
+        void TextUpdated(object sender);
+
+        /// <summary> Tells the TextUpdateListener that the entering </summary>
+        void TextEnteringOccurred(object sender, string textEntering);
+
+        /// <summary> Tells the TextUpdateListener that the text was entered </summary>
+        void TextWasEntered(object sender, string textEntered);
+
         /// <summary> Raised when the text is updated </summary>
-        public EventHandler<TextUpdateEventArgs> OnTextUpdated { get; set; }
+        EventHandler<TextUpdateEventArgs> OnTextUpdated { get; set; }
 
         /// <summary> Raised when some text is entered </summary>
-        public EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
+        EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
 
         /// <summary> Raised when some text is being entered </summary>
-        public EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
+        EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
     }
 }

@@ -19,11 +19,14 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.Com
 
         public override double Priority => 1;
 
-        public override void Complete(TextArea textArea, 
-                                      ISegment completionSegment, 
-                                      EventArgs insertionRequestEventArgs)
+        public override string GetReplacementText(EventArgs insertionRequestEventArgs)
         {
-            textArea.Document.Replace(completionSegment, "\n{\n\tpurpose : \"\"\n}");
+            var returned = "\n{\n\tpurpose : \"\"\n}";
+            
+            CaretLineNumberPlacement = EventArguments.LineNumber + 2;
+            CaretColumnPlacement = 13;
+
+            return returned;
         }
     }
 }

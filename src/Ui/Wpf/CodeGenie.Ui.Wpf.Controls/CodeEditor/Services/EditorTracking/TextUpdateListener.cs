@@ -51,7 +51,9 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
             _editor.TextArea.TextEntering -= TextArea_TextEntering;
         }
 
-        private void Text_TextChanged(object? sender, EventArgs e)
+        private void Text_TextChanged(object? sender, EventArgs e) => TextUpdated(sender);
+
+        public void TextUpdated(object sender)
         {
             if (OnTextUpdated != null)
             {
@@ -62,31 +64,36 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 });
             }
         }
-        private void TextArea_TextEntered(object sender, TextCompositionEventArgs e)
+
+        private void TextArea_TextEntered(object sender, TextCompositionEventArgs e) => TextWasEntered(sender, e.Text);
+
+        public void TextWasEntered(object sender, string textEntered)
         {
             if (OnTextEntered != null)
             {
                 var lineDetails = GetCurrentLineDetails();
                 if (!lineDetails.Line.IsDeleted)
                 {
-                    OnTextEntered?.Invoke(sender, CreateTextEnterArgs(lineDetails, e));
+                    OnTextEntered?.Invoke(sender, CreateTextEnterArgs(lineDetails, textEntered));
                 }
             }
         }
 
-        private void TextArea_TextEntering(object sender, TextCompositionEventArgs e)
+        private void TextArea_TextEntering(object sender, TextCompositionEventArgs e) => TextEnteringOccurred(sender, e.Text);
+
+        public void TextEnteringOccurred(object sender, string textEntering)
         {
             if (OnTextEntering != null)
             {
                 var lineDetails = GetCurrentLineDetails();
                 if (!lineDetails.Line.IsDeleted)
                 {
-                    OnTextEntering?.Invoke(sender, CreateTextEnterArgs(lineDetails, e));
+                    OnTextEntering?.Invoke(sender, CreateTextEnterArgs(lineDetails, textEntering));
                 }
             }
         }
 
-        protected TextEnterEventArgs CreateTextEnterArgs(CurrentLineDetails lineDetails, TextCompositionEventArgs e)
+        protected TextEnterEventArgs CreateTextEnterArgs(CurrentLineDetails lineDetails, string text)
         {
             if (lineDetails.Offset.HasValue &&
                 lineDetails.Length.HasValue &&
@@ -95,7 +102,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 return new TextEnterEventArgs()
                 {
                     DateTime = DateTimeProvider.Now,
-                    Text = e.Text,
+                    Text = text,
                     DocumentLine = lineDetails.Line,
                     Offset = lineDetails.Offset.Value,
                     Length = lineDetails.Length.Value,
@@ -108,7 +115,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 return new TextEnterEventArgs()
                 {
                     DateTime = DateTimeProvider.Now,
-                    Text = e.Text,
+                    Text = text,
                     LineContent = lineDetails.LineContent
                 };
             }

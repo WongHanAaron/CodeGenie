@@ -20,21 +20,19 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax
         private string _text;
         public override string Text => _text;
 
-        public override object Description => "Complete a component as an interface";
+        public override object Description => $"Complete a component as an {_text}";
 
         public override double Priority => 1;
 
-        public override void Complete(TextArea textArea,
-                                      ISegment completionSegment,
-                                      EventArgs insertionRequestEventArgs)
+        public override string GetReplacementText(EventArgs insertionRequestEventArgs)
         {
             if (Regex.IsMatch(EventArguments.LineContent, @"\s"))
             {
-                textArea.Document.Replace(completionSegment, Text);
+                return Text;
             }
             else
             {
-                textArea.Document.Replace(completionSegment, " " + Text);
+                return " " + Text;
             }
         }
     }

@@ -19,11 +19,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.Com
 
         public override double Priority => 1;
 
-        public override void Complete(TextArea textArea, 
-                                      ISegment completionSegment, 
-                                      EventArgs insertionRequestEventArgs)
+        public override string GetReplacementText(EventArgs insertionRequestEventArgs)
         {
-            textArea.Document.Replace(completionSegment, "\n{\n\tattributes\n\t{\n\n\t}\n}");
+            CaretLineNumberPlacement = EventArguments.LineNumber + 4;
+            CaretColumnPlacement = 3;
+            return "\n{\n\tattributes\n\t{\n\t\t\n\t}\n}";
         }
     }
 }
