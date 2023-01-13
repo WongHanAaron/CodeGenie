@@ -52,7 +52,7 @@
     </Rule>
 
     <Rule color="Type">
-      (?&lt;=:\s+)
+      (?&lt;=:\s*)
       [\w][\w0-9]*\b
     </Rule>
 
