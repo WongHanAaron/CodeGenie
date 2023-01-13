@@ -15,7 +15,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling
     public interface IComponentCompilationService
     {
         /// <summary> This method will be invoked by internal listeners when the text is updated </summary>
-        void OnTextUpdated(TextUpdateEvent evt);
+        void OnTextUpdated(TextUpdateEventArgs evt);
 
         /// <summary> This method will be called when </summary>
         void CompileIfTextUnchanged();
@@ -98,8 +98,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling
             }
         }
 
-        private TextUpdateEvent _lastTextUpdateEvent;
-        public void OnTextUpdated(TextUpdateEvent evt)
+        private TextUpdateEventArgs _lastTextUpdateEvent;
+        public void OnTextUpdated(TextUpdateEventArgs evt)
         {
             try
             {

@@ -1,4 +1,5 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.Shared.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,15 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts
     /// <summary>
     /// The component to listen for text updates in the editor
     /// </summary>
-    public interface ITextUpdateListener
+    public interface ITextUpdateListener : IInjectsEditor
     {
-        /// <summary> To be invoked when the text is updated </summary>s
-        void TextWasUpdated(object sender, TextUpdateEvent evt);
-
         /// <summary> Raised when the text is updated </summary>
-        public EventHandler<TextUpdateEvent> OnTextUpdated { get; set; }
+        public EventHandler<TextUpdateEventArgs> OnTextUpdated { get; set; }
+
+        /// <summary> Raised when some text is entered </summary>
+        public EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
+
+        /// <summary> Raised when some text is being entered </summary>
+        public EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
     }
 }

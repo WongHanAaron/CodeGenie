@@ -72,22 +72,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Setup
 
         protected void ConfigureTrackers(TextEditor textEditor)
         {
-            textEditor.TextChanged += TextEditor_TextChanged;
+            TextUpdateListener.InjectEditor(textEditor);
             TextViewEventListener.InjectEditor(textEditor);
-        }
-
-        private void TextEditor_TextChanged(object? sender, EventArgs e)
-        {
-            TextUpdateListener.TextWasUpdated(sender, new TextUpdateEvent()
-            {
-                Text = LastConfiguredEditor.Text,
-                DateTime = DateTimeProvider.Now
-            });
         }
 
         public void TearDown(TextEditor textEditor)
         {
-            textEditor.TextChanged -= TextEditor_TextChanged;
+            TextUpdateListener.TearDownEditor(textEditor);
             TextMarkerService.TearDownEditor(textEditor);
             TextViewEventListener.TearDownEditor(textEditor);
             ComponentDefinitionMarker.TearDownEditor(textEditor);
