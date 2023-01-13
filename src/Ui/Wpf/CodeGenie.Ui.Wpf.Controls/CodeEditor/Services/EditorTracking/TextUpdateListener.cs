@@ -118,7 +118,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
         {
             int editorOffset = _editor.CaretOffset;
             DocumentLine line = _editor.Document.GetLineByOffset(editorOffset);
-            if (line.IsDeleted)
+            if (!line.IsDeleted)
             {
                 var lineNumber = line.LineNumber;
                 var offset = line.Offset;

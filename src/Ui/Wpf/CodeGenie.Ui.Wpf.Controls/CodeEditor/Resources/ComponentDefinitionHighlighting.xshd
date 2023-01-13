@@ -46,6 +46,11 @@
       (?=\s*\()
     </Rule>
 
+    <Rule color="ComponentType">
+      (?&lt;=:\s+)
+      (class|interface)*\b
+    </Rule>
+
     <Rule color="Type">
       (?&lt;=:\s+)
       [\w][\w0-9]*\b
@@ -55,11 +60,6 @@
       (?&lt;=(depends|composes|aggregates|realizes|specializes)\s+)
       [\w][\w0-9]*\b
     </Rule>
-
-    <Keywords color="ComponentType">
-      <Word>class</Word>
-      <Word>interface</Word>
-    </Keywords>
 
     <Keywords color="Scope">
       <Word>+</Word>

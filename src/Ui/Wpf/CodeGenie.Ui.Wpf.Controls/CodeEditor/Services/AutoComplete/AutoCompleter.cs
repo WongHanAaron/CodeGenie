@@ -78,6 +78,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         {
             var suggestions = CompletionSuggester.GetSuggestions(textEnteredArgs);
 
+            if (!suggestions.Any()) return new List<ICompletionData>();
+
             DispatcherService.InvokeOnUiThread(() =>
             {
                 EnsureCompletionWindowCreated();
@@ -95,10 +97,14 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         {
             // If the tab character is entered, load the current suggestion
             var lastChar = args.Text.LastOrDefault();
+
             if (lastChar == default(char)) return;
 
             if (lastChar.Equals('\t'))
+            {
                 _completionWindow.CompletionList.RequestInsertion(args);
+                _completionWindow.Close();
+            }
         }
 
         protected bool IsCompletionWindowOpen()
@@ -119,6 +125,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             _completionWindow.Closed += delegate
             {
                 _completionWindow = null;
+                _lastTextEnteredArgs = null;
             };
         }
     }

@@ -1,10 +1,13 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentDetails;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentPostDivider;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
@@ -20,7 +23,30 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
     {
         public IEnumerable<ICompletionData> GetSuggestions(TextEnterEventArgs eventArgs)
         {
-            return new List<ICompletionData>() { new ClassPartCompletion() };
+            var line = eventArgs.LineContent;
+
+            if (Regex.IsMatch(line, @"((\+|-|#)\s?\w+\s?:)\s*$"))
+                return AfterComponentDivider(eventArgs);
+
+            return new List<ICompletionData>();
+        }
+
+        public IEnumerable<ICompletionData> AfterComponentDivider(TextEnterEventArgs eventArgs)
+        {
+            return new List<ICompletionData>()
+            {
+                new ComponentPostDividerCompletion("class", eventArgs),
+                new ComponentPostDividerCompletion("interface", eventArgs)
+            };
+        }
+
+        public IEnumerable<ICompletionData> AfterComponentDetails(TextEnterEventArgs eventArgs)
+        {
+            return new List<ICompletionData>()
+            {
+                new ComponentPurpose(eventArgs),
+                new ComponentAttributes(eventArgs)
+            };
         }
     }
 }
