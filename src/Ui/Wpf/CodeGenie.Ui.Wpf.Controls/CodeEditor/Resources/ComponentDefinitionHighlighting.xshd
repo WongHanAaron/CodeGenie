@@ -47,8 +47,8 @@
     </Rule>
 
     <Rule color="ComponentType">
-      (?&lt;=:\s+)
-      (class|interface)*\b
+      (?&lt;=:\s*)
+      (class|interface)\b
     </Rule>
 
     <Rule color="Type">

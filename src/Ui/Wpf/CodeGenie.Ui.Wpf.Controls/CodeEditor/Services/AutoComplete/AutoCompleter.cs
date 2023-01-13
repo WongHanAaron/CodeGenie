@@ -22,13 +22,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
     public class AutoCompleter : IAutoCompleter
     {
         protected CompletionWindow _completionWindow;
-        protected TextEnterEventArgs _lastTextEnteredArgs;
         protected readonly ILogger Logger;
         protected readonly IDateTimeProvider DateTimeProvider;
         protected readonly ITextUpdateListener TextUpdateListener;
         protected readonly ICompletionDataSuggester CompletionSuggester;
         protected readonly ICompletionWindowFactory CompletionWindowFactory;
-        protected readonly IPeriodicEventService PeriodicEventService;
         protected readonly IDispatcherService DispatcherService;
 
         public AutoCompleter(ILogger<AutoCompleter> logger, 
@@ -44,7 +42,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             TextUpdateListener = textUpdateListener;
             CompletionSuggester = completionSuggester;
             CompletionWindowFactory = completionWindowFactory;
-            PeriodicEventService = periodicEventService;
             DispatcherService = dispatcherService;
             AttachEvents();
         }
@@ -53,25 +50,24 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         {
             TextUpdateListener.OnTextEntered += TextEntered;
             TextUpdateListener.OnTextEntering += TextEntering;
-            PeriodicEventService.OnPeriodElapsed += TryShowSuggestion;
         }
 
         protected void TextEntered(object sender, TextEnterEventArgs args)
         {
-            _lastTextEnteredArgs = args;
             if (IsCompletionWindowOpen())
             {
                 _completionWindow.Close();
             }
+
+            TryShowSuggestion(sender, args);
         }
 
-        protected void TryShowSuggestion(object sender, EventArgs args)
+        protected void TryShowSuggestion(object sender, TextEnterEventArgs args)
         {
             // If there is a completion window already shown don't show another until it is closed
             if (IsCompletionWindowOpen()) return;
-            if (!HasRecentTextEntered()) return;
 
-            ShowSuggestions(_lastTextEnteredArgs);
+            ShowSuggestions(args);
         }
 
         public IEnumerable<ICompletionData> ShowSuggestions(TextEnterEventArgs textEnteredArgs)
@@ -95,7 +91,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 
         protected void TextEntering(object sender, TextEnterEventArgs args)
         {
-            // If the tab character is entered, load the current suggestion
+            // If the tab character is entered,
+            // load the current suggestion
             var lastChar = args.Text.LastOrDefault();
 
             if (lastChar == default(char)) return;
@@ -103,15 +100,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             if (lastChar.Equals('\t'))
             {
                 _completionWindow.CompletionList.RequestInsertion(args);
+                var selected = _completionWindow.CompletionList.SelectedItem;
                 _completionWindow.Close();
             }
         }
 
         protected bool IsCompletionWindowOpen()
             => _completionWindow != null;
-
-        protected bool HasRecentTextEntered() 
-            => _lastTextEnteredArgs != null;
 
         protected void EnsureCompletionWindowCreated()
         {
@@ -125,7 +120,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             _completionWindow.Closed += delegate
             {
                 _completionWindow = null;
-                _lastTextEnteredArgs = null;
             };
         }
     }

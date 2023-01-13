@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentDetails
 {
-    public class ComponentAttributes : SyntaxCompletionBase
+    public class ComponentAttributes : AutoCompletionBase
     {
         public ComponentAttributes(TextEnterEventArgs eventArgs) : base(eventArgs) { }
 
@@ -17,11 +17,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.Com
 
         public override object Description => "Add a component attributes";
 
+        public override double Priority => 1;
+
         public override void Complete(TextArea textArea, 
                                       ISegment completionSegment, 
                                       EventArgs insertionRequestEventArgs)
         {
-            textArea.Document.Replace(completionSegment, "\n\tattributes\n\t{\n\n\t}\n}");
+            textArea.Document.Replace(completionSegment, "\n{\n\tattributes\n\t{\n\n\t}\n}");
         }
     }
 }

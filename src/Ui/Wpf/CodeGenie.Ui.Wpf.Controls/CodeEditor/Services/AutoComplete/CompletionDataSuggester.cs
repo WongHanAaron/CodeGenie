@@ -1,6 +1,5 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentDetails;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentPostDivider;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
@@ -27,6 +26,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 
             if (Regex.IsMatch(line, @"((\+|-|#)\s?\w+\s?:)\s*$"))
                 return AfterComponentDivider(eventArgs);
+            else if (Regex.IsMatch(line, @"((\+|-|#)\s?\w+\s?:)\s*(class|interface)\s*$"))
+                return AfterComponentDetails(eventArgs);
 
             return new List<ICompletionData>();
         }

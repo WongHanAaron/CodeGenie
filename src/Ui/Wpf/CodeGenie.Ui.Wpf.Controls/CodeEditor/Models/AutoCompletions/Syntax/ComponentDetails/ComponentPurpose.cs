@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentDetails
 {
-    public class ComponentPurpose : SyntaxCompletionBase
+    public class ComponentPurpose : AutoCompletionBase
     {
         public ComponentPurpose(TextEnterEventArgs eventArgs) : base(eventArgs) { }
 
@@ -17,11 +17,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.Com
 
         public override object Description => "Add a component purpose";
 
+        public override double Priority => 1;
+
         public override void Complete(TextArea textArea, 
                                       ISegment completionSegment, 
                                       EventArgs insertionRequestEventArgs)
         {
-            textArea.Document.Replace(completionSegment, "\n\tpurpose : \"\"\n}");
+            textArea.Document.Replace(completionSegment, "\n{\n\tpurpose : \"\"\n}");
         }
     }
 }

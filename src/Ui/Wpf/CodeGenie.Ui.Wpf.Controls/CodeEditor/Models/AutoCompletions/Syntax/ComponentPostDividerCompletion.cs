@@ -8,11 +8,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentPostDivider
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax
 {
-    public class ComponentPostDividerCompletion : SyntaxCompletionBase
+    public class ComponentPostDividerCompletion : AutoCompletionBase
     {
-        public ComponentPostDividerCompletion(string componentType, TextEnterEventArgs eventArgs) : base(eventArgs) 
+        public ComponentPostDividerCompletion(string componentType, TextEnterEventArgs eventArgs) : base(eventArgs)
         {
             _text = componentType;
         }
@@ -22,11 +22,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.Com
 
         public override object Description => "Complete a component as an interface";
 
+        public override double Priority => 1;
+
         public override void Complete(TextArea textArea,
                                       ISegment completionSegment,
                                       EventArgs insertionRequestEventArgs)
         {
-            if (Regex.IsMatch(EventArgs.LineContent, @"\s"))
+            if (Regex.IsMatch(EventArguments.LineContent, @"\s"))
             {
                 textArea.Document.Replace(completionSegment, Text);
             }
