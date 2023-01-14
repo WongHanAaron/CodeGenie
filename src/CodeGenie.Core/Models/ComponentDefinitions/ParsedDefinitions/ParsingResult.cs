@@ -11,6 +11,8 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
 
         public ParsingResult(CodeGenieParser.ComponentDefinitionContext context) : this (null, context, null) { }
 
+        public ParsingResult(CodeGenieParser.ComponentDefinitionContext context, List<ScriptError> errors) : this(null,context, errors) { }
+
         public ParsingResult(List<ParsedComponentDefinition> components, CodeGenieParser.ComponentDefinitionContext context) : this (components, context, null){ }
 
         public ParsingResult(List<ParsedComponentDefinition> components, CodeGenieParser.ComponentDefinitionContext context, List<ScriptError> errors)

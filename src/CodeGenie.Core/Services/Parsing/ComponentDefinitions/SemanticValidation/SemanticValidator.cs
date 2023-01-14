@@ -1,12 +1,12 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators.Validations;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation.Validations;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators
+namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation
 {
     /// <summary>
     /// The component for performing all required semantic validation

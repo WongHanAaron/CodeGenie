@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators.Validations
+namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation.Validations
 {
     public interface IComponentValidation
     {

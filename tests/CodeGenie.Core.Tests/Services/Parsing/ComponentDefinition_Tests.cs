@@ -1,12 +1,12 @@
 ﻿
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
 using CodeGenie.Core.Tests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CodeGenie.Core.Tests.Services.Parsing
 {
     [TestFixture]
-    public class ComponentDefinition_Tests : ComponentDefinitionParserTestBase
+    public class ComponentDefinition_Tests : ComponentDefinitionTestBase
     {
         IComponentDefinitionParser Parser;
 

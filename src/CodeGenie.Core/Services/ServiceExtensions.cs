@@ -1,8 +1,10 @@
 ﻿using CodeGenie.Core.Models.Configuration;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions;
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers;
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators;
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators.Validations;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation.Validations;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.Shared;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,6 +24,7 @@ namespace CodeGenie.Core.Services
             serviceCollection.AddLoggerProviders(options);
             serviceCollection.AddDefinitionParserDependencies();
             serviceCollection.AddSemanticValidatorDependencies();
+            serviceCollection.AddSyntaxDescribingDependencies();
             serviceCollection.AddTransient<IComponentCompiler, ComponentCompiler>();
         }
 
@@ -45,6 +48,7 @@ namespace CodeGenie.Core.Services
         private static void AddDefinitionParserDependencies(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<IComponentDefinitionParser, ComponentDefinitionParser>();
+            serviceCollection.AddTransient<IComponentDefinitionContextParser, ComponentDefinitionContextParser>();
         }
 
         private static void AddSemanticValidatorDependencies(this IServiceCollection serviceCollection)
@@ -52,6 +56,12 @@ namespace CodeGenie.Core.Services
             serviceCollection.AddTransient<ISemanticValidator, ClusteredSemanticValidator>();
             serviceCollection.AddTransient<IComponentValidation, DuplicateComponentValidation>();
             serviceCollection.AddTransient<IComponentValidation, EmptyNameValidation>();
+        }
+    
+        private static void AddSyntaxDescribingDependencies(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<ISyntaxDescriber, SyntaxDescriber>();
+            serviceCollection.AddTransient<ISyntaxDescriberTreeSearcher, SyntaxDescriberTreeSearcher>();
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using CodeGenie.Core.Models.ComponentDefinitions;
+using CodeGenie.Core.Models.ComponentDefinitions.Definitions;
 using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
+namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
 {
     /// <summary>
     /// A class for parsing a ComponentDefinition context and collecting the list of parsed component definitions

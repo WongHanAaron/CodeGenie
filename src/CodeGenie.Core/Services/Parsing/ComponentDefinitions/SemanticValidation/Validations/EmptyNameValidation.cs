@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators.Validations
+namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation.Validations
 {
     /// <summary> Perform validation that no component, attribute, method or relationship name should be empty </summary>
     public class EmptyNameValidation : IComponentValidation

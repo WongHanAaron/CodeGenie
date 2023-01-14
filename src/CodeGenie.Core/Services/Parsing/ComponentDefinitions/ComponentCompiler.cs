@@ -1,6 +1,6 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers;
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidators;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;

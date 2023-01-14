@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeGenie.Core.Models.ComponentDefinitions
+namespace CodeGenie.Core.Models.ComponentDefinitions.Definitions
 {
     /// <summary> A class or interface </summary>
     public class ComponentDefinition
@@ -21,7 +21,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions
 
         /// <summary> The attributes that this component has </summary>
         public List<AttributeDefinition> Attributes { get; set; } = new List<AttributeDefinition>();
-        
+
         /// <summary>  The methods this component has </summary>
         public List<MethodDefinition> MethodDefinition { get; set; } = new List<MethodDefinition>();
 

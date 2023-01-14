@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeGenie.Core.Models.ComponentDefinitions
+namespace CodeGenie.Core.Models.ComponentDefinitions.Definitions
 {
     /// <summary> A definition for the method </summary>
     public class MethodDefinition

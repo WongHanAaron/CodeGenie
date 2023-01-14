@@ -1,33 +1,24 @@
 ﻿using Antlr4.Runtime;
 using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
+namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.Shared
 {
-    /// <summary>
-    /// The implementation to parse a string script into a list of parsed out component definitions
-    /// </summary>
-    public class ComponentDefinitionParser : IComponentDefinitionParser
+    /// <summary> Component to perform the context tree parsing for the ComponentDefinition ruleset </summary>
+    public interface IComponentDefinitionContextParser
     {
-        public ParsingResult Parse(string classScript)
-        {
-            var contextParseResult = GetContext(classScript);
+        /// <summary> Parse the component definition context </summary>
+        ParsingResult ParseContext(string script);
+    }
 
-            if (contextParseResult.HasErrors) return contextParseResult;
-
-            var collector = new ComponentDefinitionCollector();
-
-            collector.Visit(contextParseResult.Context);
-            
-            var components = collector.ComponentDefinitions.Where(c => c!= null).ToList();
-
-            var errors = collector.Errors.ToList();
-
-            return new ParsingResult(components, contextParseResult.Context, errors);
-        }
+    public class ComponentDefinitionContextParser : IComponentDefinitionContextParser
+    {
+        public ParsingResult ParseContext(string script)
+            => GetContext(script);
 
         // Returns the component definition context that can be used to visit the syntax tree
         // Reference: https://tomassetti.me/getting-started-with-antlr-in-csharp/
@@ -42,13 +33,13 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
             var inputStream = new AntlrInputStream(classScript);
 
             var speakLexer = new CodeGenieLexer(inputStream);
-            
+
             speakLexer.AddErrorListener(lexingErrorCollector);
-            
+
             var commonTokenStream = new CommonTokenStream(speakLexer);
-            
+
             var speakParser = new CodeGenieParser(commonTokenStream);
-            
+
             speakParser.AddErrorListener(parsingErrorCollector);
 
             var context = speakParser.componentDefinition();
@@ -57,7 +48,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
             {
                 errors.AddRange(lexingErrorCollector.Errors);
             }
-            
+
             if (parsingErrorCollector.Errors.Any())
             {
                 errors.AddRange(parsingErrorCollector.Errors);
@@ -65,7 +56,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
 
             if (errors.Any())
             {
-                return new ParsingResult(errors);
+                return new ParsingResult(context, errors);
             }
             else
             {

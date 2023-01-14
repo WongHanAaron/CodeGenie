@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsers
+namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
 {
     public class CodeGenieErrorCollector<T> : IAntlrErrorListener<T>
     {
