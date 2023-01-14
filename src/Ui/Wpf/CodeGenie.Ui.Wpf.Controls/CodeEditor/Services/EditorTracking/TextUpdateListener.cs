@@ -23,6 +23,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
         public EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
         public EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
 
+        public string CurrentText => _editor.Text;
 
         public TextUpdateListener(ILogger<TextUpdateListener> logger, 
                                   IDateTimeProvider dateTimeProvider)
@@ -97,7 +98,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
         {
             if (lineDetails.Offset.HasValue &&
                 lineDetails.Length.HasValue &&
-                lineDetails.LineNumber.HasValue)
+                lineDetails.LineNumber.HasValue &&
+                lineDetails.Column.HasValue)
             {
                 return new TextEnterEventArgs()
                 {
@@ -106,6 +108,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                     DocumentLine = lineDetails.Line,
                     Offset = lineDetails.Offset.Value,
                     Length = lineDetails.Length.Value,
+                    ColumnNumber = lineDetails.Column.Value,
                     LineNumber = lineDetails.LineNumber.Value,
                     LineContent = lineDetails.LineContent
                 };
@@ -131,13 +134,15 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 var offset = line.Offset;
                 var length = line.Length;
                 var lineString = _editor.Document.GetText(offset, length);
+                var column = lineString.Count() - 1;
                 return new CurrentLineDetails
                 {
                     Line = line,
                     LineNumber = lineNumber,
                     Offset = offset,
                     Length = length,
-                    LineContent = lineString
+                    LineContent = lineString,
+                    Column = column
                 };
             }
             else
@@ -155,6 +160,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
             public int? LineNumber { get; set; }
             public int? Offset { get; set; }
             public int? Length { get; set; }
+            public int? Column { get; set; }
             public string LineContent { get; set; }
         }
 

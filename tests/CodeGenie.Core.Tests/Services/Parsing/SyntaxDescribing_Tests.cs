@@ -27,11 +27,17 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(SyntaxDescriptor.BeforeComponentNameDefinition, 1, 0, "+TestClass:class")]
         [TestCase(SyntaxDescriptor.BeforeComponentDivider, 1, 1, "+TestClass:class")]
         [TestCase(SyntaxDescriptor.BeforeComponentTypeDefinition, 1, 10, "+TestClass:class")]
-        [TestCase(SyntaxDescriptor.BeforeComponentDetails, 1, 16, "+TestClass:class ")]
-        //[TestCase(SyntaxState.BeforeStartComponentDefinition, 1, 2, "+TestClass:class")]
+        [TestCase(SyntaxDescriptor.BeforeComponentDetails, 1, 16, "+TestClass:class")]
+        [TestCase(SyntaxDescriptor.BeforeStartComponentDefinition, 1, 0, "")]
+        [TestCase(SyntaxDescriptor.BeforeComponentDetails, 3, 16, "\n\n+TestClass:class")]
+        [TestCase(SyntaxDescriptor.BeforeStartComponentDefinition, 3, 0, "\n\n")]
+        [TestCase(SyntaxDescriptor.BeforeComponentNameDefinition, 3, 0, "\n\n+\n")]
+        [TestCase(SyntaxDescriptor.BeforeComponentTypeDefinition, 2, 10, "\n+TestClass:class\n{\npurpose:\"\"\n}\n")]
+        [TestCase(SyntaxDescriptor.BeforeComponentDivider, 2, 8, "\n+TestClass:class\n{\npurpose:\"\"\n}\n")]
+        // [TestCase(SyntaxDescriptor.BeforePurposeDefinitionDivider, 3, 12, "+TestClass:class\n{\n\tpurpose:\"\"\n}")]
         public void Get_SyntaxState_At_Line_Column(SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
-            var syntaxState = Describer.GetSyntaxState(script, lineNumber, columnNumber);
+            var syntaxState = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
 
             Assert.AreEqual(expectedState, syntaxState, $"Expected {expectedState} state but {syntaxState} was received instead for script '{script}'");
         }

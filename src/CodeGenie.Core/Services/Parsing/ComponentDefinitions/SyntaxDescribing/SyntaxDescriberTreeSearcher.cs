@@ -21,17 +21,29 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
             TerminalNodeCollection(contextDefinitionContext, terminalNodes);
 
+            if (!terminalNodes.Any()) return null;
+
             var closestNode = FindNodeAtLineAndColumn(terminalNodes.ToArray(), lineNumber, columnNumber);
 
             return closestNode;
         }
 
         protected ITerminalNode FindNodeAtLineAndColumn(ITerminalNode[] terminalNodes, int lineNumber, int columnNumber)
-            => FindNodeAtLineAndColumn(terminalNodes, 0, terminalNodes.Count() - 1, lineNumber, columnNumber);
+        {
+            var first = terminalNodes.FirstOrDefault();
+            var last = terminalNodes.LastOrDefault();
+
+            if (GetLineNumber(first) > lineNumber) return first;
+            if (GetLineNumber(last) < lineNumber) return last;
+
+            return FindNodeAtLineAndColumn(terminalNodes, 0, terminalNodes.Count() - 1, lineNumber, columnNumber);
+        }
 
         protected ITerminalNode FindNodeAtLineAndColumn(ITerminalNode[] terminalNodes, int startIndex, int endIndex, int lineNumber, int columnNumber)
         {
-            var midIndex = (int)Math.Floor((endIndex - startIndex) / 2.0);
+            if (endIndex < 0) return terminalNodes.FirstOrDefault();
+            
+            var midIndex = (int)((endIndex - startIndex) / 2.0) + startIndex;
 
             var midLineNumber = GetLineNumber(terminalNodes[midIndex]);
             if (lineNumber == midLineNumber)
@@ -48,20 +60,37 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             }
         }
 
+        /// <summary>
+        /// Search for both the token that encapsulates the column number or the token
+        /// that is closest to that column number. If none encapsulates it, go with
+        /// the token that is closest
+        /// </summary>
         protected ITerminalNode SearchForClosestTokenInSameLine(ITerminalNode[] terminalNodes, int indexOfNodeOnLine, int lineNumberToKeepOn, int searchedColumnNumber)
         {
             var minIndex = indexOfNodeOnLine;
             var minNode = terminalNodes[indexOfNodeOnLine];
             var minNodeColumnDistance = GetDistanceFromDesiredColumn(minNode, searchedColumnNumber);
+            ITerminalNode capturingToken = null;
+            if (ColumnNumberIsOnToken(minNode, searchedColumnNumber)) 
+                capturingToken = minNode;
+
+            if (capturingToken != null) return capturingToken;
 
             // Start at index and look backwards continually looking for a node that might have the smallest distance to the desired columnNumber
             for (int i = indexOfNodeOnLine - 1; i >= 0; i--)
             {
                 var node = terminalNodes[i];
+                if (ColumnNumberIsOnToken(node, searchedColumnNumber))
+                    capturingToken = node;
+
+                if (capturingToken != null) break;
+
                 var line = GetLineNumber(node);
                 if (line != lineNumberToKeepOn) break;
 
                 var distance = GetDistanceFromDesiredColumn(node, searchedColumnNumber);
+                var start = GetColumnNumberStart(node);
+                var end = GetColumnNumberEnd(node);
                 if (distance < minNodeColumnDistance)
                 {
                     minNode = node;
@@ -73,6 +102,11 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             for (int i = indexOfNodeOnLine + 1; i < terminalNodes.Count(); i++)
             {
                 var node = terminalNodes[i];
+                if (ColumnNumberIsOnToken(node, searchedColumnNumber))
+                    capturingToken = node;
+
+                if (capturingToken != null) break;
+
                 var line = GetLineNumber(node);
                 if (line != lineNumberToKeepOn) break;
 
@@ -85,16 +119,24 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
                 }
             }
 
-            return minNode;
+            return capturingToken != null ? capturingToken : minNode;
+        }
+
+        protected bool ColumnNumberIsOnToken(ITerminalNode node, int columnNumber)
+        {
+            var start = GetColumnNumberStart(node);
+            var end = GetColumnNumberEnd(node);
+            return start <= columnNumber && end >= columnNumber;
         }
 
         protected int GetDistanceFromDesiredColumn(ITerminalNode node, int columnNumber)
         {
-            return (int) Math.Abs(GetColumnNumber(node) - columnNumber);
+            return (int) Math.Min(Math.Abs(GetColumnNumberStart(node) - columnNumber), Math.Abs(GetColumnNumberEnd(node) - columnNumber));
         }
 
         protected int GetLineNumber(ITerminalNode node) => node.Symbol.Line;
-        protected int GetColumnNumber(ITerminalNode node) => node.Symbol.Column;
+        protected int GetColumnNumberStart(ITerminalNode node) => node.Symbol.Column;
+        protected int GetColumnNumberEnd(ITerminalNode node) => node.Symbol.Column + node.Symbol.Text.Count() - 1;
         protected void TerminalNodeCollection(IParseTree root, List<ITerminalNode> collectedNodes)
         {
             // Collect if a leaf

@@ -18,6 +18,9 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events
         /// <summary> Line number that is currently being edited </summary>
         public int LineNumber { get; set; }
 
+        /// <summary> The column number of the text that was being typed </summary>
+        public int ColumnNumber { get; set; }
+
         /// <summary> Offset within the document </summary>
         public int Offset { get; set; }
 

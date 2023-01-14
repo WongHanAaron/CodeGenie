@@ -1,4 +1,7 @@
-﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax;
+﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentDetails;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using ICSharpCode.AvalonEdit.CodeCompletion;
@@ -20,13 +23,23 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 
     public class CompletionDataSuggester : ICompletionDataSuggester
     {
+        protected readonly ITextUpdateListener TextUpdateListener;
+        protected readonly ISyntaxDescriber SyntaxDescriber;
+        public CompletionDataSuggester(ITextUpdateListener textUpdateListener, ISyntaxDescriber syntaxDescriber)
+        {
+            TextUpdateListener = textUpdateListener;
+            SyntaxDescriber = syntaxDescriber;
+        }
+
         public IEnumerable<ICompletionData> GetSuggestions(TextEnterEventArgs eventArgs)
         {
-            var line = eventArgs.LineContent;
+            var fullScript = TextUpdateListener.CurrentText;
 
-            if (Regex.IsMatch(line, @"((\+|-|#)\s*\w+\s*:)\s*$"))
+            var syntaxDescription = SyntaxDescriber.GetSyntaxDescription(fullScript, eventArgs.LineNumber, eventArgs.ColumnNumber);
+
+            if (syntaxDescription == SyntaxDescriptor.BeforeComponentTypeDefinition)
                 return AfterComponentDivider(eventArgs);
-            else if (Regex.IsMatch(line, @"((\+|-|#)\s*\w+\s*:)\s*(class|interface)\s*$"))
+            else if (syntaxDescription == SyntaxDescriptor.BeforeComponentDetails)
                 return AfterComponentDetails(eventArgs);
 
             return new List<ICompletionData>();

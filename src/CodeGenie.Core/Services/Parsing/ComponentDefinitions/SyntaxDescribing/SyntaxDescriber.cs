@@ -16,14 +16,14 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
     public interface ISyntaxDescriber
     {
         /// <summary> Get the syntax state at that line and column number </summary>
-        SyntaxDescriptor GetSyntaxState(string script, int lineNumber, int columnNumber);
+        SyntaxDescriptor GetSyntaxDescription(string script, int lineNumber, int columnNumber);
     }
 
     public class SyntaxDescriber : ISyntaxDescriber
     {
         protected readonly ILogger<SyntaxDescriber> Logger;
         protected readonly IComponentDefinitionContextParser ContextParser;
-        protected readonly ISyntaxDescriberTreeSearcher SyntaxTreeTraverser;
+        protected readonly ISyntaxDescriberTreeSearcher SyntaxTreeSearcher;
 
         public SyntaxDescriber(ILogger<SyntaxDescriber> logger, 
                                IComponentDefinitionContextParser contextParser,
@@ -31,17 +31,19 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
         {
             Logger = logger;
             ContextParser = contextParser;
-            SyntaxTreeTraverser = syntaxTreeTraverser;
+            SyntaxTreeSearcher = syntaxTreeTraverser;
             SetupDescribers();
         }
 
-        public SyntaxDescriptor GetSyntaxState(string script, int lineNumber, int columnNumber)
+        public SyntaxDescriptor GetSyntaxDescription(string script, int lineNumber, int columnNumber)
         {
             var result = ContextParser.ParseContext(script);
 
             if (result.Context == null) return SyntaxDescriptor.Unknown;
 
-            var closestNode = SyntaxTreeTraverser.GetClosestNode(result.Context, lineNumber, columnNumber);
+            var closestNode = SyntaxTreeSearcher.GetClosestNode(result.Context, lineNumber, columnNumber);
+
+            if (closestNode == null) return SyntaxDescriptor.BeforeStartComponentDefinition;
 
             return GetSyntaxStateFromNode(closestNode);
         }

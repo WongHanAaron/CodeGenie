@@ -30,5 +30,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts
 
         /// <summary> Raised when some text is being entered </summary>
         EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
+        
+        /// <summary> The current text in the text editor </summary>
+        string CurrentText { get; }
     }
 }
