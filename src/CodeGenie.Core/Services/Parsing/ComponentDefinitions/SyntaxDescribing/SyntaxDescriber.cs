@@ -70,9 +70,17 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             return SyntaxDescriptor.Unknown;
         }
 
+        protected SyntaxDescriptor FromComponentDetailsContext(Component_detailsContext rule, ITerminalNode node)
+        {
+            if (rule.children.FirstOrDefault() == node && node.Symbol.Text.Equals("{")) return SyntaxDescriptor.WithinComponentDetails;
+            if (rule.children.LastOrDefault() == node && node.Symbol.Text.Equals("}")) return SyntaxDescriptor.WithinComponentDetails;
+            return SyntaxDescriptor.Unknown;
+        }
+
         protected void SetupDescribers()
         {
             AddDescriber<ComponentContext>(FromComponentContext);
+            AddDescriber<Component_detailsContext>(FromComponentDetailsContext);
         }
 
         protected ConcurrentDictionary<Type, ISyntaxRuleDescriber> _describer = new ConcurrentDictionary<Type, ISyntaxRuleDescriber>();

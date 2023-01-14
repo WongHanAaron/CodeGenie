@@ -1,4 +1,5 @@
-﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
 using System;
@@ -7,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentDetails
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.ComponentDetails
 {
-    public class ComponentAttributes : AutoCompletionBase
+    public class ComponentAttributes : SuggestionBase
     {
         public ComponentAttributes(TextEnterEventArgs eventArgs) : base(eventArgs) { }
 

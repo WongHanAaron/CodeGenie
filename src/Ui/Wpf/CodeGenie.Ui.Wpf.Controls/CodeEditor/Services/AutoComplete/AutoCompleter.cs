@@ -1,5 +1,5 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking;
 using CodeGenie.Ui.Wpf.Controls.Shared.Contracts;
@@ -116,7 +116,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             {
                 var selected = _completionWindow?.CompletionList?.SelectedItem ?? _lastSelectedItem;
 
-                if (selected is AutoCompletionBase auto)
+                if (selected is SuggestionBase auto)
                 {
                     if (auto.CaretLineNumberPlacement.HasValue)
                         CaretController.MoveCaretToLineNumber(auto.CaretLineNumberPlacement.Value);

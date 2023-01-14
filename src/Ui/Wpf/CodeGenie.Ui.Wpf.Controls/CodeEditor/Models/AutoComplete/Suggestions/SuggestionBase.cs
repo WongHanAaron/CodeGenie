@@ -9,12 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions
 {
     /// <summary> The base auto completion object </summary>
-    public abstract class AutoCompletionBase : ICompletionData
+    public abstract class SuggestionBase : ICompletionData
     {
-        public AutoCompletionBase(TextEnterEventArgs args)
+        public SuggestionBase(TextEnterEventArgs args)
         {
             EventArguments = args;
         }
@@ -40,7 +40,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions
         public virtual int? CaretLineNumberPlacement { get; protected set; } = null;
 
         /// <summary> The column number to update the caret number to. No update is made if the value is null </summary>
-        public virtual int? CaretColumnPlacement { get; protected set; } = null; 
+        public virtual int? CaretColumnPlacement { get; protected set; } = null;
 
         /// <summary> The replacement text used in that spot </summary>
         public string ReplacementText { get; protected set; }

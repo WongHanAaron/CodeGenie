@@ -1,10 +1,12 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoCompletions.Syntax.ComponentDetails;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.ComponentDetails;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using ICSharpCode.AvalonEdit.CodeCompletion;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,44 +25,46 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 
     public class CompletionDataSuggester : ICompletionDataSuggester
     {
+        protected readonly ILogger<CompletionDataSuggester> Logger;
         protected readonly ITextUpdateListener TextUpdateListener;
         protected readonly ISyntaxDescriber SyntaxDescriber;
-        public CompletionDataSuggester(ITextUpdateListener textUpdateListener, ISyntaxDescriber syntaxDescriber)
+        public CompletionDataSuggester(ILogger<CompletionDataSuggester> logger,
+                                       ITextUpdateListener textUpdateListener, 
+                                       ISyntaxDescriber syntaxDescriber)
         {
+            Logger = logger;
             TextUpdateListener = textUpdateListener;
             SyntaxDescriber = syntaxDescriber;
         }
 
+
+        private readonly static List<SyntaxSuggesterBase> _suggestionCollector = new List<SyntaxSuggesterBase>()
+        {
+            new ScopeSuggester(),
+            new DividerSuggester(),
+            new ComponentNameSuggester(),
+            new ComponentTypeSuggester(),
+            new ComponentDetailSuggester()
+        };
         public IEnumerable<ICompletionData> GetSuggestions(TextEnterEventArgs eventArgs)
         {
             var fullScript = TextUpdateListener.CurrentText;
 
             var syntaxDescription = SyntaxDescriber.GetSyntaxDescription(fullScript, eventArgs.LineNumber, eventArgs.ColumnNumber);
 
-            if (syntaxDescription == SyntaxDescriptor.BeforeComponentTypeDefinition)
-                return AfterComponentDivider(eventArgs);
-            else if (syntaxDescription == SyntaxDescriptor.BeforeComponentDetails)
-                return AfterComponentDetails(eventArgs);
+            Logger.LogDebug($"CurrentSyntax: {syntaxDescription.ToString()}");
 
-            return new List<ICompletionData>();
-        }
-
-        public IEnumerable<ICompletionData> AfterComponentDivider(TextEnterEventArgs eventArgs)
-        {
-            return new List<ICompletionData>()
+            var returned = new List<ICompletionData>();
+            
+            foreach (var collector in _suggestionCollector)
             {
-                new ComponentPostDividerCompletion("class", eventArgs),
-                new ComponentPostDividerCompletion("interface", eventArgs)
-            };
-        }
+                var suggestions = collector.CollectSuggestions(syntaxDescription, eventArgs);
+                if (suggestions.Any())
+                    returned.AddRange(suggestions);
+            }
 
-        public IEnumerable<ICompletionData> AfterComponentDetails(TextEnterEventArgs eventArgs)
-        {
-            return new List<ICompletionData>()
-            {
-                new ComponentPurpose(eventArgs),
-                new ComponentAttributes(eventArgs)
-            };
+            return returned;
         }
+        
     }
 }

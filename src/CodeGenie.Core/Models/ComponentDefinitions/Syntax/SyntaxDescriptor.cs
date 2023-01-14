@@ -15,6 +15,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.State
         BeforeComponentDivider,
         BeforeComponentTypeDefinition,
         BeforeComponentDetails,
+        WithinComponentDetails,
         // Attribute Definition Tree
         BeforeStartAttributeDefinition,
         BeforeAttributeNameDefinition,
