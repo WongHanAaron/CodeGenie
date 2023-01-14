@@ -45,6 +45,14 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             
             var midIndex = (int)((endIndex - startIndex) / 2.0) + startIndex;
 
+            var span = terminalNodes.Skip(startIndex).Take((endIndex - startIndex));
+            if (span.Count() <= 2 && span.Any())
+            {
+                var indexFromSpan = FindNodeClosestToDesiredLine(span, lineNumber);
+                return SearchForClosestTokenInSameLine(terminalNodes, startIndex + indexFromSpan, lineNumber, columnNumber);
+            }
+
+
             var midLineNumber = GetLineNumber(terminalNodes[midIndex]);
             if (lineNumber == midLineNumber)
             {
@@ -133,6 +141,25 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
         {
             return (int) Math.Min(Math.Abs(GetColumnNumberStart(node) - columnNumber), Math.Abs(GetColumnNumberEnd(node) - columnNumber));
         }
+
+        protected int FindNodeClosestToDesiredLine(IEnumerable<ITerminalNode> nodes, int desiredLineNumber)
+        {
+            var minIndex = 0;
+            var minDistance = GetDistanceFromDesiredLineNumber(nodes.ElementAtOrDefault(minIndex), desiredLineNumber);
+
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                var distance = GetDistanceFromDesiredLineNumber(nodes.ElementAtOrDefault(i), desiredLineNumber);
+                if (distance < minDistance)
+                {
+                    minIndex = i;
+                }
+            }
+            return minIndex;
+        }
+
+        protected int GetDistanceFromDesiredLineNumber(ITerminalNode node, int lineNumber)
+            => (int)Math.Abs(GetLineNumber(node) - lineNumber);
 
         protected int GetLineNumber(ITerminalNode node) => node.Symbol.Line;
         protected int GetColumnNumberStart(ITerminalNode node) => node.Symbol.Column;
