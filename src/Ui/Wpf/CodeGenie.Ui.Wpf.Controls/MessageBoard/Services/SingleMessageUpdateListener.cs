@@ -53,10 +53,13 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.Services
             if (!HasRegistered()) return;
             var lastUpdateTime = MessageRepository.GetTimeOfLastMessage(_registeredChannel, _registeredMessageType);
             if (lastUpdateTime <= _lastMessageUpdate) return;
-            var message = MessageRepository.GetMessages(_registeredChannel, _registeredMessageType);
-            _lastMessageUpdate = lastUpdateTime;
+            var messages = MessageRepository.GetMessages(_registeredChannel, _registeredMessageType);
 
-            _onMessageReceived?.Invoke(message);
+            var newMessages = messages.Where(m => _lastMessageUpdate == null || m.DateTime > _lastMessageUpdate).ToList();
+
+            if (!newMessages.Any()) return;
+            _lastMessageUpdate = lastUpdateTime;
+            _onMessageReceived?.Invoke(newMessages);
         }
 
         protected bool HasRegistered()

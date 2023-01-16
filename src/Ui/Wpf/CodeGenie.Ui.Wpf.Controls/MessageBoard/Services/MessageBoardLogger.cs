@@ -15,13 +15,14 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.Services
         private string _channel;
         private string _categoryName;
         private readonly IMessageChannelRepository _channelRepository;
+        private IDateTimeProvider _dateTimeProvider;
         public MessageBoardLogger(string channel, string categoryName, LogLevel minimumLogLevel = LogLevel.Debug, IDateTimeProvider dateTimeProvider = null)
         {
-            dateTimeProvider = dateTimeProvider ?? new DateTimeProvider();
+            _dateTimeProvider = dateTimeProvider ?? new DateTimeProvider();
             _minimumLogLevel = minimumLogLevel;
             _channel = channel;
             _categoryName = categoryName;
-            _channelRepository = new MessageChannelRepository(dateTimeProvider);
+            _channelRepository = new MessageChannelRepository(_dateTimeProvider);
         }
 
         public IDisposable? BeginScope<TState>(TState state) where TState : notnull

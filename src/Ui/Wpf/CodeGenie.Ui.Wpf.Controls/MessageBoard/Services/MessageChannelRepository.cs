@@ -54,6 +54,7 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.Services
         public void AddMessage<TMessage>(string messageChannel, TMessage message) where TMessage : MessageBase
         {
             var channel = GetChannel(messageChannel);
+            message.DateTime = DateTimeProvider.Now;
             channel.AddMessage(message);
             if (message is LogMessage logMessage)
             {
@@ -176,7 +177,7 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.Services
                     var key = typeof(TMessage);
                     if (!_messages.ContainsKey(key))
                     {
-                        _messages[key] = new ConcurrentQueueWithDateTime<MessageBase>();
+                        _messages[key] = new ConcurrentQueueWithDateTime<MessageBase>(DateTimeProvider);
                     }
                     
                     while (_messages[key].Count() > count)
@@ -194,7 +195,7 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.Services
             public DateTime? GetTimeOfLastMessage(Type type)
             {
                 var key = type;
-                if (_messages.ContainsKey(key)) return null;
+                if (!_messages.ContainsKey(key)) return null;
                 return _messages[key].DateTime;
             }
 

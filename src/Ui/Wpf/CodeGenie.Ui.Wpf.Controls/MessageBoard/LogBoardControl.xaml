@@ -11,7 +11,15 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding ViewModel.Messages}" Grid.Row="1">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Source: "/>
+            <ComboBox ItemsSource="{Binding ViewModel.Sources}" Grid.Column="1" IsEditable="True" SelectedItem="{Binding ViewModel.SelectedSource}"/>
+        </Grid>
+        <ListBox ItemsSource="{Binding ViewModel.MessagesView}" Grid.Row="1">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Message}"/>
