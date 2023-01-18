@@ -13,7 +13,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester
     public class ScopeSuggester : SyntaxSuggesterBase
     {
         public ScopeSuggester() : base(SyntaxDescriptor.BeforeStartComponentDefinition,
-                                        SyntaxDescriptor.BeforeStartAttributeDefinition) { }
+                                       SyntaxDescriptor.BeforeStartAttributeDefinition,
+                                       SyntaxDescriptor.BeforeComponentDetails) { }
 
         protected override void CollectOtherSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {

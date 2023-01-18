@@ -31,7 +31,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions
 
         public override string GetReplacementText(EventArgs insertionRequestEventArgs)
         {
-            return Text;
+            return _replacementText;
         }
     }
 }

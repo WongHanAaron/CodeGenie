@@ -37,7 +37,15 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.ViewModels
 
         public int MaxLogCount { get => Get<int>(); set => Set(value); }
         public const string NoneSourceFilter = "None";
-        public string SelectedSource { get => Get<string>(); set => Set(value); }
+        public string SelectedSource 
+        {
+            get => Get<string>();
+            set
+            {
+                Set(value);
+                MessagesView.Refresh();
+            }
+        }
         private HashSet<string> _sources = new HashSet<string>();
         public ObservableCollection<string> Sources { get => Get<ObservableCollection<string>>(); set => Set(value); }
         public ObservableCollection<LogMessage> Messages { get => Get<ObservableCollection<LogMessage>>(); set => Set(value); }
