@@ -82,7 +82,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
         protected SyntaxDescriptor FromPurposeContext(PurposeContext rule, ITerminalNode node, SyntaxSearchParameters searchParameters)
         {
             if (node.Symbol.Text.EndsWith("\"") && searchParameters.ColumnNumber > 
-                node.Symbol.Column + node.Symbol.Text.Count()) return SyntaxDescriptor.WithinComponentDetails;
+                node.Symbol.Column + node.Symbol.Text.Count() - 1) return SyntaxDescriptor.WithinComponentDetails;
             return SyntaxDescriptor.Unknown;
         }
 
