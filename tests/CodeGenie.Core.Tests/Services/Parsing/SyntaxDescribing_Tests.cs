@@ -37,16 +37,16 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(SyntaxDescriptor.BeforeComponentDetails, 3, 16, "\n\n+TestClass:class")]
         [TestCase(SyntaxDescriptor.WithinComponentDetails, 1, 9, "+T:class{}")]
         [TestCase(SyntaxDescriptor.WithinComponentDetails, 1, 8, "+T:class{}")]
-
-
-        // Debug Tests
-        // [TestCase(SyntaxDescriptor.BeforePurposeDefinitionDivider, 3, 12, "+TestClass:class\n{\n\tpurpose:\"\"\n}")] // Caused stack overflow
-        // [TestCase(SyntaxDescriptor.Unknown, 4, 0, "+TestClass: class\n{\n\tpurpose : \"\"\n\t\n}")]
+        [TestCase(SyntaxDescriptor.WithinComponentDetails, 3, 13, "+TestClass:class\n{\n\tpurpose : \"\" \n}")]
         public void Get_SyntaxState_At_Line_Column(SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
             var syntaxState = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
 
             Assert.AreEqual(expectedState, syntaxState, $"Expected {expectedState} state but {syntaxState} was received instead for script '{script}'");
         }
+        // Debug Tests
+        // [TestCase(SyntaxDescriptor.BeforePurposeDefinitionDivider, 3, 12, "+TestClass:class\n{\n\tpurpose:\"\"\n}")] // Caused stack overflow
+        // [TestCase(SyntaxDescriptor.Unknown, 4, 0, "+TestClass: class\n{\n\tpurpose : \"\"\n\t\n}")]
+
     }
 }

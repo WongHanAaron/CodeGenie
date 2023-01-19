@@ -12,7 +12,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.C
 {
     public class ComponentAttributes : SuggestionBase
     {
-        public ComponentAttributes(TextEnterEventArgs eventArgs) : base(eventArgs) { }
+        bool _includeExternalBraces;
+        public ComponentAttributes(TextEnterEventArgs eventArgs, bool includeExternalBraces) : base(eventArgs) 
+        {
+            _includeExternalBraces = includeExternalBraces;
+        }
 
         public override string Text => "{ attributes { } }";
 
@@ -22,9 +26,14 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.C
 
         public override string GetReplacementText(EventArgs insertionRequestEventArgs)
         {
-            CaretLineNumberPlacement = EventArguments.LineNumber + 4;
+            var builder = new StringBuilder();
+            if (_includeExternalBraces) builder.Append("\n{");
+            builder.Append("\n\tattributes\n\t{\n\t\t\n\t}");
+            if (_includeExternalBraces) builder.Append("\n}");
+            CaretLineNumberPlacement = EventArguments.LineNumber + 3;
+            if (_includeExternalBraces) CaretLineNumberPlacement += 1;
             CaretColumnPlacement = 3;
-            return "\n{\n\tattributes\n\t{\n\t\t\n\t}\n}";
+            return builder.ToString();
         }
     }
 }

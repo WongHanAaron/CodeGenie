@@ -17,8 +17,9 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester
 
         protected override void CollectOtherSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            toBeReturned.Add(new ComponentPurpose(textEnterArgs));
-            toBeReturned.Add(new ComponentAttributes(textEnterArgs));
+            var includeBraces = descriptor == SyntaxDescriptor.BeforeComponentDetails;
+            toBeReturned.Add(new ComponentPurpose(textEnterArgs, includeBraces));
+            toBeReturned.Add(new ComponentAttributes(textEnterArgs, includeBraces));
         }
     }
 }

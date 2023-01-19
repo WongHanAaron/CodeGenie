@@ -12,7 +12,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.C
 {
     public class ComponentPurpose : SuggestionBase
     {
-        public ComponentPurpose(TextEnterEventArgs eventArgs) : base(eventArgs) { }
+        bool _includeExternalBraces;
+        public ComponentPurpose(TextEnterEventArgs eventArgs, bool includeExternalBraces) : base(eventArgs) 
+        {
+            _includeExternalBraces = includeExternalBraces;
+        }
 
         public override string Text => "{ purpose : \"\"}";
 
@@ -22,12 +26,16 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.C
 
         public override string GetReplacementText(EventArgs insertionRequestEventArgs)
         {
-            var returned = "\n{\n\tpurpose : \"\"\n}";
+            var builder = new StringBuilder();
+            if (_includeExternalBraces) builder.Append("\n{");
+            builder.Append("\n\tpurpose : \"\"");
+            if (_includeExternalBraces) builder.Append("\n}");
             
-            CaretLineNumberPlacement = EventArguments.LineNumber + 2;
+            CaretLineNumberPlacement = EventArguments.LineNumber + 1;
+            if (_includeExternalBraces) CaretLineNumberPlacement += 1;
             CaretColumnPlacement = 13;
 
-            return returned;
+            return builder.ToString();
         }
     }
 }

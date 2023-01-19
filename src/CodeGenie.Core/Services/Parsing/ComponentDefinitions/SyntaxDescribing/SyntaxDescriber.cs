@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.Shared;
 using Microsoft.Extensions.Logging;
 using System;
@@ -45,10 +46,10 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
             if (closestNode == null) return SyntaxDescriptor.BeforeStartComponentDefinition;
 
-            return GetSyntaxStateFromNode(closestNode);
+            return GetSyntaxStateFromNode(closestNode, new SyntaxSearchParameters(lineNumber, columnNumber));
         }
 
-        protected SyntaxDescriptor GetSyntaxStateFromNode(ITerminalNode node)
+        protected SyntaxDescriptor GetSyntaxStateFromNode(ITerminalNode node, SyntaxSearchParameters searchParameters)
         {
             var rule = GetClosestMatchingRule(node);
 
@@ -58,10 +59,10 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
             if (describer == null) return SyntaxDescriptor.Unknown;
 
-            return describer.Describe(rule, node);
+            return describer.Describe(rule, node, searchParameters);
         }
 
-        protected SyntaxDescriptor FromComponentContext(ComponentContext rule, ITerminalNode node)
+        protected SyntaxDescriptor FromComponentContext(ComponentContext rule, ITerminalNode node, SyntaxSearchParameters searchParameters)
         {
             if (node.Parent is Access_scopeContext) return SyntaxDescriptor.BeforeComponentNameDefinition;
             if (node.Parent.GetChild(1) == node) return SyntaxDescriptor.BeforeComponentDivider;
@@ -70,10 +71,18 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             return SyntaxDescriptor.Unknown;
         }
 
-        protected SyntaxDescriptor FromComponentDetailsContext(Component_detailsContext rule, ITerminalNode node)
+        protected SyntaxDescriptor FromComponentDetailsContext(Component_detailsContext rule, ITerminalNode node, SyntaxSearchParameters searchParameters)
         {
             if (rule.children.FirstOrDefault() == node && node.Symbol.Text.Equals("{")) return SyntaxDescriptor.WithinComponentDetails;
             if (rule.children.LastOrDefault() == node && node.Symbol.Text.Equals("}")) return SyntaxDescriptor.WithinComponentDetails;
+            if (node.Symbol.Type.Equals(" ")) return SyntaxDescriptor.WithinComponentDetails;
+            return SyntaxDescriptor.Unknown;
+        }
+
+        protected SyntaxDescriptor FromPurposeContext(PurposeContext rule, ITerminalNode node, SyntaxSearchParameters searchParameters)
+        {
+            if (node.Symbol.Text.EndsWith("\"") && searchParameters.ColumnNumber > 
+                node.Symbol.Column + node.Symbol.Text.Count()) return SyntaxDescriptor.WithinComponentDetails;
             return SyntaxDescriptor.Unknown;
         }
 
@@ -81,11 +90,12 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
         {
             AddDescriber<ComponentContext>(FromComponentContext);
             AddDescriber<Component_detailsContext>(FromComponentDetailsContext);
+            AddDescriber<PurposeContext>(FromPurposeContext);
         }
 
         protected ConcurrentDictionary<Type, ISyntaxRuleDescriber> _describer = new ConcurrentDictionary<Type, ISyntaxRuleDescriber>();
 
-        protected void AddDescriber<TRule>(Func<TRule, ITerminalNode, SyntaxDescriptor> method) where TRule : ParserRuleContext
+        protected void AddDescriber<TRule>(Func<TRule, ITerminalNode, SyntaxSearchParameters, SyntaxDescriptor> method) where TRule : ParserRuleContext
             => _describer[typeof(TRule)] = new SyntaxRuleDescriber<TRule>(typeof(TRule), method);
         
         protected ISyntaxRuleDescriber GetRuleDescriber(Type ruleType)

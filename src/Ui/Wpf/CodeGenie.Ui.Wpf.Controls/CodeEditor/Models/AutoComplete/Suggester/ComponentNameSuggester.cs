@@ -15,7 +15,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester
 
         protected override void AddDefaultSuggestions(List<ICompletionData> completionData)
         {
-            completionData.Add(new TooltipSuggestion("Component Name", "Enter a component name"));
+            completionData.Add(new TooltipSuggestion("Enter a component name", "Enter a name for this component"));
         }
     }
 }

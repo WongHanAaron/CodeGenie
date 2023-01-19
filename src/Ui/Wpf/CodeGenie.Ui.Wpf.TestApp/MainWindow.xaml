@@ -18,13 +18,17 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <editor:EditorControl ServiceProvider="{Binding ServiceProvider}"/>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
-        <TabControl Grid.Column="2">
+        <StackPanel Grid.ColumnSpan="3">
+            <Button Command="{Binding CopyTextCommand}">Copy Text</Button>
+        </StackPanel>
+        <editor:EditorControl ServiceProvider="{Binding ServiceProvider}" Grid.Row="1"/>
+        <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch"/>
+        <TabControl Grid.Column="2" Grid.Row="1">
             <TabItem Header="UML Diagram">
 
             </TabItem>
@@ -32,7 +36,7 @@
                 <ctree:ComponentTreeControl ServiceProvider="{Binding ServiceProvider}"/>
             </TabItem>
         </TabControl>
-        <GridSplitter Grid.ColumnSpan="3" Grid.Row="1" HorizontalAlignment="Stretch"/>
-        <message:MessageBoardControl Grid.ColumnSpan="3" Grid.Row="2" ServiceProvider="{Binding ServiceProvider}"/>
+        <GridSplitter Grid.ColumnSpan="3" Grid.Row="2" HorizontalAlignment="Stretch"/>
+        <message:MessageBoardControl Grid.ColumnSpan="3" Grid.Row="3" ServiceProvider="{Binding ServiceProvider}"/>
     </Grid>
 </Window>

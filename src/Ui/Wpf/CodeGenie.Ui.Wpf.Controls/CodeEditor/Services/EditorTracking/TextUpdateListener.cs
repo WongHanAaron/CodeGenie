@@ -24,7 +24,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
         public EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
         public EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
 
-        public string CurrentText => Dispatcher.InvokeOnUiThread(() => _editor.Text);
+        public string CurrentText => Dispatcher.InvokeOnUiThread(() => _editor?.Text ?? String.Empty);
 
         public TextUpdateListener(ILogger<TextUpdateListener> logger, 
                                   IDateTimeProvider dateTimeProvider,
