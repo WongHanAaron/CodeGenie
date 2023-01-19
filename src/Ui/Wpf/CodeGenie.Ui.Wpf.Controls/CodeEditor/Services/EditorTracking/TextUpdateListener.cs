@@ -19,17 +19,20 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
         protected TextEditor _editor;
         protected readonly ILogger<TextUpdateListener> Logger;
         protected readonly IDateTimeProvider DateTimeProvider;
+        protected readonly IDispatcherService Dispatcher;
         public EventHandler<TextUpdateEventArgs> OnTextUpdated { get; set; }
         public EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
         public EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
 
-        public string CurrentText => _editor.Text;
+        public string CurrentText => Dispatcher.InvokeOnUiThread(() => _editor.Text);
 
         public TextUpdateListener(ILogger<TextUpdateListener> logger, 
-                                  IDateTimeProvider dateTimeProvider)
+                                  IDateTimeProvider dateTimeProvider,
+                                  IDispatcherService dispatcher)
         {
             Logger = logger;
             DateTimeProvider = dateTimeProvider;
+            Dispatcher = dispatcher;
         }
 
         public void InjectEditor(TextEditor editor)

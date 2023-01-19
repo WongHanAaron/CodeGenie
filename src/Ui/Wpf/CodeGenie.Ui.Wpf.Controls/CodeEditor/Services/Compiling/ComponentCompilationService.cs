@@ -48,7 +48,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling
 
         private void SetupListeners()
         {
-            PeriodicEventService.OnPeriodElapsed += (o, e) => CompileIfTextUnchanged();
+            PeriodicEventService.Register(this, 4, (o, e) => CompileIfTextUnchanged());
             TextUpdateListener.OnTextUpdated += (o, e) => OnTextUpdated(e);
         }
 

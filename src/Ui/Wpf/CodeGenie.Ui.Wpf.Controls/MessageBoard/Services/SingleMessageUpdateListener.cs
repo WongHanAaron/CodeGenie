@@ -25,7 +25,7 @@ namespace CodeGenie.Ui.Wpf.Controls.MessageBoard.Services
         {
             PeriodicEventService = periodicEventService;
             MessageRepository = messageRepository;
-            PeriodicEventService.OnPeriodElapsed += (o, e) => CheckForUpdates();
+            PeriodicEventService.Register(this, 2, (o, e) => CheckForUpdates());
         }
 
         string _registeredChannel = "";

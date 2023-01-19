@@ -31,6 +31,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         protected readonly ICompletionWindowFactory CompletionWindowFactory;
         protected readonly ICaretController CaretController;
         protected readonly IDispatcherService DispatcherService;
+        protected readonly IPeriodicEventService PeriodicEventService;
 
         public AutoCompleter(ILogger<AutoCompleter> logger, 
                              IDateTimeProvider dateTimeProvider,
@@ -48,25 +49,54 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             CompletionWindowFactory = completionWindowFactory;
             CaretController = caretController;
             DispatcherService = dispatcherService;
+            PeriodicEventService = periodicEventService;
             AttachEvents();
         }
 
         protected void AttachEvents()
         {
             TextUpdateListener.OnTextEntered += TextEntered;
+            PeriodicEventService.Register(this, 1, (o, e) => HandleTextEnteredIfAnyCached());
         }
 
+        TextEnterEventArgs _cachedTextEnterArgs;
         protected void TextEntered(object sender, TextEnterEventArgs args)
         {
+            _cachedTextEnterArgs = args;
+
             if (IsCompletionWindowOpen())
             {
                 _completionWindow.Close();
             }
-
-            TryShowSuggestion(sender, args);
         }
 
-        protected void TryShowSuggestion(object sender, TextEnterEventArgs args)
+        protected bool _suggestionHandlingInProgress = false;
+        protected void HandleTextEnteredIfAnyCached()
+        {
+            if (_cachedTextEnterArgs == null) return;
+            lock (this)
+            {
+                if (_suggestionHandlingInProgress) return;
+
+                _suggestionHandlingInProgress = true;
+            }
+
+            if (IsCompletionWindowOpen())
+            {
+                DispatcherService.InvokeOnUiThread(() => _completionWindow.Close());
+            }
+
+            var args = _cachedTextEnterArgs;
+            TryShowSuggestion(args);
+
+            lock (this)
+            {
+                _suggestionHandlingInProgress = false;
+                _cachedTextEnterArgs = null;
+            }
+        }
+
+        protected void TryShowSuggestion(TextEnterEventArgs args)
         {
             // If there is a completion window already shown don't show another until it is closed
             if (IsCompletionWindowOpen()) return;

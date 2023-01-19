@@ -18,7 +18,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Source: "/>
+            <TextBlock Text="Source: " TextAlignment="Center" VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding ViewModel.Sources}" Grid.Column="1" IsEditable="True" SelectedItem="{Binding ViewModel.SelectedSource}"/>
         </Grid>
         <DataGrid ItemsSource="{Binding ViewModel.MessagesView}" Grid.Row="1" AutoGenerateColumns="False">
