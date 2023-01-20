@@ -3,6 +3,7 @@ using Antlr4.Runtime.Tree;
 using CodeGenie.Core.Models.ComponentDefinitions.State;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.Shared;
+using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.SyntaxRuleDescribers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
@@ -62,41 +63,21 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             return describer.Describe(rule, node, searchParameters);
         }
 
-        protected SyntaxDescriptor FromComponentContext(ComponentContext rule, ITerminalNode node, SyntaxSearchParameters searchParameters)
-        {
-            if (node.Parent is Access_scopeContext) return SyntaxDescriptor.BeforeComponentNameDefinition;
-            if (node.Parent.GetChild(1) == node) return SyntaxDescriptor.BeforeComponentDivider;
-            if (node.Parent.GetChild(2) == node) return SyntaxDescriptor.BeforeComponentTypeDefinition;
-            if (node.Parent is Component_typeContext) return SyntaxDescriptor.BeforeComponentDetails;
-            return SyntaxDescriptor.Unknown;
-        }
-
-        protected SyntaxDescriptor FromComponentDetailsContext(Component_detailsContext rule, ITerminalNode node, SyntaxSearchParameters searchParameters)
-        {
-            if (rule.children.FirstOrDefault() == node && node.Symbol.Text.Equals("{")) return SyntaxDescriptor.WithinComponentDetails;
-            if (rule.children.LastOrDefault() == node && node.Symbol.Text.Equals("}")) return SyntaxDescriptor.WithinComponentDetails;
-            if (node.Symbol.Type.Equals(" ")) return SyntaxDescriptor.WithinComponentDetails;
-            return SyntaxDescriptor.Unknown;
-        }
-
-        protected SyntaxDescriptor FromPurposeContext(PurposeContext rule, ITerminalNode node, SyntaxSearchParameters searchParameters)
-        {
-            if (node.Symbol.Text.EndsWith("\"") && searchParameters.ColumnNumber > 
-                node.Symbol.Column + node.Symbol.Text.Count() - 1) return SyntaxDescriptor.WithinComponentDetails;
-            return SyntaxDescriptor.Unknown;
-        }
-
         protected void SetupDescribers()
         {
-            AddDescriber<ComponentContext>(FromComponentContext);
-            AddDescriber<Component_detailsContext>(FromComponentDetailsContext);
-            AddDescriber<PurposeContext>(FromPurposeContext);
+            AddDescriber(new FromComponentContextDescriber());
+            AddDescriber(new FromComponentDetailsContextDescriber());
+            AddDescriber(new FromPurposeContext());
+            AddDescriber(new FromAttributesContextDescriber());
         }
 
         protected ConcurrentDictionary<Type, ISyntaxRuleDescriber> _describer = new ConcurrentDictionary<Type, ISyntaxRuleDescriber>();
 
-        protected void AddDescriber<TRule>(Func<TRule, ITerminalNode, SyntaxSearchParameters, SyntaxDescriptor> method) where TRule : ParserRuleContext
-            => _describer[typeof(TRule)] = new SyntaxRuleDescriber<TRule>(typeof(TRule), method);
+        protected void AddDescriber(ISyntaxRuleDescriber describer)
+            => _describer[describer.ParserRuleType] = describer;
+
+        protected void AddGenericDescriber<TRule>(Func<TRule, ITerminalNode, SyntaxSearchParameters, SyntaxDescriptor> method) where TRule : ParserRuleContext
+            => _describer[typeof(TRule)] = new GenericSyntaxRuleDescriber<TRule>(typeof(TRule), method);
         
         protected ISyntaxRuleDescriber GetRuleDescriber(Type ruleType)
             => _describer.FirstOrDefault(kvp => kvp.Key.IsAssignableFrom(ruleType)).Value;

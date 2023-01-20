@@ -38,6 +38,8 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(SyntaxDescriptor.WithinComponentDetails, 1, 9, "+T:class{}")]
         [TestCase(SyntaxDescriptor.WithinComponentDetails, 1, 8, "+T:class{}")]
         [TestCase(SyntaxDescriptor.WithinComponentDetails, 3, 13, "+TestClass:class\n{\n\tpurpose : \"\" \n}")]
+        [TestCase(SyntaxDescriptor.BeforePurposeDefinitionDivider, 1, 15, "+T:class{purpose}")]
+        [TestCase(SyntaxDescriptor.BeforeAttributesDivider, 1, 18, "+T:class{attributes}")]
         public void Get_SyntaxState_At_Line_Column(SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
             var syntaxState = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
