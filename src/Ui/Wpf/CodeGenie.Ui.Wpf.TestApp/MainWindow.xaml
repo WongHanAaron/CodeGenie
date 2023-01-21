@@ -8,14 +8,15 @@
         xmlns:ctree="clr-namespace:CodeGenie.Ui.Wpf.Controls.ComponentTree;assembly=CodeGenie.Ui.Wpf.Controls"
         xmlns:message="clr-namespace:CodeGenie.Ui.Wpf.Controls.MessageBoard;assembly=CodeGenie.Ui.Wpf.Controls"
         xmlns:shared="clr-namespace:CodeGenie.Ui.Wpf.Controls.Shared;assembly=CodeGenie.Ui.Wpf.Controls"
+        xmlns:diagram="clr-namespace:CodeGenie.Ui.Wpf.Controls.Diagram;assembly=CodeGenie.Ui.Wpf.Controls"
         mc:Ignorable="d"
         DataContext="{shared:ServiceProviderContainer ServiceType={x:Type local:MainViewModel}}"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="700" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -29,8 +30,8 @@
         <editor:EditorControl ServiceProvider="{Binding ServiceProvider}" Grid.Row="1"/>
         <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch"/>
         <TabControl Grid.Column="2" Grid.Row="1">
-            <TabItem Header="UML Diagram">
-
+            <TabItem Header="UML Diagram" IsSelected="True">
+                <diagram:DiagramViewControl/>
             </TabItem>
             <TabItem Header="Component Tree" IsSelected="True">
                 <ctree:ComponentTreeControl ServiceProvider="{Binding ServiceProvider}"/>
