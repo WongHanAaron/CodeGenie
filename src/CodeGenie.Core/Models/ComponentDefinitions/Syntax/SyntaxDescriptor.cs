@@ -34,7 +34,9 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.State
         BeforeNextParameterDivider,
         BeforeMethodReturnTypeDefinition,
         // Relationship Definition Tree
-        BeforeStartRelationshipDefinition,
+        BeforeStartRelationshipsDefinition,
+        BeforeRelationshipsDivider,
+        BeforeRelationshipsDetails,
         BeforeRelatedComponentNameDefinition,
         BeforeDependencyDetails,
         BeforeComposesDetails,

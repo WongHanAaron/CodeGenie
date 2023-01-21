@@ -69,6 +69,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             AddDescriber(new FromComponentDetailsContextDescriber());
             AddDescriber(new FromPurposeContext());
             AddDescriber(new FromAttributesContextDescriber());
+            AddDescriber(new FromRelationshipsContextDescriber());
         }
 
         protected ConcurrentDictionary<Type, ISyntaxRuleDescriber> _describer = new ConcurrentDictionary<Type, ISyntaxRuleDescriber>();
