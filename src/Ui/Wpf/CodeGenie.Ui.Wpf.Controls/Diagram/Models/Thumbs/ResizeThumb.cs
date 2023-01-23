@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace CodeGenie.Ui.Wpf.Controls.Diagram.Components
+namespace CodeGenie.Ui.Wpf.Controls.Diagram.Models.Thumbs
 {
     public class ResizeThumb : Thumb
     {
         public ResizeThumb()
         {
-            DragDelta += new DragDeltaEventHandler(this.ResizeThumb_DragDelta);
+            DragDelta += new DragDeltaEventHandler(ResizeThumb_DragDelta);
         }
 
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            Control item = this.DataContext as Control;
+            Control item = DataContext as Control;
 
             if (item != null)
             {
