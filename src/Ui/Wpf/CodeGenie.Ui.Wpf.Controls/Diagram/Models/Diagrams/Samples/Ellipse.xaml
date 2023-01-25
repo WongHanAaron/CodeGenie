@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CodeGenie.Ui.Wpf.Controls.Diagram.Models.Diagrams.Samples"
-             mc:Ignorable="d" 
-             Height="100" Width="100"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="450">
     <Grid>
-        <Ellipse IsHitTestVisible="False" >
+        <Ellipse >
             <Shape.Fill>
                 <RadialGradientBrush Center="0.2, 0.2" GradientOrigin="0.2, 0.2" RadiusX="0.8" RadiusY="0.8">
                     <GradientStop Color="LightBlue" Offset="0"/>

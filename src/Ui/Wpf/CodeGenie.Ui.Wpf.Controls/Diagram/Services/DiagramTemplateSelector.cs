@@ -13,7 +13,6 @@ namespace CodeGenie.Ui.Wpf.Controls.Diagram.Services
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item == null) return null;
             if (item is IDiagramViewModel diagramViewModel)
             {
                 var controlType = diagramViewModel.ControlType;
@@ -24,8 +23,22 @@ namespace CodeGenie.Ui.Wpf.Controls.Diagram.Services
             }
             else
             {
-                throw new ArgumentException($"The content {item.GetType()} of the diagram view is not of type '{nameof(IDiagramViewModel)}'");
+                return CreateErrorViewModel(item);
             }
+        }
+
+        protected DataTemplate CreateErrorViewModel(object viewModel)
+        {
+            var returned = new DataTemplate()
+            {
+                VisualTree = new FrameworkElementFactory(typeof(TextBlock))
+            };
+
+            returned.VisualTree.SetValue(TextBlock.TextProperty, $"ERROR: The ViewModel '{viewModel?.GetType().Name ?? null}' cannot be cast as a '{typeof(IDiagramViewModel).Name}'");
+            returned.VisualTree.SetValue(TextBlock.TextWrappingProperty, TextWrapping.Wrap);
+            returned.VisualTree.SetValue(FrameworkElement.WidthProperty, (double)100.0);
+
+            return returned;
         }
     }
 }
