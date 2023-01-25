@@ -40,6 +40,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.State
         BeforeRelatedComponentNameDefinition,
         BeforeDependencyDetails,
         BeforeComposesDetails,
+        BeforeComposesTargetDefinition,
         BeforeAggregatesDetails,
         BeforeRealizesDetails,
         BeforeSpecializesDetails,

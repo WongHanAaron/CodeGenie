@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using CodeGenie.Core.Models.Attributes;
 using CodeGenie.Core.Models.ComponentDefinitions.State;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.Shared;
@@ -34,7 +35,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             Logger = logger;
             ContextParser = contextParser;
             SyntaxTreeSearcher = syntaxTreeTraverser;
-            SetupDescribers();
+            SetupAutoIncludedDescribers();
         }
 
         public SyntaxDescriptor GetSyntaxDescription(string script, int lineNumber, int columnNumber)
@@ -63,13 +64,23 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             return describer.Describe(rule, node, searchParameters);
         }
 
-        protected void SetupDescribers()
+        protected void SetupAutoIncludedDescribers()
         {
-            AddDescriber(new FromComponentContextDescriber());
-            AddDescriber(new FromComponentDetailsContextDescriber());
-            AddDescriber(new FromPurposeContext());
-            AddDescriber(new FromAttributesContextDescriber());
-            AddDescriber(new FromRelationshipsContextDescriber());
+            var syntaxRuleDescribers = this.GetType().Assembly.GetTypes().Where(t => typeof(ISyntaxRuleDescriber).IsAssignableFrom(t));
+            foreach (var ruleDescriberType in syntaxRuleDescribers)
+            {
+                if (ruleDescriberType.IsAbstract) continue;
+                if (ruleDescriberType.IsInterface) continue;
+                var autoExcludeAttribute = 
+                    ruleDescriberType.GetCustomAttributes(true).
+                    FirstOrDefault(a => a is AutoExcludeAttribute) as AutoExcludeAttribute;
+                if (autoExcludeAttribute != null &&
+                    autoExcludeAttribute.Exclude) continue;
+
+                var instance = Activator.CreateInstance(ruleDescriberType) as ISyntaxRuleDescriber;
+                if (instance != null)
+                    AddDescriber(instance);
+            }
         }
 
         protected ConcurrentDictionary<Type, ISyntaxRuleDescriber> _describer = new ConcurrentDictionary<Type, ISyntaxRuleDescriber>();

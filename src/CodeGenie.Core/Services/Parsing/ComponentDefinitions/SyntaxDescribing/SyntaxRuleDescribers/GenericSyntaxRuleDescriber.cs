@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using CodeGenie.Core.Models.Attributes;
 using CodeGenie.Core.Models.ComponentDefinitions.State;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using System;
@@ -8,6 +9,7 @@ using System.Text;
 
 namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.SyntaxRuleDescribers
 {
+    [AutoExclude]
     public class GenericSyntaxRuleDescriber<TRule> : SyntaxRuleDescriberBase<TRule>
     {
         public Func<TRule, ITerminalNode, SyntaxSearchParameters, SyntaxDescriptor> DescriptionMethod { get; protected set; }

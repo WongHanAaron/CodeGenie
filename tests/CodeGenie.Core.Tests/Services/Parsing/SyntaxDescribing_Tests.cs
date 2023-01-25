@@ -44,6 +44,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(SyntaxDescriptor.BeforeAttributesDetails, 1, 19, "+T:class{attributes:}")]
         [TestCase(SyntaxDescriptor.BeforeRelationshipsDetails, 1, 21, "+T:class{relationships}")]
         [TestCase(SyntaxDescriptor.WithinRelationshipsDetails, 1, 23, "+T:class{relationships{a}}")]
+        [TestCase(SyntaxDescriptor.BeforeComposesTargetDefinition, 1, 30, "+T:class{relationships{composes}}")]
         public void Get_SyntaxState_At_Line_Column(SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
             var syntaxState = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
