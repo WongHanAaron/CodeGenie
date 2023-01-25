@@ -13,11 +13,8 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.
     {
         public override SyntaxDescriptor Describe(RelationshipsContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
         {
-            if (rule.children.FirstOrDefault() == selectedNode) return SyntaxDescriptor.BeforeRelationshipsDivider;
-            if (rule.children.ElementAtOrDefault(1) != null &&
-                rule.children.ElementAtOrDefault(1) == selectedNode &&
-                selectedNode.Symbol.Text.Equals(":")) return SyntaxDescriptor.BeforeRelationshipsDetails;
-            return SyntaxDescriptor.Unknown;
+            if (rule.children.FirstOrDefault() == selectedNode) return SyntaxDescriptor.BeforeRelationshipsDetails;
+            return SyntaxDescriptor.WithinRelationshipsDetails;
         }
     }
 }

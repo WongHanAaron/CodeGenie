@@ -35,8 +35,8 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.State
         BeforeMethodReturnTypeDefinition,
         // Relationship Definition Tree
         BeforeStartRelationshipsDefinition,
-        BeforeRelationshipsDivider,
         BeforeRelationshipsDetails,
+        WithinRelationshipsDetails,
         BeforeRelatedComponentNameDefinition,
         BeforeDependencyDetails,
         BeforeComposesDetails,
