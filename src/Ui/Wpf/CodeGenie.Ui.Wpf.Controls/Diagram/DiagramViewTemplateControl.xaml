@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:CodeGenie.Ui.Wpf.Controls.Diagram"
              xmlns:thumb="clr-namespace:CodeGenie.Ui.Wpf.Controls.Diagram.Models.Thumbs"
              xmlns:services="clr-namespace:CodeGenie.Ui.Wpf.Controls.Diagram.Services"
+             xmlns:decorator="clr-namespace:CodeGenie.Ui.Wpf.Controls.Diagram.Models.Decorators"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -20,6 +21,9 @@
                          DataContext="{Binding }"/>
         <ContentControl Content="{Binding }" 
                         ContentTemplateSelector="{StaticResource ItemTemplateSelector}"
-                        IsHitTestVisible="False"/>
+                        IsHitTestVisible="False">
+        </ContentControl>
+        <decorator:DesignerItemDecorator x:Name="ItemDecorator"/>
+        
     </Grid>
 </UserControl>

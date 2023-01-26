@@ -9,9 +9,9 @@ using static CodeGenieParser;
 
 namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.SyntaxRuleDescribers
 {
-    public class FromComposesContextDescriber : SyntaxRuleDescriberBase<ComposesContext>
+    public class FromSpecializesContextDescriber : SyntaxRuleDescriberBase<SpecializesContext>
     {
-        public override SyntaxDescriptor Describe(ComposesContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
+        public override SyntaxDescriptor Describe(SpecializesContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
         {
             if (rule.children.FirstOrDefault() == selectedNode) return SyntaxDescriptor.BeforeRelatedComponentNameDefinition;
             return SyntaxDescriptor.Unknown;
