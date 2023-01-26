@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 {
@@ -28,24 +29,32 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         protected readonly ILogger<CompletionDataSuggester> Logger;
         protected readonly ITextUpdateListener TextUpdateListener;
         protected readonly ISyntaxDescriber SyntaxDescriber;
+        protected readonly IComponentRepository ComponentRepository;
+
         public CompletionDataSuggester(ILogger<CompletionDataSuggester> logger,
                                        ITextUpdateListener textUpdateListener, 
-                                       ISyntaxDescriber syntaxDescriber)
+                                       ISyntaxDescriber syntaxDescriber,
+                                       IComponentRepository componentRepository)
         {
             Logger = logger;
             TextUpdateListener = textUpdateListener;
             SyntaxDescriber = syntaxDescriber;
+            ComponentRepository = componentRepository;
+            SetupSuggestionCollectors();
+        }
+
+        protected void SetupSuggestionCollectors()
+        {
+            _suggestionCollector.Add(new ScopeSuggester());
+            _suggestionCollector.Add(new DividerSuggester());
+            _suggestionCollector.Add(new ComponentNameSuggester());
+            _suggestionCollector.Add(new ComponentTypeSuggester());
+            _suggestionCollector.Add(new ComponentDetailSuggester());
+            _suggestionCollector.Add(new ExistingComponentNameSuggester(ComponentRepository));
         }
 
 
-        private readonly static List<SyntaxSuggesterBase> _suggestionCollector = new List<SyntaxSuggesterBase>()
-        {
-            new ScopeSuggester(),
-            new DividerSuggester(),
-            new ComponentNameSuggester(),
-            new ComponentTypeSuggester(),
-            new ComponentDetailSuggester()
-        };
+        private readonly List<SyntaxSuggesterBase> _suggestionCollector = new List<SyntaxSuggesterBase>();
         public IEnumerable<ICompletionData> GetSuggestions(TextEnterEventArgs eventArgs)
         {
             var fullScript = TextUpdateListener.CurrentText;

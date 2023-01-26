@@ -17,7 +17,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling
         /// <summary> This method will be invoked by internal listeners when the text is updated </summary>
         void OnTextUpdated(TextUpdateEventArgs evt);
 
-        /// <summary> This method will be called when </summary>
+        /// <summary> This method will be called when the text has not been modified and can be compiled </summary>
         void CompileIfTextUnchanged();
     }
 
