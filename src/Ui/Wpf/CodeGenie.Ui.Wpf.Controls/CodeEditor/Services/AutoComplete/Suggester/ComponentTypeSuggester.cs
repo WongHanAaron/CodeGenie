@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeGenie.Core.Models.ComponentDefinitions.State;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester

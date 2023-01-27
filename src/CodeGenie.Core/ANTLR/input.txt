@@ -11,6 +11,13 @@
     }
     relationships
     {
-        
+        depends TestClass 
+        {
+            purpose : "Test"
+        }
+        depends TestClass2
+        aggregates TestClass3
+        aggregates TestClass3
+        composes TestClass1
     }
 }

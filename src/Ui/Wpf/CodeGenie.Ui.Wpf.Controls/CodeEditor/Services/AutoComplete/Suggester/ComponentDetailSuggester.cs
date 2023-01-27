@@ -1,6 +1,6 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.ComponentDetails;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions.ComponentDetails;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
 using System.Collections.Generic;
@@ -21,6 +21,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
             var includeBraces = descriptor == SyntaxDescriptor.BeforeComponentDetails;
             toBeReturned.Add(new ComponentPurpose(textEnterArgs, includeBraces));
             toBeReturned.Add(new ComponentAttributes(textEnterArgs, includeBraces));
+            toBeReturned.Add(new ComponentRelationships(textEnterArgs, includeBraces));
         }
     }
 }

@@ -83,7 +83,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 
             if (IsCompletionWindowOpen())
             {
-                DispatcherService.InvokeOnUiThread(() => _completionWindow.Close());
+                DispatcherService.InvokeOnUiThread(() => _completionWindow?.Close());
             }
 
             var args = _cachedTextEnterArgs;

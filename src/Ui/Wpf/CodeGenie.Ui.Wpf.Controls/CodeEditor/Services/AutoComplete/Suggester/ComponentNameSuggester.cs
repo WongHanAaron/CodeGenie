@@ -1,5 +1,5 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
 using System.Collections.Generic;

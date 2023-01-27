@@ -1,8 +1,6 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.ComponentDetails;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using Microsoft.Extensions.Logging;

@@ -33,7 +33,7 @@ parameter           :   NAME DIVIDER type;
 method_details      :   OPEN_S (purpose|tags)? CLOSE_S;
 
 /* Relationship Definitions */
-relationships       :   'relationships' OPEN_S relationship (',' relationship)* CLOSE_S;
+relationships       :   'relationships' OPEN_S relationship (relationship)* CLOSE_S;
 relationship        :   dependency|composes|aggregates|realizes|specializes;
 
 cardinality         :   'cardinality' DIVIDER cardinality_count '...' cardinality_count;
