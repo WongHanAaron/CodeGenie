@@ -8,18 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class ScopeSuggester : SyntaxSuggesterBase
     {
         public ScopeSuggester() : base(SyntaxDescriptor.BeforeStartComponentDefinition,
                                        SyntaxDescriptor.BeforeStartAttributeDefinition,
-                                       SyntaxDescriptor.BeforeComponentDetails) { }
+                                       SyntaxDescriptor.BeforeComponentDetails)
+        { }
 
         protected override void CollectOtherSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
             toBeReturned.Add(new SimpleTextSuggestion("+ (public)", "Public Scope", textEnterArgs, "+ "));
-            toBeReturned.Add(new SimpleTextSuggestion("- (private)", "Private Scope", textEnterArgs,"- "));
+            toBeReturned.Add(new SimpleTextSuggestion("- (private)", "Private Scope", textEnterArgs, "- "));
             toBeReturned.Add(new SimpleTextSuggestion("# (protected)", "Private Scope", textEnterArgs, "# "));
         }
     }

@@ -1,5 +1,5 @@
-﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
 using System;
@@ -8,19 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.ComponentDetails
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions.ComponentDetails
 {
-    public class ComponentPurpose : SuggestionBase
+    public class ComponentAttributes : SuggestionBase
     {
         bool _includeExternalBraces;
-        public ComponentPurpose(TextEnterEventArgs eventArgs, bool includeExternalBraces) : base(eventArgs) 
+        public ComponentAttributes(TextEnterEventArgs eventArgs, bool includeExternalBraces) : base(eventArgs)
         {
             _includeExternalBraces = includeExternalBraces;
         }
 
-        public override string Text => "{ purpose : \"\"}";
+        public override string Text => "{ attributes { } }";
 
-        public override object Description => "Add a component purpose";
+        public override object Description => "Add a component attributes";
 
         public override double Priority => 1;
 
@@ -28,13 +28,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions.C
         {
             var builder = new StringBuilder();
             if (_includeExternalBraces) builder.Append("\n{");
-            builder.Append("\n\tpurpose : \"\"");
+            builder.Append("\n\tattributes\n\t{\n\t\t\n\t}");
             if (_includeExternalBraces) builder.Append("\n}");
-            
-            CaretLineNumberPlacement = EventArguments.LineNumber + 1;
+            CaretLineNumberPlacement = EventArguments.LineNumber + 3;
             if (_includeExternalBraces) CaretLineNumberPlacement += 1;
-            CaretColumnPlacement = 13;
-
+            CaretColumnPlacement = 3;
             return builder.ToString();
         }
     }

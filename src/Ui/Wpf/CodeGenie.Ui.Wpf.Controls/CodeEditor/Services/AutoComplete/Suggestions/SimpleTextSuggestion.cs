@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions
 {
     public class SimpleTextSuggestion : SuggestionBase
-    {   
+    {
         public SimpleTextSuggestion(string caption, string description, TextEnterEventArgs args, string replacementText = null, double priority = 1) : base(args)
         {
             _text = caption;

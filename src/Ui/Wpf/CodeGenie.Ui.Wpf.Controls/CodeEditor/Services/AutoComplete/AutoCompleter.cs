@@ -1,6 +1,6 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking;
 using CodeGenie.Ui.Wpf.Controls.Shared.Contracts;
 using CodeGenie.Ui.Wpf.Controls.Shared.Services;

@@ -2,7 +2,6 @@
 using CodeGenie.Core.Models.ComponentDefinitions.State;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggestions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
-using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
@@ -11,12 +10,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class ExistingComponentNameSuggester : SyntaxSuggesterBase
     {
         protected readonly IComponentRepository Repository;
-        public ExistingComponentNameSuggester(IComponentRepository repository) : 
+        public ExistingComponentNameSuggester(IComponentRepository repository) :
                                         base(SyntaxDescriptor.BeforeRelatedComponentNameDefinition)
         {
             Repository = repository;

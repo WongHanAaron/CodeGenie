@@ -8,12 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester
+namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class ComponentDetailSuggester : SyntaxSuggesterBase
     {
         public ComponentDetailSuggester() : base(SyntaxDescriptor.BeforeComponentDetails,
-                                                  SyntaxDescriptor.WithinComponentDetails) { }
+                                                  SyntaxDescriptor.WithinComponentDetails)
+        { }
 
         protected override void CollectOtherSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
