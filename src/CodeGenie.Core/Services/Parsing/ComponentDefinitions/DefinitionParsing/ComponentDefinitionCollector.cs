@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static CodeGenieParser;
 
 namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
 {
@@ -32,6 +33,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             var component = new ParsedComponentDefinition();
             component.Name = context.NAME().Symbol.Text;
             component.IsInterface = IsInterface(context.component_type().GetText());
+            component.Scope = LoadScope(context.access_scope());
 
             var start = context.Start;
             var stop = context.Stop;
@@ -49,6 +51,16 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             component.ParsedToken = ParsedToken.Create<ParsedToken>(start, stop);
             _componentDefinitions.Add(component);
             return component;
+        }
+
+        protected Scope LoadScope(Access_scopeContext accessScope)
+        {
+            var scope = accessScope.children.FirstOrDefault();
+            if (scope == null) return Scope.Unknown;
+            if (scope.GetText().Equals("+") || scope.GetText().Equals("public")) return Scope.Public;
+            if (scope.GetText().Equals("-") || scope.GetText().Equals("private")) return Scope.Private;
+            if (scope.GetText().Equals("#") || scope.GetText().Equals("protected")) return Scope.Protected;
+            return Scope.Unknown;
         }
 
         protected bool IsInterface(string componentType)

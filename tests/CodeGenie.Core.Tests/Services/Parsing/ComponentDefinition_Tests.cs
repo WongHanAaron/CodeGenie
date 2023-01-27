@@ -1,4 +1,5 @@
 ﻿
+using CodeGenie.Core.Models.ComponentDefinitions.Definitions;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
 using CodeGenie.Core.Tests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -111,6 +112,25 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
 
             Assert.AreEqual(expectedPurpose, component.Purpose);
+        }
+
+        [TestCase("+TestClass:class", Scope.Public)]
+        [TestCase("-TestClass:class", Scope.Private)]
+        [TestCase("#TestClass:class", Scope.Protected)]
+        [TestCase("public TestClass:class", Scope.Public)]
+        [TestCase("private TestClass:class", Scope.Private)]
+        [TestCase("protected TestClass:class", Scope.Protected)]
+        public void Component_Parse_Correct_Scope(string script, Scope expectedScope)
+        {
+            var result = Parser.Parse(script);
+
+            var component = result.Components.FirstOrDefault();
+
+            Assert.AreEqual(false, result.Errors.Any());
+
+            Assert.IsNotNull(component, $"Expect there to be a component to test against");
+
+            Assert.AreEqual(expectedScope, component.Scope);
         }
     }
 }

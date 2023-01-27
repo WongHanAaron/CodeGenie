@@ -27,12 +27,16 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.AutoComplete.Suggester
             if (Repository.LastValidComponents?.Components == null) return;
             if (!Repository.LastValidComponents.Components.Any()) return;
 
+            var shouldPrefixWhitespace = !textEnterArgs.LineContent.EndsWith(' ');
+
             foreach (var component in Repository.LastValidComponents.Components)
             {
-                // if (component.Scope != Scope.Public) continue;
+                if (component.Scope != Scope.Public) continue;
                 var componentType = component.IsInterface ? "interface" : "class";
                 var description = string.IsNullOrWhiteSpace(component.Purpose) ? $"A {componentType} of name '{component.Name}'" : $"A {componentType} of name '{component.Name}'. {component.Purpose}";
-                toBeReturned.Add(new SimpleTextSuggestion(component.Name, description, textEnterArgs));
+                var value = component.Name;
+                if (shouldPrefixWhitespace) value = " " + value;
+                toBeReturned.Add(new SimpleTextSuggestion(component.Name, description, textEnterArgs, value));
             }
         }
     }
