@@ -25,6 +25,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.State
         BeforeAttributeTypeDefinition,
         BeforeAttributeDetails,
         // Method Definition Tree
+        BeforeMethodsDetails,
         BeforeStartMethodDefinition,
         BeforeMethodNameDefinition,
         BeforeMethodParenthesis,

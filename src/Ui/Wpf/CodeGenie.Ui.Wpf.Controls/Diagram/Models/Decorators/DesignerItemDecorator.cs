@@ -47,7 +47,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Diagram.Models.Decorators
                 if (adornerLayer != null)
                 {
                     ContentControl designerItem = this.DataContext as ContentControl;
-                    Canvas canvas = VisualTreeHelper.GetParent(designerItem) as Canvas;
+                    var obj = VisualTreeHelper.GetParent(designerItem);
                     this.adorner = new ResizeRotateAdorner(designerItem);
                     adornerLayer.Add(this.adorner);
 

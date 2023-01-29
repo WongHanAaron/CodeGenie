@@ -23,6 +23,20 @@ namespace CodeGenie.Ui.Wpf.Controls.Diagram
         public DiagramViewTemplateControl()
         {
             InitializeComponent();
+            MouseEnter += DiagramViewTemplateControl_MouseEnter;
+            MouseLeave += DiagramViewTemplateControl_MouseLeave;
+        }
+
+        private void DiagramViewTemplateControl_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (ItemDecorator != null)
+                ItemDecorator.ShowDecorator = true;
+        }
+
+        private void DiagramViewTemplateControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (ItemDecorator != null)
+                ItemDecorator.ShowDecorator = false;
         }
     }
 }

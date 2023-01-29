@@ -23,7 +23,8 @@
                         ContentTemplateSelector="{StaticResource ItemTemplateSelector}"
                         IsHitTestVisible="False">
         </ContentControl>
-        <decorator:DesignerItemDecorator x:Name="ItemDecorator"/>
-        
+        <decorator:DesignerItemDecorator 
+                x:Name="ItemDecorator" Background="Red"
+                DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:DiagramViewTemplateControl}}}"/>
     </Grid>
 </UserControl>

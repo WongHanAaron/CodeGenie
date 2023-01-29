@@ -50,7 +50,8 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(SyntaxDescriptor.BeforeRelatedComponentNameDefinition, 1, 32, "+T:class{relationships{aggregates}}")]
         [TestCase(SyntaxDescriptor.BeforeRelatedComponentNameDefinition, 1, 30, "+T:class{relationships{realizes}}")]
         [TestCase(SyntaxDescriptor.BeforeRelatedComponentNameDefinition, 1, 33, "+T:class{relationships{specializes}}")]
-
+        [TestCase(SyntaxDescriptor.BeforeMethodsDetails, 1, 15, "+T:class{methods{}}")]
+        [TestCase(SyntaxDescriptor.BeforeMethodsDetails, 1, 15, "+T:class{methods}")]
         public void Get_SyntaxState_At_Line_Column(SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
             var syntaxState = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
