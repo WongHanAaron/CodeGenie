@@ -14,7 +14,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
     {
         public DetailsBracketSuggester() : base(SyntaxDescriptor.BeforeComponentDetails,
                                                 SyntaxDescriptor.BeforeRelationshipsDetails,
-                                                SyntaxDescriptor.BeforeAttributeDetails)
+                                                SyntaxDescriptor.BeforeAttributeDetails,
+                                                SyntaxDescriptor.BeforeMethodsDetails)
         { }
 
         protected override void CollectOtherSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)

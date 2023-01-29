@@ -37,8 +37,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions
                 b.Append(string.Join("", new string[existingTabLevel].Select(s => "\t")));
                 b.Append("}");
                 CaretLineNumberPlacement = EventArguments.LineNumber + 2;
-                CaretColumnPlacement += existingTabLevel + 1;
-            }
+                CaretColumnPlacement += existingTabLevel + 1;            }
             else
             {
                 CaretColumnPlacement += 2;

@@ -13,7 +13,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
     public class DividerSuggester : SyntaxSuggesterBase
     {
         public DividerSuggester() : base(SyntaxDescriptor.BeforeComponentDivider,
-                                         SyntaxDescriptor.BeforeAttributesDivider,
                                          SyntaxDescriptor.BeforeAttributeDivider,
                                          SyntaxDescriptor.BeforeCardinalityDivider)
         { }
