@@ -28,7 +28,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
         protected readonly ITextViewEventListener TextViewEventListener;
         protected readonly IComponentDefinitionProvider ComponentDefinitionProvider;
         protected TextEditor TextEditor;
-        protected ToolTip ToolTip;
+        protected ToolTip? ToolTip;
 
         public ComponentDefinitionErrorMarker(ILogger<ComponentDefinitionErrorMarker> logger,
                                               ITextMarkerService textMarkerService,
@@ -45,7 +45,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
             TextViewEventListener.VisualLinesChanged += VisualLinesChanged;
         }
 
-        private void MouseHover(object sender, MouseEventArgs e)
+        private void MouseHover(object? sender, MouseEventArgs e)
         {
             var pos = TextEditor.TextArea.TextView.GetPositionFloor(e.GetPosition(TextEditor.TextArea.TextView) + TextEditor.TextArea.TextView.ScrollOffset);
             bool inDocument = pos.HasValue;
@@ -76,12 +76,12 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
             }
         }
 
-        void ToolTipClosed(object sender, RoutedEventArgs e)
+        void ToolTipClosed(object? sender, RoutedEventArgs e)
         {
             ToolTip = null;
         }
 
-        void TextEditorMouseHoverStopped(object sender, MouseEventArgs e)
+        void TextEditorMouseHoverStopped(object? sender, MouseEventArgs e)
         {
             if (ToolTip != null)
             {
@@ -90,7 +90,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
             }
         }
 
-        private void VisualLinesChanged(object sender, EventArgs e)
+        private void VisualLinesChanged(object? sender, EventArgs e)
         {
             if (ToolTip != null)
             {
@@ -98,7 +98,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
             }
         }
 
-        private void MarkErrors(object sender, ParsingResult parsingResult)
+        private void MarkErrors(object? sender, ParsingResult parsingResult)
         {
             try
             {

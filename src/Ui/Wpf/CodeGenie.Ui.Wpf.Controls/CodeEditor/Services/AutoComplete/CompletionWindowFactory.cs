@@ -13,13 +13,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
     public interface ICompletionWindowFactory : IInjectsEditor
     {
         /// <summary> Create a completion window for the code editor </summary>
-        CompletionWindow Create();
+        CompletionWindow? Create();
     }
 
     public class CompletionWindowFactory : ICompletionWindowFactory
     {
-        public TextEditor _editor;
-        public CompletionWindow Create()
+        public TextEditor? _editor;
+        public CompletionWindow? Create()
         {
             if (_editor == null) return null;
             return new CompletionWindow(_editor.TextArea);

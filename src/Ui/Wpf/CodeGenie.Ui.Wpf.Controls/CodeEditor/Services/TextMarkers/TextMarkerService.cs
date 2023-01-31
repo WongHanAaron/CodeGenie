@@ -29,8 +29,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
 
     public class TextMarkerService : ITextMarkerService
     {
-        private TextEditor _textEditor;
-        private TextSegmentCollection<TextMarker> _markers;
+        private TextEditor? _textEditor;
+        private TextSegmentCollection<TextMarker>? _markers;
         protected ILogger<TextMarkerService> Logger;
 
         public void InjectEditor(TextEditor textEditor)
@@ -129,6 +129,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
 
         public void Clear()
         {
+            if (_markers == null) return;
             foreach (TextMarker m in _markers)
             {
                 Remove(m);
@@ -137,6 +138,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
 
         private void Remove(TextMarker marker)
         {
+            if (_markers == null) return;
             if (_markers.Remove(marker))
             {
                 Redraw(marker);
@@ -145,7 +147,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.TextMarkers
 
         private void Redraw(ISegment segment)
         {
-            _textEditor.Dispatcher.Invoke(() =>
+            _textEditor?.Dispatcher.Invoke(() =>
             {
                 _textEditor.TextArea.TextView.Redraw(segment);
             });

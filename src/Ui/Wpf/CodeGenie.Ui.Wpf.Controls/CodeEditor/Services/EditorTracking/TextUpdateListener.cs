@@ -20,9 +20,9 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
         protected readonly ILogger<TextUpdateListener> Logger;
         protected readonly IDateTimeProvider DateTimeProvider;
         protected readonly IDispatcherService Dispatcher;
-        public EventHandler<TextUpdateEventArgs> OnTextUpdated { get; set; }
-        public EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
-        public EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
+        public EventHandler<TextUpdateEventArgs>? OnTextUpdated { get; set; }
+        public EventHandler<TextEnterEventArgs>? OnTextEntered { get; set; }
+        public EventHandler<TextEnterEventArgs>? OnTextEntering { get; set; }
 
         public string CurrentText => Dispatcher.InvokeOnUiThread(() => _editor?.Text ?? String.Empty);
 
@@ -159,15 +159,15 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
 
         public sealed class CurrentLineDetails
         {
-            public DocumentLine Line { get; set; }
+            public DocumentLine? Line { get; set; }
             public int? LineNumber { get; set; }
             public int? Offset { get; set; }
             public int? Length { get; set; }
             public int? Column { get; set; }
-            public string LineContent { get; set; }
+            public string? LineContent { get; set; }
         }
 
-        public void TearDownEditor(TextEditor editor)
+        public void TearDownEditor(TextEditor? editor)
         {
             DetachEvents();
             _editor = null;

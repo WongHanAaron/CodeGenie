@@ -20,7 +20,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
 {
     public static class EditorServiceExtensions
     {
-        public static ServiceProvider CreateDefaultServiceProvider(IDispatcherService dispatcherService = null)
+        public static ServiceProvider CreateDefaultServiceProvider(IDispatcherService? dispatcherService = null)
         {
             var collection = new ServiceCollection();
             collection.AddControlSharedServices(dispatcherService);
@@ -31,7 +31,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
             return collection.BuildServiceProvider();
         }
 
-        public static void AddCodeEditorServices(this IServiceCollection serviceCollection, Action<ServiceCreationOptions> optionsUpdater = null)
+        public static void AddCodeEditorServices(this IServiceCollection serviceCollection, Action<ServiceCreationOptions>? optionsUpdater = null)
         {
             serviceCollection.AddEditorUiServices();
             serviceCollection.AddCodeGenie(optionsUpdater);

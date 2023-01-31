@@ -23,13 +23,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts
         void TextWasEntered(object sender, string textEntered);
 
         /// <summary> Raised when the text is updated </summary>
-        EventHandler<TextUpdateEventArgs> OnTextUpdated { get; set; }
+        EventHandler<TextUpdateEventArgs>? OnTextUpdated { get; set; }
 
         /// <summary> Raised when some text is entered </summary>
-        EventHandler<TextEnterEventArgs> OnTextEntered { get; set; }
+        EventHandler<TextEnterEventArgs>? OnTextEntered { get; set; }
 
         /// <summary> Raised when some text is being entered </summary>
-        EventHandler<TextEnterEventArgs> OnTextEntering { get; set; }
+        EventHandler<TextEnterEventArgs>? OnTextEntering { get; set; }
         
         /// <summary> The current text in the text editor </summary>
         string CurrentText { get; }

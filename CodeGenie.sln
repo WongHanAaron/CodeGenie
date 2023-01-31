@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ui", "Ui", "{91F2EA75-5420-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wpf", "Wpf", "{06FF521A-7010-4813-82C2-7D88EFF6C314}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenie.Ui.Wpf.TestApp", "src\Ui\Wpf\CodeGenie.Ui.Wpf.TestApp\CodeGenie.Ui.Wpf.TestApp.csproj", "{AD6B5161-9FDD-4E92-993D-06F7C185B2E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenie.Ui.Wpf.TestApp", "src\Ui\Wpf\CodeGenie.Ui.Wpf.TestApp\CodeGenie.Ui.Wpf.TestApp.csproj", "{AD6B5161-9FDD-4E92-993D-06F7C185B2E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenie.Ui.Wpf.Controls", "src\Ui\Wpf\CodeGenie.Ui.Wpf.Controls\CodeGenie.Ui.Wpf.Controls.csproj", "{5684D7D0-6690-45F7-9A23-FC219677C827}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenie.Ui.Wpf.Controls", "src\Ui\Wpf\CodeGenie.Ui.Wpf.Controls\CodeGenie.Ui.Wpf.Controls.csproj", "{5684D7D0-6690-45F7-9A23-FC219677C827}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

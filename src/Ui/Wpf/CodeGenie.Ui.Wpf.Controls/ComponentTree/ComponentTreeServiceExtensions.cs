@@ -13,7 +13,7 @@ namespace CodeGenie.Ui.Wpf.Controls.ComponentTree
 {
     public static class ComponentTreeServiceExtensions
     {
-        public static IServiceProvider CreateDefaultServiceProvider(IDispatcherService dispatcherService = null)
+        public static IServiceProvider CreateDefaultServiceProvider(IDispatcherService? dispatcherService = null)
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddControlSharedServices(dispatcherService);

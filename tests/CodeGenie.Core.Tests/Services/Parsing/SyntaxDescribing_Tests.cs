@@ -19,7 +19,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         public void SetUp()
         {
             ServiceProvider = BuildServiceProvider();
-            Describer = ServiceProvider.GetService<ISyntaxDescriber>();
+            Describer = ServiceProvider?.GetService<ISyntaxDescriber>();
 
             Assert.IsNotNull(Describer, "The syntax describer is null");
         }

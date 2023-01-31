@@ -9,13 +9,13 @@ namespace CodeGenie.Core.Tests.Services.Parsing
     [TestFixture]
     public class ComponentDefinition_Tests : ComponentDefinitionTestBase
     {
-        IComponentDefinitionParser Parser;
+        IComponentDefinitionParser? Parser;
 
         [SetUp]
         public void SetUp()
         {
             ServiceProvider = BuildServiceProvider();
-            Parser = ServiceProvider.GetService<IComponentDefinitionParser>();
+            Parser = ServiceProvider?.GetService<IComponentDefinitionParser>();
             Assert.IsNotNull(Parser, "The parser could not be injected");
         }
 
@@ -23,8 +23,8 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase("+ TestClass : class - TestClass2 : class + TestClass3 : interface", 3)]
         public void Component_Parse_Matches_Count(string script, int expectedCount)
         {
-            var components = Parser.Parse(script).Components;
-            Assert.AreEqual(expectedCount, components.Count(), "The returned count of components do not match the expected count");
+            var components = Parser?.Parse(script).Components;
+            Assert.That(components?.Count(), Is.EqualTo(expectedCount), "The returned count of components do not match the expected count");
         }
 
         [TestCase("+ TestClass : class", "TestClass", "", false)]
@@ -32,27 +32,27 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase("+ TestClass3 : interface { purpose : \"Something\"}", "TestClass3", "Something", true)]
         public void Component_Parse_Matches_Name(string script, string expectedName, string purpose, bool expectIsInterface)
         {
-            var components = Parser.Parse(script).Components;
-            var first = components.FirstOrDefault();
-            Assert.AreEqual(expectedName, first.Name);
-            Assert.AreEqual(expectIsInterface, first.IsInterface);
+            var components = Parser?.Parse(script).Components;
+            var first = components?.FirstOrDefault();
+            Assert.That(first?.Name, Is.EqualTo(expectedName));
+            Assert.That(first?.IsInterface, Is.EqualTo(expectIsInterface));
         }
 
         [TestCase("+ TestClass : class { attributes { + Attribute : string } }", 1)]
         public void Component_Parse_Attribute_Count_Matches(string script, int expectedAttributeCount)
         {
-            var components = Parser.Parse(script).Components;
-            Assert.AreEqual(expectedAttributeCount, components.FirstOrDefault().Attributes.Count());
+            var components = Parser?.Parse(script).Components;
+            Assert.That(components?.FirstOrDefault()?.Attributes.Count(), Is.EqualTo(expectedAttributeCount));
         }
 
         [TestCase("+ TestClass : class { attributes { + Attribute : string} }", "Attribute", "string")]
         public void Component_Parse_Attribute_Name_And_Type_Matches(string script, string expectedName, string expectedType)
         {
-            var components = Parser.Parse(script).Components;
-            var first = components.FirstOrDefault();
-            var attribute = first.Attributes.FirstOrDefault();
-            Assert.AreEqual(expectedName, attribute.Name);
-            Assert.AreEqual(expectedType, attribute.Type);
+            var components = Parser?.Parse(script).Components;
+            var first = components?.FirstOrDefault();
+            var attribute = first?.Attributes.FirstOrDefault();
+            Assert.That(attribute?.Name, Is.EqualTo(expectedName));
+            Assert.That(attribute?.Type, Is.EqualTo(expectedType));
         }
 
         [TestCase("+ Testclass : something", true)]
@@ -61,25 +61,25 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         {
             var result = Parser.Parse(script);
 
-            Assert.AreEqual(expectError, result.HasErrors);
+            Assert.That(result.HasErrors, Is.EqualTo(expectError));
         }
 
         [TestCase("+ TestClass : class", "TestClass", 0, 18, 1, 0)]
         [TestCase("+ TestClass : class\n+ TestClass2 : class", "TestClass2", 20, 39, 2, 0)]
         public void Component_Parse_Correct_Positions(string script, string componentToTest, int startIndex, int endIndex, int lineNumber, int columnPosition)
         {
-            var result = Parser.Parse(script);
+            var result = Parser?.Parse(script);
 
-            Assert.AreEqual(false, result.HasErrors, "Don't expect any parsing errors from this");
+            Assert.That(result?.HasErrors, Is.EqualTo(false), "Don't expect any parsing errors from this");
 
-            var component = result.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
+            var component = result?.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
 
             Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
 
-            Assert.AreEqual(startIndex, component.ParsedToken.StartIndex);
-            Assert.AreEqual(endIndex, component.ParsedToken.EndIndex);
-            Assert.AreEqual(lineNumber, component.ParsedToken.LineNumber);
-            Assert.AreEqual(columnPosition, component.ParsedToken.ColumnIndex);
+            Assert.That(component.ParsedToken.StartIndex, Is.EqualTo(startIndex));
+            Assert.That(component.ParsedToken.EndIndex, Is.EqualTo(endIndex));
+            Assert.That(component.ParsedToken.LineNumber, Is.EqualTo(lineNumber));
+            Assert.That(component.ParsedToken.ColumnIndex, Is.EqualTo(columnPosition));
         }
 
         [TestCase("+ TestClass : class { tags { \"test1\" \"test2\"} }", "TestClass", "test1,test2")]
@@ -87,15 +87,15 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase("+ TestClass : class { purpose: \"somepurpose\" attributes { + Attribute1 : string } tags { \"test1\" \"test2\"} } + TestClass2 : class { tags { \"test3\" } }", "TestClass2", "test3")]
         public void Component_Parse_Correct_Tags(string script, string componentToTest, string expectedCommaSeparatedTags)
         {
-            var result = Parser.Parse(script);
+            var result = Parser?.Parse(script);
             
             var expectedTags = expectedCommaSeparatedTags.Split(",").ToList();
 
-            var component = result.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
+            var component = result?.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
 
             Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
 
-            Assert.AreEqual(expectedTags, component.Tags);
+            Assert.That(component.Tags, Is.EqualTo(expectedTags));
         }
 
         [TestCase("+TestClass:class{purpose:\"some purpose\"}", "TestClass", "some purpose", false)]
@@ -107,11 +107,11 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
             var component = result.Components.FirstOrDefault(c => c.Name.Equals(componentToTest));
 
-            Assert.AreEqual(expectError, result.Errors.Any());
+            Assert.That(result.Errors.Any(), Is.EqualTo(expectError));
 
             Assert.IsNotNull(component, $"Expect there to be a component by the name of '{componentToTest}'");
 
-            Assert.AreEqual(expectedPurpose, component.Purpose);
+            Assert.That(component.Purpose, Is.EqualTo(expectedPurpose));
         }
 
         [TestCase("+TestClass:class", Scope.Public)]
@@ -126,11 +126,11 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
             var component = result.Components.FirstOrDefault();
 
-            Assert.AreEqual(false, result.Errors.Any());
+            Assert.That(result.Errors.Any(), Is.EqualTo(false));
 
-            Assert.IsNotNull(component, $"Expect there to be a component to test against");
+            Assert.That(component, Is.Not.Null, $"Expect there to be a component to test against");
 
-            Assert.AreEqual(expectedScope, component.Scope);
+            Assert.That(component.Scope, Is.EqualTo(expectedScope));
         }
     }
 }

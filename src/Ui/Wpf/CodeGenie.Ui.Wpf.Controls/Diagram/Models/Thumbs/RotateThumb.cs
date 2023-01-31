@@ -66,7 +66,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Diagram.Models.Thumbs
                 Vector deltaVector = Point.Subtract(currentPoint, this.centerPoint);
 
                 double angle = Vector.AngleBetween(this.startVector, deltaVector);
-
+                
                 RotateTransform rotateTransform = this.designerItem.RenderTransform as RotateTransform;
                 rotateTransform.Angle = this.initialAngle + Math.Round(angle, 0);
                 this.designerItem.InvalidateMeasure();

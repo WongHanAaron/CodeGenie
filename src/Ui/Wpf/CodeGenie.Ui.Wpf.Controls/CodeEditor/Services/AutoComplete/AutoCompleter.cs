@@ -23,7 +23,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 
     public class AutoCompleter : IAutoCompleter
     {
-        protected CompletionWindow _completionWindow;
+        protected CompletionWindow? _completionWindow;
         protected readonly ILogger Logger;
         protected readonly IDateTimeProvider DateTimeProvider;
         protected readonly ITextUpdateListener TextUpdateListener;
@@ -59,7 +59,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
             PeriodicEventService.Register(this, 1, (o, e) => HandleTextEnteredIfAnyCached());
         }
 
-        TextEnterEventArgs _cachedTextEnterArgs;
+        TextEnterEventArgs? _cachedTextEnterArgs;
         protected void TextEntered(object sender, TextEnterEventArgs args)
         {
             _cachedTextEnterArgs = args;
@@ -126,7 +126,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         protected bool IsCompletionWindowOpen()
             => _completionWindow != null;
 
-        protected ICompletionData _lastSelectedItem;
+        protected ICompletionData? _lastSelectedItem;
         protected void EnsureCompletionWindowCreated()
         {
             if (_completionWindow != null)
