@@ -38,21 +38,26 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.That(first?.IsInterface, Is.EqualTo(expectIsInterface));
         }
 
-        [TestCase("+ TestClass : class { attributes { + Attribute : string } }", 1)]
-        public void Component_Parse_Attribute_Count_Matches(string script, int expectedAttributeCount)
+        [TestCase(1, "+ TestClass : class { attributes { + Attribute : string } }")]
+        [TestCase(2, "+ TestClass : class { attributes { + Attribute : string - Attribute2 : string } }")]
+        [TestCase(3, "+ TestClass : class { attributes { + Attribute : string - Attribute2 : string # Attribute3: otherType } }")]
+        public void Component_Parse_Attribute_Count_Matches(int expectedAttributeCount, string script)
         {
             var components = Parser?.Parse(script).Components;
             Assert.That(components?.FirstOrDefault()?.Attributes.Count(), Is.EqualTo(expectedAttributeCount));
         }
 
-        [TestCase("+ TestClass : class { attributes { + Attribute : string} }", "Attribute", "string")]
-        public void Component_Parse_Attribute_Name_And_Type_Matches(string script, string expectedName, string expectedType)
+        [TestCase("Attribute", "string", Scope.Public, "+ TestClass : class { attributes { + Attribute : string} }")]
+        [TestCase("Attribute", "string", Scope.Protected, "+ TestClass : class { attributes { # Attribute : string} }")]
+        [TestCase("Attribute", "string", Scope.Private, "+ TestClass : class { attributes { - Attribute : string} }")]
+        public void Component_Parse_Attribute_Name_Type_And_Scope_Matches(string expectedName, string expectedType, Scope expectedScope,  string script)
         {
             var components = Parser?.Parse(script).Components;
             var first = components?.FirstOrDefault();
             var attribute = first?.Attributes.FirstOrDefault();
             Assert.That(attribute?.Name, Is.EqualTo(expectedName));
             Assert.That(attribute?.Type, Is.EqualTo(expectedType));
+            Assert.That(attribute?.Scope, Is.EqualTo(expectedScope));
         }
 
         [TestCase("+ Testclass : something", true)]

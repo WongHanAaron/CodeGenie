@@ -153,6 +153,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             var parsedAttribute = new ParsedAttributeDefinition();
             parsedAttribute.Name = context.NAME().GetText();
             parsedAttribute.Type = context.type().GetText();
+            parsedAttribute.Scope = LoadScope(context.access_scope());
             return parsedAttribute;
         }
 
