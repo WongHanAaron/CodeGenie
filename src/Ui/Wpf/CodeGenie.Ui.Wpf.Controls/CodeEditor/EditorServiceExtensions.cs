@@ -23,12 +23,17 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor
         public static ServiceProvider CreateDefaultServiceProvider(IDispatcherService? dispatcherService = null)
         {
             var collection = new ServiceCollection();
+            AddDefaultServices(collection, dispatcherService);
+            return collection.BuildServiceProvider();
+        }
+
+        public static void AddDefaultServices(IServiceCollection collection, IDispatcherService? dispatcherService = null)
+        {
             collection.AddControlSharedServices(dispatcherService);
-            collection.AddCodeEditorServices(o => 
+            collection.AddCodeEditorServices(o =>
             {
                 o.LoggerProviders.Add(new DebugLoggerProvider());
             });
-            return collection.BuildServiceProvider();
         }
 
         public static void AddCodeEditorServices(this IServiceCollection serviceCollection, Action<ServiceCreationOptions>? optionsUpdater = null)

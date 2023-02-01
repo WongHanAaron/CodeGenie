@@ -108,7 +108,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.EditorTracking
                 {
                     DateTime = DateTimeProvider.Now,
                     Text = text,
-                    DocumentLine = lineDetails.Line,
                     Offset = lineDetails.Offset.Value,
                     Length = lineDetails.Length.Value,
                     ColumnNumber = lineDetails.Column.Value,
