@@ -8,19 +8,14 @@ using CodeGenie.Core.Services;
 namespace CodeGenie.Core.Tests.Utilities
 {
     /// <summary> The base test class for component definition parsers </summary>
-    public class ComponentDefinitionTestBase
+    public class ComponentDefinitionTestBase : MockableTestBase
     {
-        protected MockableServiceCollection MockableServiceCollection = new MockableServiceCollection();
-        protected IServiceProvider? ServiceProvider { get; set; }
-
-        public IServiceProvider BuildServiceProvider(Action<MockableServiceCollection>? mockServicesMethod = null)
+        protected override void InjectMockedServices(MockableServiceCollection collection)
         {
-            MockableServiceCollection.AddCodeGenie(builder => 
+            MockableServiceCollection.AddCodeGenie(builder =>
             {
                 builder.LoggerProviders.Add(new DebugLoggerProvider());
             });
-            mockServicesMethod?.Invoke(MockableServiceCollection);
-            return MockableServiceCollection.BuildMockedServiceProvider();
         }
     }
 }

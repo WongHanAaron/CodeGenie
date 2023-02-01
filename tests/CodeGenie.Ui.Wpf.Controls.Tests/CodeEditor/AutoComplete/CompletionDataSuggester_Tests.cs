@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
 {
-    public class CompletionDataSuggester_Tests
+    [TestFixture]
+    public class CompletionDataSuggester_Tests : CodeEditorTestBase
     {
     }
 }
