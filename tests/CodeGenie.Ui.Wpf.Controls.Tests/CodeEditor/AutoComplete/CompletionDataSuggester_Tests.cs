@@ -35,7 +35,8 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
         }
 
         [TestCase(1, 2, "+ ", typeof(TooltipSuggestion))]
-        public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, params Type[] types)
+        [TestCase(1, 0, "", typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, params Type[] expectedTypes)
         {
             // SETUP
             if (Suggester == null) throw new ArgumentException($"The '{nameof(Suggester)}' is null at test start");
@@ -45,10 +46,17 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
 
             var suggestions = Suggester.GetSuggestions(args);
 
-            Assert.That(suggestions.Count(), Is.EqualTo(types.Count()));
-            foreach (var expectedSuggestion in types)
+            Assert.That(suggestions.Count(), Is.EqualTo(expectedTypes.Count()));
+
+            var groupedSuggestion = suggestions.GroupBy(g => g.GetType());
+
+            foreach (var expectedSuggestion in expectedTypes.GroupBy(t => t))
             {
-                Assert.That(suggestions.Any(t => t.GetType().Equals(expectedSuggestion)), Is.True);
+                var matchingGroup = groupedSuggestion.FirstOrDefault(g => g.Key.Equals(expectedSuggestion.Key));
+
+                Assert.That(matchingGroup, Is.Not.Null, $"Unable to find suggestion of type '{expectedSuggestion.Key}'");
+
+                Assert.That(matchingGroup.Count(), Is.EqualTo(expectedSuggestion.Count()));               
             }
         }
 
@@ -70,7 +78,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
         {
             var lines = fullContents.Split("\n");
             var lineContent = lines.ElementAtOrDefault(lineNumber - 1);
-            if (string.IsNullOrEmpty(lineContent)) throw new ArgumentException($"No contents on line");
+            // if (string.IsNullOrEmpty(lineContent)) throw new ArgumentException($"No contents on line");
 
             var lineOffset = fullContents.IndexOf(lineContent);
 
