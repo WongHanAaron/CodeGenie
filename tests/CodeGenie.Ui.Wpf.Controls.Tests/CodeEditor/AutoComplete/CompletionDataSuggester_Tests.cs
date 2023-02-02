@@ -35,7 +35,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
         }
 
         [TestCase(1, 2, "+ ", typeof(TooltipSuggestion))]
-        public void TestSuggestions(int lineNumber, int columnNumber, string fullContents, params Type[] types)
+        public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, params Type[] types)
         {
             // SETUP
             if (Suggester == null) throw new ArgumentException($"The '{nameof(Suggester)}' is null at test start");
