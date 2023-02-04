@@ -56,6 +56,13 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                                     typeof(ComponentAttributes), 
                                     typeof(ComponentRelationships),
                                     typeof(NewBracketSuggestion))]
+        [TestCase(3, 0, "+T:class\n{\n\t\n}", 
+                                    $"{ComponentPurpose.TextValue}," +
+                                    $"{ComponentAttributes.TextValue}," +
+                                    $"{ComponentRelationships.TextValue}",
+                                    typeof(ComponentPurpose),
+                                    typeof(ComponentAttributes),
+                                    typeof(ComponentRelationships))]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
