@@ -1,6 +1,7 @@
 ﻿using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -34,9 +35,11 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
             Assert.That(Suggester, Is.Not.Null);
         }
 
-        [TestCase(1, 2, "+ ", typeof(TooltipSuggestion))]
-        [TestCase(1, 0, "", typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
-        public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, params Type[] expectedTypes)
+        [TestCase(1, 2, "+ ",       $"{ComponentNameSuggester.EnterComponentName}", typeof(TooltipSuggestion))]
+        [TestCase(1, 0, "",         $"{ScopeSuggester.PublicScope},{ScopeSuggester.PrivateScope},{ScopeSuggester.ProtectedScope}", 
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        [TestCase(1, 4, "+Test",    $"{DividerSuggester.Divider}", typeof(SimpleTextSuggestion))]
+        public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
             if (Suggester == null) throw new ArgumentException($"The '{nameof(Suggester)}' is null at test start");
@@ -57,6 +60,19 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                 Assert.That(matchingGroup, Is.Not.Null, $"Unable to find suggestion of type '{expectedSuggestion.Key}'");
 
                 Assert.That(matchingGroup.Count(), Is.EqualTo(expectedSuggestion.Count()));               
+            }
+
+            var expectedSuggestions = expectedSuggestionName.Split(",");
+
+            for (int i = 0; i < expectedSuggestions.Count(); i++)
+            {
+                var expectedSuggestion = expectedSuggestions[i];
+                var expectedType = expectedTypes[i];
+                var suggestion = suggestions.ElementAtOrDefault(i);
+
+                if (string.IsNullOrEmpty(expectedSuggestion)) continue;
+
+                Assert.That(suggestion.Text, Is.EqualTo(expectedSuggestion), $"Expected suggestion text for '{expectedType?.Name}' to be '{expectedSuggestion}' instead of '{suggestion}'");
             }
         }
 
@@ -92,6 +108,14 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                 Text = fullContents,
                 Offset = lineOffset + columnNumber
             };
+        }
+    }
+
+    public class SuggestionTestCase
+    {
+        public static SuggestionTestCase Create()
+        {
+            return null;
         }
     }
 }

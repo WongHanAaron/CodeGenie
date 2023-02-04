@@ -12,6 +12,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class DividerSuggester : SyntaxSuggesterBase
     {
+        public const string Divider = ":";
+
         public DividerSuggester() : base(SyntaxDescriptor.BeforeComponentDivider,
                                          SyntaxDescriptor.BeforeAttributeDivider,
                                          SyntaxDescriptor.BeforeCardinalityDivider)
@@ -19,7 +21,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 
         protected override void CollectOtherSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            toBeReturned.Add(new SimpleTextSuggestion(":", "Divider", textEnterArgs));
+            toBeReturned.Add(new SimpleTextSuggestion(Divider, "Divider", textEnterArgs));
         }
     }
 }
