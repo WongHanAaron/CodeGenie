@@ -35,8 +35,8 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(false,SyntaxDescriptor.BeforeComponentTypeDefinition, 2, 10, "\n+TestClass:class\n{\npurpose:\"\"\n}\n")]
         [TestCase(false,SyntaxDescriptor.BeforeComponentDetails, 1, 16, "+TestClass:class")]
         [TestCase(false,SyntaxDescriptor.BeforeComponentDetails, 3, 16, "\n\n+TestClass:class")]
-        [TestCase(false,SyntaxDescriptor.WithinComponentDetails, 1, 9, "+T:class{}")]
-        [TestCase(false,SyntaxDescriptor.WithinComponentDetails, 1, 8, "+T:class{}")]
+        [TestCase(true, SyntaxDescriptor.WithinComponentDetails, 1, 9, "+T:class{}")]
+        [TestCase(true, SyntaxDescriptor.WithinComponentDetails, 1, 8, "+T:class{}")]
         [TestCase(true,SyntaxDescriptor.WithinComponentDetails, 1, 10, "+T:class{relati}")]
         [TestCase(false,SyntaxDescriptor.WithinComponentDetails, 3, 13, "+TestClass:class\n{\n\tpurpose : \"\" \n}")]
         [TestCase(true, SyntaxDescriptor.BeforePurposeDefinitionDivider, 1, 15, "+T:class{purpose}")]
@@ -51,11 +51,14 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(true, SyntaxDescriptor.BeforeRelatedComponentNameDefinition, 1, 33, "+T:class{relationships{specializes}}")]
         [TestCase(true, SyntaxDescriptor.BeforeMethodsDetails, 1, 15, "+T:class{methods{}}")]
         [TestCase(true, SyntaxDescriptor.BeforeMethodsDetails, 1, 15, "+T:class{methods}")]
-        public void Get_SyntaxState_At_Line_Column(bool hasError, SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
+        public void Get_SyntaxState_At_Line_Column(bool expectErrors, SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
-            var syntaxState = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
+            var description = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
 
-            Assert.AreEqual(expectedState, syntaxState.SyntaxDescriptorAtCaret, $"Expected {expectedState} state but {syntaxState} was received instead for script '{script}'");
+            Assert.AreEqual(expectedState, description.SyntaxDescriptorAtCaret, $"Expected {expectedState} state but {description} was received instead for script '{script}'");
+
+            var errorDescription = expectErrors ? "has" : "does not have";
+            Assert.That(description.HasSyntaxError, Is.EqualTo(expectErrors), $"Expected that script {errorDescription} errors. For script '{script}'");
         }
         // Debug Tests
         // [TestCase(SyntaxDescriptor.BeforePurposeDefinitionDivider, 3, 12, "+TestClass:class\n{\n\tpurpose:\"\"\n}")] // Caused stack overflow
