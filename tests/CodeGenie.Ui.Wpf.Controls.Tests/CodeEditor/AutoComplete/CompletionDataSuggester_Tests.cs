@@ -63,6 +63,9 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                                     typeof(ComponentPurpose),
                                     typeof(ComponentAttributes),
                                     typeof(ComponentRelationships))]
+        [TestCase(3, 10, "+T:class\n{\n\tattributes\n}",
+                                    $"{NewBracketSuggestion.TextValue}",
+                                    typeof(NewBracketSuggestion))]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
@@ -73,7 +76,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
 
             var suggestions = Suggester.GetSuggestions(args);
 
-            Assert.That(suggestions.Count(), Is.EqualTo(expectedTypes.Count()));
+            Assert.That(suggestions.Count(), Is.EqualTo(expectedTypes.Count()), $"Expected: '{string.Join(",", expectedTypes.Select(t => t.Name))}'. Got: '{string.Join(",", suggestions.Select(s => s.GetType().Name + ": " + s.Text))}'");
 
             var groupedSuggestion = suggestions.GroupBy(g => g.GetType());
 
