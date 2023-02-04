@@ -1,4 +1,4 @@
-﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
+﻿using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using ICSharpCode.AvalonEdit.CodeCompletion;
@@ -12,7 +12,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class CurlyBracesCompletionSuggester : SyntaxSuggesterBase
     {
-        public override IEnumerable<ICompletionData> CollectSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs)
+        public override IEnumerable<ICompletionData> CollectSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs)
         {
             if (textEnterArgs.LineContent.EndsWith("{"))
             {

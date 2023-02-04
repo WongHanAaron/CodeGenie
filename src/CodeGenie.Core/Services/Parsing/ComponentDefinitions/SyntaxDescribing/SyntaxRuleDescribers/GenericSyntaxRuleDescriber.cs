@@ -1,7 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using CodeGenie.Core.Models.Attributes;
-using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.
             DescriptionMethod = descriptionMethod;
         }
 
-        public override SyntaxDescriptor Describe(TRule rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
+        public override SyntaxDescriptor Describe(ParsingResult parsingResults, TRule rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
         {
             return DescriptionMethod?.Invoke(rule, selectedNode, searchParameters) ?? SyntaxDescriptor.Error;
         }

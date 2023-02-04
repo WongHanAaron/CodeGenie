@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using System;
 using System.Collections.Generic;
@@ -17,16 +17,22 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.
             ParserRuleType = parserRuleType;
         }
 
-        public virtual SyntaxDescriptor Describe(ParserRuleContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
+        public virtual SyntaxDescription Describe(ParsingResult parsingResults, ParserRuleContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
         {
+            var descriptor = SyntaxDescriptor.Unknown;
+            
             if (rule is TRule tRule)
             {
-                return Describe(tRule, selectedNode, searchParameters);
+                descriptor = Describe(parsingResults, tRule, selectedNode, searchParameters);
             }
 
-            return SyntaxDescriptor.Unknown;
+            return new SyntaxDescription()
+            {
+                ParsedResult = parsingResults,
+                SyntaxDescriptorAtCaret = descriptor
+            };
         }
 
-        public abstract SyntaxDescriptor Describe(TRule rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters);
+        public abstract SyntaxDescriptor Describe(ParsingResult parsingResults, TRule rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters);
     }
 }

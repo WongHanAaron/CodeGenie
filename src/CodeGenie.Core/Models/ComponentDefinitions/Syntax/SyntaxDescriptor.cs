@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeGenie.Core.Models.ComponentDefinitions.State
+namespace CodeGenie.Core.Models.ComponentDefinitions.Syntax
 {
     /// <summary> A description of where a location is in a syntax tree </summary>
     public enum SyntaxDescriptor

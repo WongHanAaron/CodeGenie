@@ -1,5 +1,5 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.Definitions;
-using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.Compiling;
@@ -21,7 +21,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
             Repository = repository;
         }
 
-        protected override void CollectOtherSuggestions(SyntaxDescriptor descriptor, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
+        protected override void CollectOtherSuggestions(SyntaxDescription syntaxDescription, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
             if (Repository.LastValidComponents?.Components == null) return;
             if (!Repository.LastValidComponents.Components.Any()) return;

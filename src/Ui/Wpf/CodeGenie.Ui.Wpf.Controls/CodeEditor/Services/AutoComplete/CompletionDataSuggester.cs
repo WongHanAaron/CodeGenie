@@ -1,5 +1,4 @@
-﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
-using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing;
+﻿using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Contracts;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using ICSharpCode.AvalonEdit.CodeCompletion;

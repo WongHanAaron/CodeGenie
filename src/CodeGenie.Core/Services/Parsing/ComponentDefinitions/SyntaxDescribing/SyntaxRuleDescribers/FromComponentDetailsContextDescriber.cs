@@ -1,5 +1,5 @@
 ﻿using Antlr4.Runtime.Tree;
-using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.
 {
     public class FromComponentDetailsContextDescriber : SyntaxRuleDescriberBase<Component_detailsContext>
     {
-        public override SyntaxDescriptor Describe(Component_detailsContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
+        public override SyntaxDescriptor Describe(ParsingResult parsingResults, Component_detailsContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
         {
             if (rule.children.FirstOrDefault() == selectedNode && selectedNode.Symbol.Text.Equals("{")) return SyntaxDescriptor.WithinComponentDetails;
             if (rule.children.LastOrDefault() == selectedNode && selectedNode.Symbol.Text.Equals("}")) return SyntaxDescriptor.WithinComponentDetails;

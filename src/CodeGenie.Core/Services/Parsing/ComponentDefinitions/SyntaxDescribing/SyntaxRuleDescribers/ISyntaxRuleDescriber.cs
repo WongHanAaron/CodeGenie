@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,6 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.
     public interface ISyntaxRuleDescriber
     {
         Type ParserRuleType { get; }
-        SyntaxDescriptor Describe(ParserRuleContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters);
+        SyntaxDescription Describe(ParsingResult parsingResults, ParserRuleContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters);
     }
 }

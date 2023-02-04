@@ -1,7 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using CodeGenie.Core.Models.Attributes;
-using CodeGenie.Core.Models.ComponentDefinitions.State;
+using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.Shared;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.SyntaxRuleDescribers;
@@ -19,7 +19,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
     public interface ISyntaxDescriber
     {
         /// <summary> Get the syntax state at that line and column number </summary>
-        SyntaxDescriptor GetSyntaxDescription(string script, int lineNumber, int columnNumber);
+        SyntaxDescription GetSyntaxDescription(string script, int lineNumber, int columnNumber);
     }
 
     public class SyntaxDescriber : ISyntaxDescriber
@@ -38,20 +38,20 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             SetupAutoIncludedDescribers();
         }
 
-        public SyntaxDescriptor GetSyntaxDescription(string script, int lineNumber, int columnNumber)
+        public SyntaxDescription GetSyntaxDescription(string script, int lineNumber, int columnNumber)
         {
             var result = ContextParser.ParseContext(script);
 
-            if (result.Context == null) return SyntaxDescriptor.Unknown;
+            if (result.Context == null) return SyntaxDescription.CreateUnknown(result);
 
             var closestNode = SyntaxTreeSearcher.GetClosestNode(result.Context, lineNumber, columnNumber);
 
-            if (closestNode == null) return SyntaxDescriptor.BeforeStartComponentDefinition;
+            if (closestNode == null) return SyntaxDescription.Create(result, SyntaxDescriptor.BeforeStartComponentDefinition);
 
-            return GetSyntaxStateFromNode(closestNode, new SyntaxSearchParameters(lineNumber, columnNumber));
+            return GetSyntaxStateFromNode(result, closestNode, new SyntaxSearchParameters(lineNumber, columnNumber));
         }
 
-        protected SyntaxDescriptor GetSyntaxStateFromNode(ITerminalNode node, SyntaxSearchParameters searchParameters)
+        protected SyntaxDescription GetSyntaxStateFromNode(ParsingResult result, ITerminalNode node, SyntaxSearchParameters searchParameters)
         {
             var rule = GetClosestMatchingRule(node);
 
@@ -59,9 +59,9 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
             var describer = GetRuleDescriber(ruleType);
 
-            if (describer == null) return SyntaxDescriptor.Unknown;
+            if (describer == null) return SyntaxDescription.Create(result, SyntaxDescriptor.Unknown);
 
-            return describer.Describe(rule, node, searchParameters);
+            return describer.Describe(result, rule, node, searchParameters);
         }
 
         protected void SetupAutoIncludedDescribers()

@@ -1,4 +1,4 @@
-﻿using CodeGenie.Core.Models.ComponentDefinitions.State;
+﻿using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
