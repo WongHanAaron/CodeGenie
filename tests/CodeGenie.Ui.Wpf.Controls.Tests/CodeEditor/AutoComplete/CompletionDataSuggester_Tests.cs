@@ -3,6 +3,7 @@ using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions.ComponentDetails;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
@@ -40,6 +41,21 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                                     typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
         [TestCase(1, 4, "+Test",    $"{DividerSuggester.Divider}", typeof(SimpleTextSuggestion))]
         [TestCase(1, 5, "+Test:",   $"{ComponentTypeSuggester.Class},{ComponentTypeSuggester.Interface}", typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        [TestCase(1, 10, "+Test:class", 
+                                    $"{ScopeSuggester.PublicScope}," +
+                                    $"{ScopeSuggester.PrivateScope}," +
+                                    $"{ScopeSuggester.ProtectedScope}," +
+                                    $"{ComponentPurpose.TextValue}," +
+                                    $"{ComponentAttributes.TextValue}," +
+                                    $"{ComponentRelationships.TextValue}," +
+                                    $"{NewBracketSuggestion.TextValue}",
+                                    typeof(SimpleTextSuggestion), 
+                                    typeof(SimpleTextSuggestion), 
+                                    typeof(SimpleTextSuggestion),
+                                    typeof(ComponentPurpose), 
+                                    typeof(ComponentAttributes), 
+                                    typeof(ComponentRelationships),
+                                    typeof(NewBracketSuggestion))]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP

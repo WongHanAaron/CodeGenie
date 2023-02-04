@@ -12,13 +12,15 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions
 {
     public class ComponentAttributes : SuggestionBase
     {
+        public const string TextValue = "{ attributes { } }";
+
         bool _includeExternalBraces;
         public ComponentAttributes(TextEnterEventArgs eventArgs, bool includeExternalBraces) : base(eventArgs)
         {
             _includeExternalBraces = includeExternalBraces;
         }
 
-        public override string Text => "{ attributes { } }";
+        public override string Text => TextValue;
 
         public override object Description => "Add a component attributes";
 

@@ -9,11 +9,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions
 {
     public class CurlyBracesCompletionSuggestion : SuggestionBase
     {
+        public const string TextValue = "}";
+
         public CurlyBracesCompletionSuggestion(TextEnterEventArgs args) : base(args)
         {
         }
 
-        public override string Text => "}";
+        public override string Text => TextValue;
 
         public override object Description => "Complete the curly braces";
 

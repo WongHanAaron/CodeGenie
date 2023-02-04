@@ -9,13 +9,15 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions
 {
     public class NewBracketSuggestion : SuggestionBase
     {
+        public const string TextValue = "{ }";
+
         protected bool _createNewLine;
         public NewBracketSuggestion(TextEnterEventArgs args, bool createNewLine) : base(args)
         {
             _createNewLine = createNewLine;
         }
 
-        public override string Text => "{ }";
+        public override string Text => TextValue;
 
         public override object Description => "Add details bracket";
 
