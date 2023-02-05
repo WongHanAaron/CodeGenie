@@ -10,7 +10,7 @@ using System.Text;
 namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.SyntaxRuleDescribers
 {
     [AutoExclude]
-    public class GenericSyntaxRuleDescriber<TRule> : SyntaxRuleDescriberBase<TRule>
+    public class GenericSyntaxRuleDescriber<TRule> : SyntaxRuleDescriberBase<TRule> where TRule : ParserRuleContext
     {
         public Func<TRule, ITerminalNode, SyntaxSearchParameters, SyntaxDescriptor> DescriptionMethod { get; protected set; }
 

@@ -46,7 +46,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
             var closestNode = SyntaxTreeSearcher.GetClosestNode(result.Context, lineNumber, columnNumber);
 
-            if (closestNode == null) return SyntaxDescription.Create(result, SyntaxDescriptor.BeforeStartComponentDefinition);
+            if (closestNode == null) return SyntaxDescription.Create(result, SyntaxDescriptor.BeforeStartComponentDefinition, false);
 
             return GetSyntaxStateFromNode(result, closestNode, new SyntaxSearchParameters(lineNumber, columnNumber));
         }
@@ -59,7 +59,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
             var describer = GetRuleDescriber(ruleType);
 
-            if (describer == null) return SyntaxDescription.Create(result, SyntaxDescriptor.Unknown);
+            if (describer == null) return SyntaxDescription.CreateUnknown(result);
 
             return describer.Describe(result, rule, node, searchParameters);
         }
