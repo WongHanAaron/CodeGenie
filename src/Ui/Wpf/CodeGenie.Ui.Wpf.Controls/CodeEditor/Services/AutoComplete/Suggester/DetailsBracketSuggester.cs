@@ -21,6 +21,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
+            if (!description.HasSyntaxErrorOnSelectedRule) return;
+
             toBeReturned.Add(new NewBracketSuggestion(textEnterArgs, true));
         }
     }

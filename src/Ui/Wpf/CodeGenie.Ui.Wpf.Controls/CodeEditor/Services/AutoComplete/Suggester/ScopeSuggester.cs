@@ -23,6 +23,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
+            if (!description.HasSyntaxErrorOnSelectedRule) return;
+
             toBeReturned.Add(new SimpleTextSuggestion(PublicScope, "Public Scope", textEnterArgs, "+ "));
             toBeReturned.Add(new SimpleTextSuggestion(PrivateScope, "Private Scope", textEnterArgs, "- "));
             toBeReturned.Add(new SimpleTextSuggestion(ProtectedScope, "Private Scope", textEnterArgs, "# "));

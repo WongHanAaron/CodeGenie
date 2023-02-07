@@ -1,4 +1,5 @@
 ﻿using CodeGenie.Core.Models.ComponentDefinitions.Syntax;
+using CodeGenie.Ui.Wpf.Controls.CodeEditor.Models.Events;
 using CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggestions;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
@@ -15,9 +16,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 
         public ComponentNameSuggester() : base(SyntaxDescriptor.BeforeComponentNameDefinition) { }
 
-        protected override void AddDefaultSuggestions(List<ICompletionData> completionData)
+        protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            completionData.Add(new TooltipSuggestion(EnterComponentName, "Enter a name for this component"));
+            if (!description.HasSyntaxErrorOnSelectedRule) return;
+
+            toBeReturned.Add(new TooltipSuggestion(EnterComponentName, "Enter a name for this component"));
         }
     }
 }

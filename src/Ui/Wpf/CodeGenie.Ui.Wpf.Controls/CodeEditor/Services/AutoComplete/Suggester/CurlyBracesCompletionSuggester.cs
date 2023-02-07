@@ -14,7 +14,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
     {
         public override IEnumerable<ICompletionData> CollectSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs)
         {
-            if (textEnterArgs.LineContent.EndsWith("{"))
+            if (textEnterArgs.LineContent.EndsWith("{") &&
+                !description.HasSyntaxErrorOnSelectedRule)
             {
                 return new List<ICompletionData>() { new CurlyBracesCompletionSuggestion(textEnterArgs) };
             }

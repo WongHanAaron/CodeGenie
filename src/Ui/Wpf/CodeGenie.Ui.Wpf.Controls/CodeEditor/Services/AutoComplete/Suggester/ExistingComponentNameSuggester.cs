@@ -21,8 +21,10 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
             Repository = repository;
         }
 
-        protected override void CollectOtherSuggestions(SyntaxDescription syntaxDescription, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
+        protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
+            if (!description.HasSyntaxErrorOnSelectedRule) return;
+
             if (Repository.LastValidComponents?.Components == null) return;
             if (!Repository.LastValidComponents.Components.Any()) return;
 
@@ -32,10 +34,10 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
             {
                 if (component.Scope != Scope.Public) continue;
                 var componentType = component.IsInterface ? "interface" : "class";
-                var description = string.IsNullOrWhiteSpace(component.Purpose) ? $"A {componentType} of name '{component.Name}'" : $"A {componentType} of name '{component.Name}'. {component.Purpose}";
+                var purposeDescription = string.IsNullOrWhiteSpace(component.Purpose) ? $"A {componentType} of name '{component.Name}'" : $"A {componentType} of name '{component.Name}'. {component.Purpose}";
                 var value = component.Name;
                 if (shouldPrefixWhitespace) value = " " + value;
-                toBeReturned.Add(new SimpleTextSuggestion(component.Name, description, textEnterArgs, value));
+                toBeReturned.Add(new SimpleTextSuggestion(component.Name, purposeDescription, textEnterArgs, value));
             }
         }
     }

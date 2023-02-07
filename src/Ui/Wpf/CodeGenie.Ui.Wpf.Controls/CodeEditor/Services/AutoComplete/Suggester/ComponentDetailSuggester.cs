@@ -18,6 +18,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
+            if (!description.HasSyntaxErrorOnSelectedRule) return;
+
             var includeBraces = description.SyntaxDescriptorAtCaret == SyntaxDescriptor.BeforeComponentDetails;
             toBeReturned.Add(new ComponentPurpose(textEnterArgs, includeBraces));
             toBeReturned.Add(new ComponentAttributes(textEnterArgs, includeBraces));
