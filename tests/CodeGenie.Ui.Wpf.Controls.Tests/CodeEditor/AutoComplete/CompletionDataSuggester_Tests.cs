@@ -66,6 +66,11 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
         [TestCase(3, 10, "+T:class\n{\n\tattributes\n}",
                                     $"{NewBracketSuggestion.TextValue}",
                                     typeof(NewBracketSuggestion))]
+        [TestCase(3, 7, "+T:class\n{\n\tpurpose\n}",
+                                    $"{DividerSuggester.Divider}",
+                                    typeof(SimpleTextSuggestion))]
+        [TestCase(3, 7, "+T:class\n{\n\tpurpose:\"\"\n}",
+                                    $"")]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
@@ -91,7 +96,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
 
             var expectedSuggestions = expectedSuggestionName.Split(",");
 
-            for (int i = 0; i < expectedSuggestions.Count(); i++)
+            for (int i = 0; i < expectedSuggestions.Count() && i < expectedTypes.Count(); i++)
             {
                 var expectedSuggestion = expectedSuggestions[i];
                 var expectedType = expectedTypes[i];

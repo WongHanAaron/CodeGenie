@@ -14,14 +14,16 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
     {
         public const string Divider = ":";
 
-        public DividerSuggester() : base(SyntaxDescriptor.BeforeComponentDivider,
+        public DividerSuggester() : base(SyntaxDescriptor.BeforePurposeDefinitionDivider,
+                                         SyntaxDescriptor.BeforeComponentDivider,
                                          SyntaxDescriptor.BeforeAttributeDivider,
                                          SyntaxDescriptor.BeforeCardinalityDivider)
         { }
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            toBeReturned.Add(new SimpleTextSuggestion(Divider, "Divider", textEnterArgs));
+            if (description.HasSyntaxErrorOnSelectedRule)
+                toBeReturned.Add(new SimpleTextSuggestion(Divider, "Divider", textEnterArgs));
         }
     }
 }

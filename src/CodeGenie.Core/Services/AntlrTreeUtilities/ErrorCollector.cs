@@ -23,12 +23,12 @@ namespace CodeGenie.Core.Services.AntlrTreeUtilities
         {
             if (HasOrIsError(ruleContext)) return true;
 
-            foreach (var child in ruleContext.children)
+            foreach (var child in ruleContext.children ?? new IParseTree[0])
             {
                 if (HasOrIsError(child)) return true;
             }
 
-            foreach (var child in ruleContext.children)
+            foreach (var child in ruleContext.children ?? new IParseTree[0])
             {
                 if (child is ParserRuleContext parserRuleContext)
                 {
