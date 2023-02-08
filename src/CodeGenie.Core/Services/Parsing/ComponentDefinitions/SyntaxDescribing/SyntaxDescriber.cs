@@ -66,11 +66,48 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
             Logger.LogDebug($"{nameof(GetClosestMatchingRule)} returned {ruleType}");
 
+            if (!IsSearchWithinRuleBounds(rule, searchParameters))
+            {
+                // If it is not in the bounds, it might be a new line. Need to handle
+                Logger.LogDebug($"Rule does not bound the search target");
+
+                return SyntaxDescription.Create(result, SyntaxDescriptor.BeforeStartComponentDefinition, false);
+            }
+
             var describer = GetRuleDescriber(ruleType);
 
             if (describer == null) return SyntaxDescription.CreateUnknown(result);
 
             return describer.Describe(result, rule, node, searchParameters);
+        }
+
+        protected bool IsSearchWithinRuleBounds(ParserRuleContext rule, SyntaxSearchParameters parameters)
+        {
+            var minLine = Math.Min(rule.Start.Line, rule.Stop.Line);
+            var maxLine = Math.Max(rule.Start.Line, rule.Stop.Line);
+            
+            // Check if the search was for a character outside the line bounds
+            if (parameters.LineNumber > maxLine || parameters.LineNumber < minLine) return false;
+
+            if (parameters.LineNumber == minLine)
+                return IsSearchWithinLineColumnBounds(rule.Start, false, parameters);
+            
+            if (parameters.LineNumber == maxLine)
+                return IsSearchWithinLineColumnBounds(rule.Stop, true, parameters);
+
+            return true;
+        }
+
+        protected bool IsSearchWithinLineColumnBounds(IToken token, bool expectTokenGreaterThanColumn, SyntaxSearchParameters parameters)
+        {
+            if (expectTokenGreaterThanColumn)
+            {
+                return token.Column >= parameters.ColumnNumber;
+            }
+            else
+            {
+                return token.Column <= parameters.ColumnNumber;
+            }
         }
 
         protected void SetupAutoIncludedDescribers()

@@ -74,6 +74,11 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
         [TestCase(2, 2, "+T:class\n+T:",
                                     $"{ComponentTypeSuggester.Class},{ComponentTypeSuggester.Interface}",
                                     typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        [TestCase(2, 2, "+T:class\n+T:class",
+                                    $"")]
+        [TestCase(5, 0, "+Test:class\n{\n\tpurpose : \"\"\n}\n ",
+                                    $"{ScopeSuggester.PublicScope},{ScopeSuggester.PrivateScope},{ScopeSuggester.ProtectedScope}",
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
