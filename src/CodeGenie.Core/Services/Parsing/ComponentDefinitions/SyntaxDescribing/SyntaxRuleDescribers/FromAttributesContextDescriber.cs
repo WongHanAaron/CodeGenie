@@ -14,7 +14,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.
         public override SyntaxDescriptor Describe(ParsingResult parsingResults, AttributesContext rule, ITerminalNode selectedNode, SyntaxSearchParameters searchParameters)
         {
             if (rule.children.FirstOrDefault() == selectedNode) return SyntaxDescriptor.BeforeAttributesDetails;
-            return SyntaxDescriptor.Unknown;
+            return SyntaxDescriptor.BeforeStartAttributeDefinition;
         }
     }
 }

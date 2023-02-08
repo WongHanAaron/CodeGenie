@@ -88,13 +88,14 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             for (int i = indexOfNodeOnLine - 1; i >= 0; i--)
             {
                 var node = terminalNodes[i];
+
+                var line = GetLineNumber(node);
+                if (line != lineNumberToKeepOn) break;
+
                 if (ColumnNumberIsOnToken(node, searchedColumnNumber))
                     capturingToken = node;
 
                 if (capturingToken != null) break;
-
-                var line = GetLineNumber(node);
-                if (line != lineNumberToKeepOn) break;
 
                 var distance = GetDistanceFromDesiredColumn(node, searchedColumnNumber);
                 var start = GetColumnNumberStart(node);
@@ -110,13 +111,15 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             for (int i = indexOfNodeOnLine + 1; i < terminalNodes.Count(); i++)
             {
                 var node = terminalNodes[i];
+                
+                var line = GetLineNumber(node);
+                if (line != lineNumberToKeepOn) break;
+
                 if (ColumnNumberIsOnToken(node, searchedColumnNumber))
                     capturingToken = node;
 
                 if (capturingToken != null) break;
 
-                var line = GetLineNumber(node);
-                if (line != lineNumberToKeepOn) break;
 
                 var distance = GetDistanceFromDesiredColumn(node, searchedColumnNumber);
                 if (distance < minNodeColumnDistance)
