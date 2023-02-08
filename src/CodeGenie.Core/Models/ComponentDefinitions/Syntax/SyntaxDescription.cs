@@ -13,11 +13,14 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.Syntax
 
         /// <summary> The syntax descriptor at the current cursor/caret </summary>
         public SyntaxDescriptor SyntaxDescriptorAtCaret { get; set; }
-
-        public bool HasSyntaxErrorOnSelectedRule { get; set; } = false;
+        
+        public bool HasErrorOnSyntaxRule { get; set; } = false;
 
         /// <summary> If the current instance of the script has any syntax errors </summary>
         public bool HasSyntaxError => ParsedResult.HasErrors;
+
+        /// <summary> If there are any errors in the syntax description at all </summary>
+        public bool HasAnyError => HasErrorOnSyntaxRule || HasSyntaxError;
 
         public static SyntaxDescription CreateUnknown(ParsingResult result) => Create(result, SyntaxDescriptor.Unknown, false);
         public static SyntaxDescription CreateError(ParsingResult result, bool ruleHasSyntaxError) => Create(result, SyntaxDescriptor.Error, ruleHasSyntaxError);
@@ -27,7 +30,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.Syntax
             {
                 ParsedResult = result, 
                 SyntaxDescriptorAtCaret = description,
-                HasSyntaxErrorOnSelectedRule = ruleHasSyntaxError
+                HasErrorOnSyntaxRule = ruleHasSyntaxError
             };
         }
     }

@@ -71,6 +71,9 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                                     typeof(SimpleTextSuggestion))]
         [TestCase(3, 7, "+T:class\n{\n\tpurpose:\"\"\n}",
                                     $"")]
+        [TestCase(2, 2, "+T:class\n+T:",
+                                    $"{ComponentTypeSuggester.Class},{ComponentTypeSuggester.Interface}",
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP

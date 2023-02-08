@@ -14,12 +14,11 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
     {
         public const string EnterComponentName = "Enter a component name";
 
-        public ComponentNameSuggester() : base(SyntaxDescriptor.BeforeComponentNameDefinition) { }
+        public ComponentNameSuggester() : base(SyntaxValidityOption.Invalid,
+                                               SyntaxDescriptor.BeforeComponentNameDefinition) { }
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            if (!description.HasSyntaxErrorOnSelectedRule) return;
-
             toBeReturned.Add(new TooltipSuggestion(EnterComponentName, "Enter a name for this component"));
         }
     }

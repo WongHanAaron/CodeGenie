@@ -16,6 +16,8 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing.
             if (selectedNode.Parent.GetChild(1) == selectedNode) return SyntaxDescriptor.BeforeComponentDivider;
             if (selectedNode.Parent.GetChild(2) == selectedNode) return SyntaxDescriptor.BeforeComponentTypeDefinition;
             if (selectedNode.Parent is Component_typeContext) return SyntaxDescriptor.BeforeComponentDetails;
+            if (selectedNode.Symbol.Text.Equals("}") ||
+                selectedNode.Symbol.Text.Equals("{")) return SyntaxDescriptor.WithinComponentDetails;
             return SyntaxDescriptor.Unknown;
         }
     }

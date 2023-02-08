@@ -40,14 +40,21 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
 
         public SyntaxDescription GetSyntaxDescription(string script, int lineNumber, int columnNumber)
         {
+            Logger.LogDebug($"{nameof(GetSyntaxDescription)} for line {lineNumber} and column {columnNumber}");
+
             var result = ContextParser.ParseContext(script);
 
             if (result.Context == null) return SyntaxDescription.CreateUnknown(result);
 
             var closestNode = SyntaxTreeSearcher.GetClosestNode(result.Context, lineNumber, columnNumber);
 
-            if (closestNode == null) return SyntaxDescription.Create(result, SyntaxDescriptor.BeforeStartComponentDefinition, false);
+            if (closestNode == null)
+            {
+                Logger.LogDebug($"{nameof(SyntaxDescriberTreeSearcher.GetClosestNode)} returned null");
+                return SyntaxDescription.Create(result, SyntaxDescriptor.BeforeStartComponentDefinition, false);
+            }
 
+            Logger.LogDebug($"{nameof(SyntaxDescriberTreeSearcher.GetClosestNode)} returned {closestNode.GetType()} on {closestNode?.Symbol?.Line}, {closestNode?.Symbol?.Column}");
             return GetSyntaxStateFromNode(result, closestNode, new SyntaxSearchParameters(lineNumber, columnNumber));
         }
 
@@ -56,6 +63,8 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             var rule = GetClosestMatchingRule(node);
 
             var ruleType = rule.GetType();
+
+            Logger.LogDebug($"{nameof(GetClosestMatchingRule)} returned {ruleType}");
 
             var describer = GetRuleDescriber(ruleType);
 

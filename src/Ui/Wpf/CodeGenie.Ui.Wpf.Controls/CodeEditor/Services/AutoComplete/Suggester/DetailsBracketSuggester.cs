@@ -12,7 +12,8 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class DetailsBracketSuggester : SyntaxSuggesterBase
     {
-        public DetailsBracketSuggester() : base(SyntaxDescriptor.BeforeComponentDetails,
+        public DetailsBracketSuggester() : base(SyntaxValidityOption.Either,
+                                                SyntaxDescriptor.BeforeComponentDetails,
                                                 SyntaxDescriptor.BeforeRelationshipsDetails,
                                                 SyntaxDescriptor.BeforeAttributesDetails,
                                                 SyntaxDescriptor.BeforeAttributeDetails,
@@ -21,8 +22,6 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            if (!description.HasSyntaxErrorOnSelectedRule) return;
-
             toBeReturned.Add(new NewBracketSuggestion(textEnterArgs, true));
         }
     }

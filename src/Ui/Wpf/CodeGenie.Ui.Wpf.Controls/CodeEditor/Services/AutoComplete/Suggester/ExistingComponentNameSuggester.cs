@@ -16,15 +16,14 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
     {
         protected readonly IComponentRepository Repository;
         public ExistingComponentNameSuggester(IComponentRepository repository) :
-                                        base(SyntaxDescriptor.BeforeRelatedComponentNameDefinition)
+                                         base(SyntaxValidityOption.Invalid, 
+                                              SyntaxDescriptor.BeforeRelatedComponentNameDefinition)
         {
             Repository = repository;
         }
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            if (!description.HasSyntaxErrorOnSelectedRule) return;
-
             if (Repository.LastValidComponents?.Components == null) return;
             if (!Repository.LastValidComponents.Components.Any()) return;
 

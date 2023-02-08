@@ -12,14 +12,13 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class ComponentDetailSuggester : SyntaxSuggesterBase
     {
-        public ComponentDetailSuggester() : base(SyntaxDescriptor.BeforeComponentDetails,
-                                                  SyntaxDescriptor.WithinComponentDetails)
+        public ComponentDetailSuggester() : base(SyntaxValidityOption.Either,
+                                                 SyntaxDescriptor.BeforeComponentDetails,
+                                                 SyntaxDescriptor.WithinComponentDetails)
         { }
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            if (!description.HasSyntaxErrorOnSelectedRule) return;
-
             var includeBraces = description.SyntaxDescriptorAtCaret == SyntaxDescriptor.BeforeComponentDetails;
             toBeReturned.Add(new ComponentPurpose(textEnterArgs, includeBraces));
             toBeReturned.Add(new ComponentAttributes(textEnterArgs, includeBraces));

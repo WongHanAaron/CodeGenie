@@ -15,13 +15,12 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
         public const string Class = "class";
         public const string Interface = "interface";
 
-        public ComponentTypeSuggester() : base(SyntaxDescriptor.BeforeComponentTypeDefinition)
+        public ComponentTypeSuggester() : base(SyntaxValidityOption.Invalid, 
+                                               SyntaxDescriptor.BeforeComponentTypeDefinition)
         { }
 
         protected override void CollectOtherSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs, List<ICompletionData> toBeReturned)
         {
-            if (!description.HasSyntaxErrorOnSelectedRule) return;
-
             toBeReturned.Add(new SimpleTextSuggestion(Class, "Add as class component", textEnterArgs));
             toBeReturned.Add(new SimpleTextSuggestion(Interface, "Add as interface component", textEnterArgs));
         }

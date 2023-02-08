@@ -51,17 +51,18 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(true, true, SyntaxDescriptor.BeforeRelatedComponentNameDefinition, 1, 33, "+T:class{relationships{specializes}}")]
         [TestCase(true, true, SyntaxDescriptor.BeforeMethodsDetails, 1, 15, "+T:class{methods{}}")]
         [TestCase(true, true, SyntaxDescriptor.BeforeMethodsDetails, 1, 15, "+T:class{methods}")]
+        [TestCase(true, true, SyntaxDescriptor.WithinComponentDetails, 3, 0, "+T:class\n{\n\t\n}")]
         public void Get_SyntaxState_At_Line_Column(bool expectErrors, bool expectErrorsOnRule, SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
             var description = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
 
-            Assert.AreEqual(expectedState, description.SyntaxDescriptorAtCaret, $"Expected {expectedState} state but {description} was received instead for script '{script}'");
+            Assert.AreEqual(expectedState, description.SyntaxDescriptorAtCaret, $"Expected {expectedState} state but {description.SyntaxDescriptorAtCaret} was received instead for script '{script}'");
 
             var errorDescription = expectErrors ? "has" : "does not have";
             Assert.That(description.HasSyntaxError, Is.EqualTo(expectErrors), $"Expected that script {errorDescription} errors. For script '{script}'");
         
             errorDescription = expectErrorsOnRule ? "has" : "does not have";
-            Assert.That(description.HasSyntaxErrorOnSelectedRule, Is.EqualTo(expectErrorsOnRule), $"Expected that script {errorDescription} errors on rule. For script '{script}'");
+            Assert.That(description.HasErrorOnSyntaxRule, Is.EqualTo(expectErrorsOnRule), $"Expected that script {errorDescription} errors on rule. For script '{script}'");
         }
         // Debug Tests
         // [TestCase(SyntaxDescriptor.BeforePurposeDefinitionDivider, 3, 12, "+TestClass:class\n{\n\tpurpose:\"\"\n}")] // Caused stack overflow

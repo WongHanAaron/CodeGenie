@@ -9,10 +9,21 @@ using System.Threading.Tasks;
 
 namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
+    /// <summary> An enum describing the expected state for the suggester base to provide any suggestions </summary>
+    public enum SyntaxValidityOption
+    {
+        Valid,
+        Invalid,
+        Either
+    }
+
     public abstract class SyntaxSuggesterBase
     {
-        public SyntaxSuggesterBase(params SyntaxDescriptor[] syntaxDescriptors)
+        protected SyntaxValidityOption _syntaxValidityExpectation;
+
+        public SyntaxSuggesterBase(SyntaxValidityOption syntaxValidityExpectation, params SyntaxDescriptor[] syntaxDescriptors)
         {
+            _syntaxValidityExpectation = syntaxValidityExpectation;
             foreach (var d in syntaxDescriptors)
             {
                 AcceptedSyntaxDescriptor.Add(d);
@@ -27,13 +38,30 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
         public virtual IEnumerable<ICompletionData> CollectSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs)
         {
             var returned = new List<ICompletionData>();
+
             if (!AcceptedSyntaxDescriptor.Any(d => d == description.SyntaxDescriptorAtCaret)) return returned;
+
+            if (!MatchValidityExpectation(description)) return returned;
 
             returned = Suggestions.ToList();
 
             CollectOtherSuggestions(description, textEnterArgs, returned);
 
             return returned;
+        }
+
+        protected bool MatchValidityExpectation(SyntaxDescription description)
+        {
+            switch (_syntaxValidityExpectation)
+            {
+                case SyntaxValidityOption.Valid:
+                    return !description.HasAnyError;
+                case SyntaxValidityOption.Invalid:
+                    return description.HasAnyError;
+                case SyntaxValidityOption.Either:
+                    return true;
+            }
+            return true;
         }
 
         protected virtual void AddDefaultSuggestions(List<ICompletionData> completionData) { }

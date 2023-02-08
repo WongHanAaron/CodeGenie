@@ -21,3 +21,4 @@
         composes TestClass1
     }
 }
++TestClass:class

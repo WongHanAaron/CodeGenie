@@ -12,10 +12,14 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
 {
     public class CurlyBracesCompletionSuggester : SyntaxSuggesterBase
     {
+        public CurlyBracesCompletionSuggester() : base(SyntaxValidityOption.Invalid)
+        {
+        }
+
         public override IEnumerable<ICompletionData> CollectSuggestions(SyntaxDescription description, TextEnterEventArgs textEnterArgs)
         {
             if (textEnterArgs.LineContent.EndsWith("{") &&
-                !description.HasSyntaxErrorOnSelectedRule)
+                !description.HasAnyError)
             {
                 return new List<ICompletionData>() { new CurlyBracesCompletionSuggestion(textEnterArgs) };
             }
