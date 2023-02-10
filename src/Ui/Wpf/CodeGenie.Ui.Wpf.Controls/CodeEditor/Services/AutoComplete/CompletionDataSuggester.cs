@@ -44,9 +44,10 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
         {
             _suggestionCollector.Add(new ScopeSuggester());
             _suggestionCollector.Add(new DividerSuggester());
-            _suggestionCollector.Add(new ComponentNameSuggester());
+            _suggestionCollector.Add(new NameTooltipSuggester());
             _suggestionCollector.Add(new ComponentTypeSuggester());
             _suggestionCollector.Add(new ComponentDetailSuggester());
+            _suggestionCollector.Add(new TypeSuggester(ComponentRepository));
             _suggestionCollector.Add(new ExistingComponentNameSuggester(ComponentRepository));
             _suggestionCollector.Add(new DetailsBracketSuggester());
             _suggestionCollector.Add(new CurlyBracesCompletionSuggester());

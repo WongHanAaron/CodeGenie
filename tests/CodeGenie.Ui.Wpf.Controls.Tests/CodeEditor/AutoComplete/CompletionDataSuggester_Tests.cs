@@ -36,7 +36,7 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
             Assert.That(Suggester, Is.Not.Null);
         }
 
-        [TestCase(1, 2, "+ ",       $"{ComponentNameSuggester.EnterComponentName}", typeof(TooltipSuggestion))]
+        [TestCase(1, 2, "+ ",       $"{NameTooltipSuggester.EnterName}", typeof(TooltipSuggestion))]
         [TestCase(1, 0, "",         $"{ScopeSuggester.PublicScope},{ScopeSuggester.PrivateScope},{ScopeSuggester.ProtectedScope}", 
                                     typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
         [TestCase(1, 4, "+Test",    $"{DividerSuggester.Divider}", typeof(SimpleTextSuggestion))]
@@ -79,6 +79,18 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
         [TestCase(5, 0, "+Test:class\n{\n\tpurpose : \"\"\n}\n ",
                                     $"{ScopeSuggester.PublicScope},{ScopeSuggester.PrivateScope},{ScopeSuggester.ProtectedScope}",
                                     typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        [TestCase(5, 4, "+ T : class \n{\n\tattributes\n\t{\n\t\t\n\t}\n}",
+                                    $"{ScopeSuggester.PublicScope},{ScopeSuggester.PrivateScope},{ScopeSuggester.ProtectedScope}",
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        [TestCase(5, 4, "+ T : class \n{\n\tattributes\n\t{\n\t\t+\n\t}\n}",
+                                    $"{NameTooltipSuggester.EnterName}", typeof(TooltipSuggestion))]
+        [TestCase(5, 4, "+ T : class \n{\n\tattributes\n\t{\n\t\t+A\n\t}\n}",
+                                    $"{DividerSuggester.Divider}",
+                                    typeof(SimpleTextSuggestion))]
+        [TestCase(5, 4, "+ T : class \n{\n\tattributes\n\t{\n\t\t+A:\n\t}\n}",
+                                    $"{TypeSuggester.String},{TypeSuggester.Integer},{TypeSuggester.Float},{TypeSuggester.Double},{TypeSuggester.DateTime}",
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
