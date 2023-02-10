@@ -19,6 +19,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete.Suggester
         public ScopeSuggester() : base(SyntaxValidityOption.Either,
                                        SyntaxDescriptor.BeforeStartComponentDefinition,
                                        SyntaxDescriptor.BeforeStartAttributeDefinition,
+                                       SyntaxDescriptor.BeforeStartMethodDefinition,
                                        SyntaxDescriptor.BeforeComponentDetails)
         { }
 
