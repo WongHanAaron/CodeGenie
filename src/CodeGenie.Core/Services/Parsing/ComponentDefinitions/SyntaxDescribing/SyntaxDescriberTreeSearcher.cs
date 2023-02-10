@@ -45,7 +45,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             
             var midIndex = (int)((endIndex - startIndex) / 2.0) + startIndex;
 
-            var span = terminalNodes.Skip(startIndex).Take((endIndex - startIndex));
+            var span = terminalNodes.Skip(startIndex).Take((endIndex - startIndex + 1));
             if (span.Count() <= 2 && span.Any())
             {
                 var indexFromSpan = FindNodeClosestToDesiredLine(span, lineNumber);

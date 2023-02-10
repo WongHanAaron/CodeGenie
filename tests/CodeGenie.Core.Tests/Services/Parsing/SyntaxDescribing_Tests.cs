@@ -58,6 +58,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(true, true, SyntaxDescriptor.BeforeAttributeNameDefinition, 5, 3, "+ T : class \n{\n\tattributes\n\t{\n\t\t+\n\t}\n}")]
         [TestCase(true, true, SyntaxDescriptor.BeforeAttributeDivider, 5, 3, "+ T : class \n{\n\tattributes\n\t{\n\t\t+A\n\t}\n}")]
         [TestCase(true, true, SyntaxDescriptor.BeforeAttributeTypeDefinition, 5, 4, "+ T : class \n{\n\tattributes\n\t{\n\t\t+A:\n\t}\n}")]
+        [TestCase(true, true, SyntaxDescriptor.BeforeComponentNameDefinition, 2, 0, "+T:class\n+")]
         public void Get_SyntaxState_At_Line_Column(bool expectErrors, bool expectErrorsOnRule, SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
             var description = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);

@@ -2,6 +2,7 @@
 using CodeGenie.Ui.Wpf.Controls.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -16,19 +17,28 @@ namespace CodeGenie.Ui.Wpf.TestApp
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel(IServiceProvider serviceProvider)
+        ILogger<MainViewModel> _logger;
+        public MainViewModel(ILogger<MainViewModel> logger, IServiceProvider serviceProvider)
         {
+            _logger = logger;
             Title = "CodeGenie TestApp";
             ServiceProvider = serviceProvider;
             TextListener = ServiceProvider.GetService<ITextUpdateListener>();
             CopyTextCommand = new RelayCommand(() =>
             {
-                var text = TextListener.CurrentText;
-                using (var writer = new StringWriter())
-                using (var provider = CodeDomProvider.CreateProvider("CSharp"))
+                try
                 {
-                    provider.GenerateCodeFromExpression(new CodePrimitiveExpression(text), writer, null);
-                    Clipboard.SetText(writer.ToString());
+                    var text = TextListener.CurrentText;
+                    using (var writer = new StringWriter())
+                    using (var provider = CodeDomProvider.CreateProvider("CSharp"))
+                    {
+                        provider.GenerateCodeFromExpression(new CodePrimitiveExpression(text), writer, null);
+                        Clipboard.SetText(writer.ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{nameof(CopyTextCommand)} had an error. {ex}");
                 }
             });
         }
