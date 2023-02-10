@@ -27,11 +27,11 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.Syntax
         BeforeMethodsDetails,
         BeforeStartMethodDefinition,
         BeforeMethodNameDefinition,
-        BeforeMethodParenthesis,
+        BeforeMethodOpenParenthesis,
         BeforeParameterNameDefinition,
         BeforeParameterDivider,
         BeforeParameterTypeDefinition,
-        BeforeNextParameterDivider,
+        AfterParameterTypeDefinition,
         BeforeMethodReturnTypeDefinition,
         // Relationship Definition Tree
         BeforeStartRelationshipsDefinition,

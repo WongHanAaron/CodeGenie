@@ -41,6 +41,8 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
         public SyntaxDescription GetSyntaxDescription(string script, int lineNumber, int columnNumber)
         {
             Logger.LogDebug($"{nameof(GetSyntaxDescription)} for line {lineNumber} and column {columnNumber}");
+            
+            var searchParameters = new SyntaxSearchParameters(lineNumber, columnNumber);
 
             var result = ContextParser.ParseContext(script);
 
@@ -55,7 +57,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.SyntaxDescribing
             }
 
             Logger.LogDebug($"{nameof(SyntaxDescriberTreeSearcher.GetClosestNode)} returned {closestNode.GetType()} on {closestNode?.Symbol?.Line}, {closestNode?.Symbol?.Column}");
-            return GetSyntaxStateFromNode(result, closestNode, new SyntaxSearchParameters(lineNumber, columnNumber));
+            return GetSyntaxStateFromNode(result, closestNode, searchParameters);
         }
 
         protected SyntaxDescription GetSyntaxStateFromNode(ParsingResult result, ITerminalNode node, SyntaxSearchParameters searchParameters)
