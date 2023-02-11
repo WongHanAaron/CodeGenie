@@ -98,7 +98,16 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                                     typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
         [TestCase(5, 2, "+ T : class \n{\n\tmethods\n\t{\n\t\t+\n\t}\n}",
                                     $"{NameTooltipSuggester.EnterName}", typeof(TooltipSuggestion))]
-
+        [TestCase(1, 16, "+T:class{methods{}}",
+                                    $"{ScopeSuggester.PublicScope},{ScopeSuggester.PrivateScope},{ScopeSuggester.ProtectedScope}",
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        [TestCase(1, 17, "+T:class{methods{+}}",
+                                    $"{NameTooltipSuggester.EnterName}", typeof(TooltipSuggestion))]
+        [TestCase(3, 16, "\n\n+T:class{methods{}}",
+                                    $"{ScopeSuggester.PublicScope},{ScopeSuggester.PrivateScope},{ScopeSuggester.ProtectedScope}",
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
+        [TestCase(3, 17, "\n\n+T:class{methods{+}}",
+                                    $"{NameTooltipSuggester.EnterName}", typeof(TooltipSuggestion))]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
