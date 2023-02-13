@@ -23,7 +23,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.Definitions
         public List<AttributeDefinition> Attributes { get; set; } = new List<AttributeDefinition>();
 
         /// <summary>  The methods this component has </summary>
-        public List<MethodDefinition> MethodDefinition { get; set; } = new List<MethodDefinition>();
+        public List<MethodDefinition> MethodDefinitions { get; set; } = new List<MethodDefinition>();
 
         /// <summary> A list of descriptional tags on this component </summary>
         public List<string> Tags { get; set; }

@@ -105,6 +105,9 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
                 });
             }
 
+            // Parse Methods
+
+            
             componentDetails.Purpose = VisitPurpose(purposes.FirstOrDefault()) as string;
 
             return componentDetails;

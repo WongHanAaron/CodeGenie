@@ -15,5 +15,8 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.Definitions
 
         /// <summary> The name of the return type </summary>
         public string ReturnTypeName { get; set; }
+
+        /// <summary> The Parameters to this method </summary>
+        public List<ParameterDefinition> Parameters { get; set; } = new List<ParameterDefinition>();
     }
 }

@@ -142,5 +142,28 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
             Assert.That(component.Scope, Is.EqualTo(expectedScope));
         }
+
+        //[TestCase("+T:class{methods{+M(P1:string,P2:integer):void}}", "M", Scope.Public, "void", "P1,P2", "string,integer")]
+        public void ParseCorrectMethod(string script, string methodToTest, Scope expectedScope, string expectedReturnTypeName, string commaSeparatedParameterNameList, string commaSeparatedParameterTypeList)
+        {
+            var result = Parser.Parse(script);
+
+            var component = result.Components.FirstOrDefault();
+
+            Assert.That(result.Errors.Any(), Is.EqualTo(false));
+
+            Assert.That(component, Is.Not.Null, $"Expect there to be a component to test against");
+
+            var matchingMethod = component.MethodDefinitions.FirstOrDefault(m => m.Name.Equals(methodToTest));
+
+            Assert.That(matchingMethod, Is.Not.Null, $"Expected there to be a method by the name '{methodToTest}'");
+
+            Assert.That(matchingMethod.Scope, Is.EqualTo(expectedScope), $"Expected the scope to be {expectedScope.ToString()}");
+
+            Assert.That(matchingMethod.ReturnTypeName, Is.EqualTo(expectedReturnTypeName));
+
+            Assert.That(matchingMethod.Parameters.Select(p => p.Name).ToList(), Is.EqualTo(commaSeparatedParameterNameList.Split(",").ToList()));
+            Assert.That(matchingMethod.Parameters.Select(p => p.TypeName).ToList(), Is.EqualTo(commaSeparatedParameterTypeList.Split(",").ToList()));
+        }
     }
 }
