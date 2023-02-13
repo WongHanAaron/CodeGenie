@@ -62,6 +62,8 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
         [TestCase("+ Testclass : something", true)]
         [TestCase("TestClass : class",  true)]
+        [TestCase("+ : class", true)]
+        [TestCase("+T:class+T:class", false)]
         public void Component_Parsing_Error(string script, bool expectError)
         {
             var result = Parser.Parse(script);
@@ -90,6 +92,9 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase("+ TestClass : class { tags { \"test1\" \"test2\"} }", "TestClass", "test1,test2")]
         [TestCase("+ TestClass : class { purpose: \"somepurpose\" attributes { + Attribute1 : string } tags { \"test1\" \"test2\"} }", "TestClass", "test1,test2")]
         [TestCase("+ TestClass : class { purpose: \"somepurpose\" attributes { + Attribute1 : string } tags { \"test1\" \"test2\"} } + TestClass2 : class { tags { \"test3\" } }", "TestClass2", "test3")]
+        [TestCase("+ TestClass : class { purpose: \"purpose\" tags { \"tag1\" } } + TestClass2 : class { tags { \"test3\" } }", "TestClass", "tag1")]
+        [TestCase("+ TestClass : class { purpose: \"purpose\" tags { \"tag2\" } } + TestClass2 : class { tags { \"test3\" } }", "TestClass", "tag2")]
+        [TestCase("+ TestClass : class \n\n\n\n+ TestClass2 : class { tags { \"tag3\" } }", "TestClass2", "tag3")]
         public void Component_Parse_Correct_Tags(string script, string componentToTest, string expectedCommaSeparatedTags)
         {
             var result = Parser?.Parse(script);
