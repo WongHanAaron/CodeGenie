@@ -68,6 +68,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase(true, true, SyntaxDescriptor.BeforeParameterTypeDefinition, 5, 6, "+ T : class \n{\n\tmethods\n\t{\n\t\t+M(P:\n\t}\n}")]
         [TestCase(true, false, SyntaxDescriptor.AfterParameterTypeDefinition, 5, 7, "+ T : class \n{\n\tmethods\n\t{\n\t\t+M(P:T\n\t}\n}")]
         [TestCase(true, true, SyntaxDescriptor.BeforeParameterNameDefinition, 5, 8, "+ T : class \n{\n\tmethods\n\t{\n\t\t+M(P:T,\n\t}\n}")]
+        [TestCase(true, true, SyntaxDescriptor.WithinComponentDetails, 4, 0, "+T:class{\n\n\n\n}")] // Broken test case
         public void Get_SyntaxState_At_Line_Column(bool expectErrors, bool expectErrorsOnRule, SyntaxDescriptor expectedState, int lineNumber, int columnNumber, string script)
         {
             var description = Describer.GetSyntaxDescription(script, lineNumber, columnNumber);
