@@ -52,7 +52,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             component.ParsedToken = ParsedToken.Create<ParsedToken>(start, stop);
             _componentDefinitions.Add(component);
             return component;
-        }
+        }   
 
         protected Scope LoadScope(Access_scopeContext accessScope)
         {
@@ -107,7 +107,6 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             }
 
             // Parse Methods
-
             var collectedParsedMethods = new List<ParsedMethodDefinition>();
             foreach (var methods in context.methods() ?? new CodeGenieParser.MethodsContext[0])
             {
@@ -182,13 +181,29 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
 
         protected ParsedMethodDefinition LoadMethodDefinition([NotNull] CodeGenieParser.MethodContext context)
         {
-            var parsedAttribute = new ParsedMethodDefinition();
-            parsedAttribute.Name = context.NAME().GetText();
-            parsedAttribute.ReturnTypeName = context.type().GetText();
-            parsedAttribute.Scope = LoadScope(context.access_scope());
-            return parsedAttribute;
-        }
-        
+            var parsedMethod = new ParsedMethodDefinition();
+            parsedMethod.Name = context.NAME().GetText();
+            parsedMethod.ReturnTypeName = context.type().GetText();
+            parsedMethod.Scope = LoadScope(context.access_scope());
 
+            // Collect attributes
+            var collectedParsedAttributes = new List<ParsedParameterDefinition>();
+            foreach (var parameter in context.parameter() ?? new CodeGenieParser.ParameterContext[0])
+            {
+                var parsedParameters = VisitParameter(parameter) as ParsedParameterDefinition;
+                if (parsedParameters != null) collectedParsedAttributes.Add(parsedParameters);
+            }
+            parsedMethod.Parameters = collectedParsedAttributes.Select(p => p as ParameterDefinition).ToList();
+
+            return parsedMethod;
+        }
+
+        public override object VisitParameter([NotNull] ParameterContext context)
+        {
+            var parsedParameter = new ParsedParameterDefinition();
+            parsedParameter.Name = context.NAME().GetText();
+            parsedParameter.TypeName = context.type().GetText();
+            return parsedParameter;
+        }
     }
 }

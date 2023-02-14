@@ -162,8 +162,8 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
             Assert.That(matchingMethod.ReturnTypeName, Is.EqualTo(expectedReturnTypeName));
 
-            // Assert.That(matchingMethod.Parameters.Select(p => p.Name).ToList(), Is.EqualTo(commaSeparatedParameterNameList.Split(",").ToList()));
-            // Assert.That(matchingMethod.Parameters.Select(p => p.TypeName).ToList(), Is.EqualTo(commaSeparatedParameterTypeList.Split(",").ToList()));
+            Assert.That(matchingMethod.Parameters.Select(p => p.Name).ToList(), Is.EqualTo(commaSeparatedParameterNameList.Split(",").ToList()));
+            Assert.That(matchingMethod.Parameters.Select(p => p.TypeName).ToList(), Is.EqualTo(commaSeparatedParameterTypeList.Split(",").ToList()));
         }
     }
 }
