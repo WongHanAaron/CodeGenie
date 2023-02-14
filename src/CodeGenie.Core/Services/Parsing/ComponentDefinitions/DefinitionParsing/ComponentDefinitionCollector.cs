@@ -44,6 +44,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             {
                 component.Purpose = details.Purpose;
                 component.Attributes = details.Attributes.Select(a => a as AttributeDefinition).ToList();
+                component.MethodDefinitions = details.Methods.Select(m => m as MethodDefinition).ToList();
                 component.Tags = details.Tags;
                 stop = componentDetailsContext.Stop;
             };
@@ -107,7 +108,14 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
 
             // Parse Methods
 
-            
+            var collectedParsedMethods = new List<ParsedMethodDefinition>();
+            foreach (var methods in context.methods() ?? new CodeGenieParser.MethodsContext[0])
+            {
+                var parsedMethods = VisitMethods(methods) as IEnumerable<ParsedMethodDefinition>;
+                if (parsedMethods != null) collectedParsedMethods.AddRange(parsedMethods);
+            }
+            componentDetails.Methods = collectedParsedMethods;
+
             componentDetails.Purpose = VisitPurpose(purposes.FirstOrDefault()) as string;
 
             return componentDetails;
@@ -123,6 +131,18 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
                 attributes.Add(LoadAttributeDefinition(attribute));
             }
             return attributes;
+        }
+
+        public override object VisitMethods([NotNull] MethodsContext context)
+        {
+            if (context == null) return null;
+
+            var methods = new List<ParsedMethodDefinition>();
+            foreach (var method in context.method())
+            {
+                methods.Add(LoadMethodDefinition(method));
+            }
+            return methods;
         }
 
         public override object VisitTags([NotNull] CodeGenieParser.TagsContext context)
@@ -160,6 +180,15 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             return parsedAttribute;
         }
 
+        protected ParsedMethodDefinition LoadMethodDefinition([NotNull] CodeGenieParser.MethodContext context)
+        {
+            var parsedAttribute = new ParsedMethodDefinition();
+            parsedAttribute.Name = context.NAME().GetText();
+            parsedAttribute.ReturnTypeName = context.type().GetText();
+            parsedAttribute.Scope = LoadScope(context.access_scope());
+            return parsedAttribute;
+        }
+        
 
     }
 }
