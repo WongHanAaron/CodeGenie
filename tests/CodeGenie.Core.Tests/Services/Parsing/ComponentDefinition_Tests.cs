@@ -144,6 +144,9 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         }
 
         [TestCase("+T:class{methods{+M(P1:string,P2:integer):void}}", "M", Scope.Public, "void", "P1,P2", "string,integer")]
+        [TestCase("+T:class{methods{+M(P1:string,P2:integer):void+M2(P3:something):string}}", "M2", Scope.Public, "string", "P3", "something")]
+        [TestCase("+T:class{methods{+O(P1:string,P2:integer,P3:other):other}}", "O", Scope.Public, "other", "P1,P2,P3", "string,integer,other")]
+        [TestCase("+T:class{methods{+M(\n\n\nP1:string,\n\n\nP2:integer)\n:\nvoid}}", "M", Scope.Public, "void", "P1,P2", "string,integer")]
         public void ParseCorrectMethod(string script, string methodToTest, Scope expectedScope, string expectedReturnTypeName, string commaSeparatedParameterNameList, string commaSeparatedParameterTypeList)
         {
             var result = Parser.Parse(script);
