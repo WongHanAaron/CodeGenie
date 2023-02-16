@@ -61,7 +61,7 @@ namespace CodeGenie.Ui.Wpf.Controls.CodeEditor.Services.AutoComplete
 
             var syntaxDescription = SyntaxDescriber.GetSyntaxDescription(fullScript, eventArgs.LineNumber, eventArgs.ColumnNumber);
 
-            Logger.LogDebug($"CurrentSyntax: {syntaxDescription.ToString()}");
+            Logger.LogDebug($"CurrentSyntax: {syntaxDescription.SyntaxDescriptorAtCaret.ToString()}");
 
             var returned = new List<ICompletionData>();
             
