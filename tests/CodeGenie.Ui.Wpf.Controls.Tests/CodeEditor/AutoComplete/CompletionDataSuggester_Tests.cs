@@ -108,6 +108,9 @@ namespace CodeGenie.Ui.Wpf.Controls.Tests.CodeEditor.AutoComplete
                                     typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
         [TestCase(3, 17, "\n\n+T:class{methods{+}}",
                                     $"{NameTooltipSuggester.EnterName}", typeof(TooltipSuggestion))]
+        [TestCase(3, 22, "\n\n+T:class{relationships{}}",
+                                    $"{RelationshipTypeSuggester.Depends},{RelationshipTypeSuggester.Aggregates},{RelationshipTypeSuggester.Composes},{RelationshipTypeSuggester.Realizes},{RelationshipTypeSuggester.Specializes}", 
+                                    typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion), typeof(SimpleTextSuggestion))]
         public void Script_Suggests_Correct_Types(int lineNumber, int columnNumber, string fullContents, string expectedSuggestionName, params Type[] expectedTypes)
         {
             // SETUP
