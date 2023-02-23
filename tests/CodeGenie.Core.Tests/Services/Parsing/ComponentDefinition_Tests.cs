@@ -170,6 +170,14 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         }
 
         [TestCase("+T:class{relationships{depends T}}", $"{nameof(RelationshipType.Dependency)}", "T")]
+        [TestCase("+T:class{relationships{aggregates T}}", $"{nameof(RelationshipType.Aggregation)}", "T")]
+        [TestCase("+T:class{relationships{composes T}}", $"{nameof(RelationshipType.Composition)}", "T")]
+        [TestCase("+T:class{relationships{specializes T}}", $"{nameof(RelationshipType.Specialization)}", "T")]
+        [TestCase("+T:class{relationships{realizes T}}", $"{nameof(RelationshipType.Realization)}", "T")]
+        [TestCase("+T:class{relationships{realizes T depends T composes T}}", 
+                    $"{nameof(RelationshipType.Realization)},{nameof(RelationshipType.Dependency)},{nameof(RelationshipType.Composition)}", "T,T,T")]
+        [TestCase("+T:class{relationships{depends T depends T2 depends T3}}", 
+                    $"{nameof(RelationshipType.Dependency)},{nameof(RelationshipType.Dependency)},{nameof(RelationshipType.Dependency)}", "T,T2,T3")]
         public void ParseCorrectRelationshipType(string script, string csvOfRelationshipTypes, string csvOfRelatedComponents)
         {
             var result = Parser.Parse(script);
