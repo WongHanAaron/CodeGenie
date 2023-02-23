@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using CodeGenie.Core.Models.ComponentDefinitions.Definitions;
 using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
@@ -45,6 +46,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
                 component.Purpose = details.Purpose;
                 component.Attributes = details.Attributes.Select(a => a as AttributeDefinition).ToList();
                 component.MethodDefinitions = details.Methods.Select(m => m as MethodDefinition).ToList();
+                component.RelationshipDefinitions = details.Relationships.Select(r => r as RelationshipDefinition).ToList();
                 component.Tags = details.Tags;
                 stop = componentDetailsContext.Stop;
             };
@@ -105,6 +107,7 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
                     _errors.Add(ParsedToken.Create<ScriptError>(c.Start, c.Stop));
                 });
             }
+            componentDetails.Purpose = VisitPurpose(purposes.FirstOrDefault()) as string;
 
             // Parse Methods
             var collectedParsedMethods = new List<ParsedMethodDefinition>();
@@ -115,7 +118,14 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             }
             componentDetails.Methods = collectedParsedMethods;
 
-            componentDetails.Purpose = VisitPurpose(purposes.FirstOrDefault()) as string;
+            // Parse Relationships
+            var collectedParsedRelationships = new List<ParsedRelationshipDefinition>();
+            foreach (var relationshipsContext in context.relationships() ?? new RelationshipsContext[0])
+            {
+                var parsedRelationships = VisitRelationships(relationshipsContext) as IEnumerable<ParsedRelationshipDefinition>;
+                if (parsedRelationships != null) collectedParsedRelationships.AddRange(parsedRelationships);
+            }
+            componentDetails.Relationships = collectedParsedRelationships;
 
             return componentDetails;
         }
@@ -204,6 +214,149 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             parsedParameter.Name = context.NAME().GetText();
             parsedParameter.TypeName = context.type().GetText();
             return parsedParameter;
+        }
+
+        public override object VisitRelationships([NotNull] RelationshipsContext context)
+        {
+            var returned = new List<ParsedRelationshipDefinition>();
+
+            foreach (var child in context.relationship() ?? new RelationshipContext[0])
+            {
+                var result = VisitRelationship(child) as ParsedRelationshipDefinition;
+                if (result != null)
+                {
+                    returned.Add(result);
+                }
+            }
+
+            return returned;
+        }
+
+        public override object VisitRelationship([NotNull] RelationshipContext context)
+        {
+            ParsedRelationshipDefinition parsed = null;
+
+            if (TryVisitAndParse<DependencyContext>(() => context.dependency(), VisitDependency, out parsed))
+            {
+                return parsed;
+            }
+
+            if (TryVisitAndParse<AggregatesContext>(() => context.aggregates(), VisitAggregates, out parsed))
+            {
+                return parsed;
+            }
+
+            if (TryVisitAndParse<ComposesContext>(() => context.composes(), VisitComposes, out parsed))
+            {
+                return parsed;
+            }
+
+            if (TryVisitAndParse<SpecializesContext>(() => context.specializes(), VisitSpecializes, out parsed))
+            {
+                return parsed;
+            }
+
+            if (TryVisitAndParse<RealizesContext>(() => context.realizes(), VisitRealizes, out parsed))
+            {
+                return parsed;
+            }
+
+            return parsed;
+        }
+
+        public bool TryVisitAndParse<TRelationship>(
+            Func<TRelationship> relationshipExtractor,
+            Func<TRelationship, object> visitorMethod,
+            out ParsedRelationshipDefinition parsed)
+                where TRelationship : ParserRuleContext
+        {
+            parsed = null;
+
+            var ruleContext = relationshipExtractor?.Invoke();
+
+            if (ruleContext == null) return false;
+
+            var visitedResult = visitorMethod?.Invoke(ruleContext);
+
+            parsed = visitedResult as ParsedRelationshipDefinition;
+
+            return parsed != null;
+        }
+
+        public override object VisitDependency([NotNull] DependencyContext context)
+        {
+            var returned = ParseRelationshipDefinition<DependencyContext, ParsedRelationshipDefinition>(context);
+            return returned;
+        }
+
+        public override object VisitAggregates([NotNull] AggregatesContext context)
+        {
+            var returned = ParseRelationshipDefinition<AggregatesContext, ParsedRelationshipDefinition>(context);
+            return returned;
+        }
+
+        public override object VisitComposes([NotNull] ComposesContext context)
+        {
+            var returned = ParseRelationshipDefinition<ComposesContext,ParsedRelationshipDefinition>(context);
+            return returned;
+        }
+
+        public override object VisitSpecializes([NotNull] SpecializesContext context)
+        {
+            var returned = ParseRelationshipDefinition<SpecializesContext, ParsedRelationshipDefinition>(context);
+            return returned;
+        }
+
+        public override object VisitRealizes([NotNull] RealizesContext context)
+        {
+            var returned = ParseRelationshipDefinition<RealizesContext, ParsedRelationshipDefinition>(context);
+            return returned;
+        }
+
+        public TReturn ParseRelationshipDefinition<TRelationship, TReturn>(ParserRuleContext ruleContext) where TReturn : ParsedRelationshipDefinition
+        {
+            var created = Activator.CreateInstance(typeof(TReturn)) as TReturn;
+
+            var relationshipType = GetRelationshipType(ruleContext);
+
+            if (!relationshipType.HasValue) return null;
+
+            created.RelationshipType = relationshipType.Value;
+
+            var type = typeof(TRelationship);
+
+            var typeMethod = type.GetMethod(nameof(DependencyContext.type));
+
+            if (typeMethod == null) return null;
+
+            var typeContext = typeMethod.Invoke(ruleContext, new object[0]) as TypeContext;
+
+            if (typeContext == null) return null;
+
+            var componentType = typeContext.GetText();
+
+            created.RelatedComponentName = componentType;
+
+            return created;
+        }
+
+        public RelationshipType? GetRelationshipType(ParserRuleContext parserRuleContext)
+        {
+            switch(parserRuleContext.GetType().Name)
+            {
+                case nameof(DependencyContext):
+                    return RelationshipType.Dependency;
+                case nameof(ComposesContext):
+                    return RelationshipType.Composition;
+                case nameof(AggregatesContext):
+                    return RelationshipType.Aggregation;
+                case nameof(RealizesContext):
+                    return RelationshipType.Realization;
+                case nameof(SpecializesContext):
+                    return RelationshipType.Specialization;
+                default:
+                    return null;
+            }
         }
     }
 }
