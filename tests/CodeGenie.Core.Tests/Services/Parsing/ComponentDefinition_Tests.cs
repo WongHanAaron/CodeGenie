@@ -180,7 +180,21 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
             Assert.That(component, Is.Not.Null, $"Expect there to be a component to test against");
 
-            
+            var expectedRelationshipTypes = csvOfRelationshipTypes.Split(",");
+            var expectedRelatedComponents = csvOfRelatedComponents.Split(",");
+
+            for (int i = 0; i < expectedRelationshipTypes.Count(); i++)
+            {
+                var expectedRelationshipType = expectedRelationshipTypes[i];
+                var expectedRelatedComponent = expectedRelatedComponents[i];
+
+                var parsedRelationship = component.RelationshipDefinitions.ElementAtOrDefault(i);
+
+                Assert.That(parsedRelationship, Is.Not.Null, $"Expected relationship at element '{i}' to be '{expectedRelationshipType}' and '{expectedRelatedComponent}' but was null");
+
+                Assert.That(parsedRelationship.RelationshipType.ToString(), Is.EqualTo(expectedRelationshipType), $"Expected relationship at element '{i}' to be '{expectedRelationshipType}' but was '{parsedRelationship.RelationshipType.ToString()}'");
+                Assert.That(parsedRelationship.RelatedComponentName, Is.EqualTo(expectedRelatedComponent), $"Expected relationship at element '{i}' to be related to '{expectedRelationshipType}' but was '{parsedRelationship.RelationshipType.ToString()}'");
+            }
         }
     }
 }

@@ -25,6 +25,9 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.Definitions
         /// <summary>  The methods this component has </summary>
         public List<MethodDefinition> MethodDefinitions { get; set; } = new List<MethodDefinition>();
 
+        /// <summary> The relationships this component has </summary>
+        public List<RelationshipDefinition> RelationshipDefinitions { get; set; } = new List<RelationshipDefinition>();
+
         /// <summary> A list of descriptional tags on this component </summary>
         public List<string> Tags { get; set; }
     }
