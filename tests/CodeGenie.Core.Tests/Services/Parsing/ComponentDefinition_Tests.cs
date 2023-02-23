@@ -168,5 +168,19 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.That(matchingMethod.Parameters.Select(p => p.Name).ToList(), Is.EqualTo(commaSeparatedParameterNameList.Split(",").ToList()));
             Assert.That(matchingMethod.Parameters.Select(p => p.TypeName).ToList(), Is.EqualTo(commaSeparatedParameterTypeList.Split(",").ToList()));
         }
+
+        // [TestCase("+T:class{relationships{depends T}", "depends", "T")]
+        public void ParseCorrectRelationshipType(string script, string csvOfRelationshipTypes, string csvOfRelatedComponents)
+        {
+            var result = Parser.Parse(script);
+
+            var component = result.Components.FirstOrDefault();
+
+            Assert.That(result.Errors.Any(), Is.EqualTo(false));
+
+            Assert.That(component, Is.Not.Null, $"Expect there to be a component to test against");
+
+            
+        }
     }
 }
