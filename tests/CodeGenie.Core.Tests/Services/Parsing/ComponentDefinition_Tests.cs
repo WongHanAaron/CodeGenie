@@ -204,5 +204,27 @@ namespace CodeGenie.Core.Tests.Services.Parsing
                 Assert.That(parsedRelationship.RelatedComponentName, Is.EqualTo(expectedRelatedComponent), $"Expected relationship at element '{i}' to be related to '{expectedRelationshipType}' but was '{parsedRelationship.RelationshipType.ToString()}'");
             }
         }
+
+
+        public void ParseCorrectRelationshipDetails(string script, string targetedRelationshipType, string expectedPurpose, string csvOfTags, string sourceCardinality, string destinationCardinality)
+        {
+            var result = Parser.Parse(script);
+
+            var component = result.Components.FirstOrDefault();
+
+            Assert.That(result.Errors.Any(), Is.EqualTo(false));
+
+            Assert.That(component, Is.Not.Null, $"Expect there to be a component to test against");
+
+            var targetedRelationship = component.RelationshipDefinitions.FirstOrDefault(r => r.GetType().Name.Equals(targetedRelationshipType));
+
+            Assert.That(targetedRelationship, Is.Not.Null, $"There does not exist a relationship of type '{targetedRelationshipType}'");
+
+            Assert.That(targetedRelationship.Purpose, Is.EqualTo(expectedPurpose));
+
+            var expectedTags = csvOfTags.Split(",").ToList();
+
+            Assert.That(targetedRelationship.Tags, Is.EqualTo(expectedTags));
+        }
     }
 }

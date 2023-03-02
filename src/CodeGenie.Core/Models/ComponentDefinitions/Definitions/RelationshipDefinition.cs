@@ -9,6 +9,14 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.Definitions
     {
         /// <summary> The relationship type name </summary>
         public RelationshipType RelationshipType { get; set; }
+
+        /// <summary> The purpose of this component </summary>
+        public string Purpose { get; set; }
+
+        /// <summary> The name of the related component </summary>
         public string RelatedComponentName { get; set; }
+
+        /// <summary> The list of tags </summary>
+        public List<string> Tags { get; set; }
     }
 }
