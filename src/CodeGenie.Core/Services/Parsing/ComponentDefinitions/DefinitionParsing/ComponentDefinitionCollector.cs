@@ -340,6 +340,11 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             return created;
         }
 
+        public ParsedRelationshipDetails GetRelationshipDetails(ParserRuleContext parserRuleContext)
+        {
+            return null;
+        }
+
         public RelationshipType? GetRelationshipType(ParserRuleContext parserRuleContext)
         {
             switch(parserRuleContext.GetType().Name)

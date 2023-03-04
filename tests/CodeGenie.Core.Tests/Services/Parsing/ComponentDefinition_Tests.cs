@@ -205,7 +205,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             }
         }
 
-
+        [TestCase("+T:class{relationships{depends T {purpose:\"something\" tags{\"tag1\"}}}}", $"{nameof(RelationshipType.Dependency)}", "something", "tag1", "1", "1")]
         public void ParseCorrectRelationshipDetails(string script, string targetedRelationshipType, string expectedPurpose, string csvOfTags, string sourceCardinality, string destinationCardinality)
         {
             var result = Parser.Parse(script);
