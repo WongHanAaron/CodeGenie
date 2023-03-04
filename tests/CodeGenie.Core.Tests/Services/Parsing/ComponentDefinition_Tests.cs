@@ -206,6 +206,9 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         }
 
         [TestCase("+T:class{relationships{depends T {purpose:\"something\" tags{\"tag1\"}}}}", $"{nameof(RelationshipType.Dependency)}", "something", "tag1", "1", "1")]
+        [TestCase("+T:class{relationships{depends T {purpose:\"something1\" tags{\"tag1\" \"tag2\"}}}}", $"{nameof(RelationshipType.Dependency)}", "something1", "tag1,tag2", "1", "1")]
+        [TestCase("+T:class{relationships{depends T {purpose:\"something2\" tags{\"tag3\"}}}}", $"{nameof(RelationshipType.Dependency)}", "something2", "tag3", "1", "1")]
+        [TestCase("+T:class{relationships{depends T}}", $"{nameof(RelationshipType.Dependency)}", "", "", "1", "1")]
         public void ParseCorrectRelationshipDetails(string script, string targetedRelationshipType, string expectedPurpose, string csvOfTags, string sourceCardinality, string destinationCardinality)
         {
             var result = Parser.Parse(script);
@@ -216,13 +219,13 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
             Assert.That(component, Is.Not.Null, $"Expect there to be a component to test against");
 
-            var targetedRelationship = component.RelationshipDefinitions.FirstOrDefault(r => r.GetType().Name.Equals(targetedRelationshipType));
+            var targetedRelationship = component.RelationshipDefinitions.FirstOrDefault(r => r.RelationshipType.ToString().Equals(targetedRelationshipType));
 
             Assert.That(targetedRelationship, Is.Not.Null, $"There does not exist a relationship of type '{targetedRelationshipType}'");
 
             Assert.That(targetedRelationship.Purpose, Is.EqualTo(expectedPurpose));
 
-            var expectedTags = csvOfTags.Split(",").ToList();
+            var expectedTags = csvOfTags.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
 
             Assert.That(targetedRelationship.Tags, Is.EqualTo(expectedTags));
         }

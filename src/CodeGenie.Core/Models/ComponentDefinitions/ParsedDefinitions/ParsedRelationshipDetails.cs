@@ -6,7 +6,7 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
 {
     public class ParsedRelationshipDetails
     {
-        public string Purpose { get; set; }
+        public string Purpose { get; set; } = string.Empty;
         public List<string> Tags { get; set; } = new List<string>();
     }
 }

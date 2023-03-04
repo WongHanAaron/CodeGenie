@@ -9,5 +9,11 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
     {
         /// <summary> The parsed token for this component </summary>
         public ParsedToken ParsedToken { get; set; }
+
+        public void SetDetails(ParsedRelationshipDetails details)
+        {
+            Purpose = details.Purpose;
+            Tags = details.Tags;
+        }
     }
 }

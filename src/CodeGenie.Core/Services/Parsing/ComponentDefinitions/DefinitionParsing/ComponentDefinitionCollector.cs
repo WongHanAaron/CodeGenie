@@ -286,30 +286,55 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
         public override object VisitDependency([NotNull] DependencyContext context)
         {
             var returned = ParseRelationshipDefinition<DependencyContext, ParsedRelationshipDefinition>(context);
+
+            var details = GetRelationshipDetails(context.dependency_details());
+
+            returned.SetDetails(details);
+
             return returned;
         }
 
         public override object VisitAggregates([NotNull] AggregatesContext context)
         {
             var returned = ParseRelationshipDefinition<AggregatesContext, ParsedRelationshipDefinition>(context);
+
+            var details = GetRelationshipDetails(context.aggregates_details());
+
+            returned.SetDetails(details);
+
             return returned;
         }
 
         public override object VisitComposes([NotNull] ComposesContext context)
         {
             var returned = ParseRelationshipDefinition<ComposesContext,ParsedRelationshipDefinition>(context);
+
+            var details = GetRelationshipDetails(context.composes_details());
+
+            returned.SetDetails(details);
+
             return returned;
         }
 
         public override object VisitSpecializes([NotNull] SpecializesContext context)
         {
             var returned = ParseRelationshipDefinition<SpecializesContext, ParsedRelationshipDefinition>(context);
+
+            var details = GetRelationshipDetails(context.specializes_details());
+
+            returned.SetDetails(details);
+
             return returned;
         }
 
         public override object VisitRealizes([NotNull] RealizesContext context)
         {
             var returned = ParseRelationshipDefinition<RealizesContext, ParsedRelationshipDefinition>(context);
+
+            var details = GetRelationshipDetails(context.realizes_details());
+
+            returned.SetDetails(details);
+
             return returned;
         }
 
@@ -342,7 +367,30 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
 
         public ParsedRelationshipDetails GetRelationshipDetails(ParserRuleContext parserRuleContext)
         {
-            return null;
+            var returned = new ParsedRelationshipDetails();
+
+            if (parserRuleContext == null) return returned;
+
+            var type = parserRuleContext.GetType();
+            var methods = type.GetMethods().Where(m => m.IsPublic);
+
+            var purposeMethod = methods.FirstOrDefault(m => m.Name.Equals(nameof(Dependency_detailsContext.purpose)));
+
+            if (purposeMethod != null)
+            {
+                var purposeContexts = purposeMethod.Invoke(parserRuleContext, new object[0]) as PurposeContext[];
+                returned.Purpose = VisitPurpose(purposeContexts.FirstOrDefault()) as string;
+            }
+
+            var tagsMethod = methods.FirstOrDefault(m => m.Name.Equals(nameof(Dependency_detailsContext.tags)));
+
+            if (tagsMethod != null)
+            {
+                var tagsContexts = tagsMethod.Invoke(parserRuleContext, new object[0]) as TagsContext[];
+                returned.Tags = VisitTags(tagsContexts.FirstOrDefault()) as List<string>;
+            }
+
+            return returned;
         }
 
         public RelationshipType? GetRelationshipType(ParserRuleContext parserRuleContext)
