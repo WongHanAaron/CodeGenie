@@ -8,7 +8,7 @@ using CodeGenie.Core.Services;
 namespace CodeGenie.Core.Tests.Utilities
 {
     /// <summary> The base test class for component definition parsers </summary>
-    public class ComponentDefinitionTestBase : MockableTestBase
+    public class CodeGenieTestBase : MockableTestBase
     {
         protected override void InjectMockedServices(MockableServiceCollection collection)
         {

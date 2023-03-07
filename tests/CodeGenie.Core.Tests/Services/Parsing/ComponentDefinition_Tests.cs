@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CodeGenie.Core.Tests.Services.Parsing
 {
     [TestFixture]
-    public class ComponentDefinition_Tests : ComponentDefinitionTestBase
+    public class ComponentDefinition_Tests : CodeGenieTestBase
     {
         IComponentDefinitionParser? Parser;
 

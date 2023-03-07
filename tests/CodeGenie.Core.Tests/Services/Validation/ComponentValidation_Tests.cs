@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CodeGenie.Core.Tests.Services.Validation
 {
-    public class ComponentValidation_Tests : ComponentDefinitionTestBase
+    public class ComponentValidation_Tests : CodeGenieTestBase
     {
         IComponentDefinitionParser Parser;
         ISemanticValidator Validator;

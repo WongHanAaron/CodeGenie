@@ -10,7 +10,10 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
     {
         public GeneratedComponentDefinition Generate(ComponentDefinition component)
         {
-
+            return new GeneratedComponentDefinition()
+            {
+                Component = component
+            };
         }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace CodeGenie.Core.Tests.Services.Parsing
 {
     [TestFixture]
-    public class SyntaxDescribing_Tests : ComponentDefinitionTestBase
+    public class SyntaxDescribing_Tests : CodeGenieTestBase
     {
         protected ISyntaxDescriber Describer;
 
