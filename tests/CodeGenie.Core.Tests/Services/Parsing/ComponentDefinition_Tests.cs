@@ -236,5 +236,24 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
             Assert.That(targetedRelationship.Tags, Is.EqualTo(expectedTags));
         }
+
+        // [TestCase("test", 0, 10, "+test:class")]
+        public void ComponentParsedToCorrectPosition(string componentName, 
+                                                     int firstCharIndex,
+                                                     int lastCharIndex,
+                                                     string script)
+        {
+            var parsed = Parser.Parse(script);
+
+            Assert.That(parsed.HasErrors, Is.False, $"There were parsing errors in a script expected to be valid. '{script}'");
+
+            var matchingComponent = parsed.Components.FirstOrDefault(c => c.Name.Equals(componentName));
+
+            Assert.That(matchingComponent, Is.Not.Null, $"Expect there to be a component by name '{componentName}'");
+
+            Assert.That(matchingComponent.ParsedToken.StartIndex, Is.EqualTo(firstCharIndex), $"Expected first index to be {firstCharIndex} but was {matchingComponent.ParsedToken.StartIndex}");
+
+            Assert.That(matchingComponent.ParsedToken.EndIndex, Is.EqualTo(lastCharIndex), $"Expected end index to be {lastCharIndex} but was {matchingComponent.ParsedToken.EndIndex}");
+        }
     }
 }
