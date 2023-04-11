@@ -227,7 +227,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.That(component, Is.Not.Null, $"Expect there to be a component to test against");
 
             var targetedRelationship = component.RelationshipDefinitions.FirstOrDefault(r => r.RelationshipType.ToString().Equals(targetedRelationshipType));
-
+                
             Assert.That(targetedRelationship, Is.Not.Null, $"There does not exist a relationship of type '{targetedRelationshipType}'");
 
             Assert.That(targetedRelationship.Purpose, Is.EqualTo(expectedPurpose));
@@ -239,7 +239,11 @@ namespace CodeGenie.Core.Tests.Services.Parsing
 
         [TestCase("test", 0, 10, "+test:class")]
         [TestCase("test", 0, 22, "+test:class{purpose:\"\"}")]
-        // [TestCase("test", 10, 32, "+T:class +test:class{purpose:\"\"}")]
+        [TestCase("test", 9, 31, "+T:class +test:class{purpose:\"\"}")]
+        [TestCase("test", 10, 32, "+T:class  +test:class{purpose:\"\"}")]
+        [TestCase("test", 11, 33, "+T:class   +test:class{purpose:\"\"}")]
+        [TestCase("test", 12, 34, "+T:class   \n+test:class{purpose:\"\"}")]
+        [TestCase("test", 12, 51, "+T:class   \n+test:class{purpose:\"\"\n\ttags { \"tag2\" }}")]
         public void ComponentParsedToCorrectPosition(string componentName, 
                                                      int firstCharIndex,
                                                      int lastCharIndex,
