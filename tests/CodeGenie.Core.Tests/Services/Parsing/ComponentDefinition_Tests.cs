@@ -237,7 +237,9 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.That(targetedRelationship.Tags, Is.EqualTo(expectedTags));
         }
 
-        // [TestCase("test", 0, 10, "+test:class")]
+        [TestCase("test", 0, 10, "+test:class")]
+        [TestCase("test", 0, 22, "+test:class{purpose:\"\"}")]
+        // [TestCase("test", 10, 32, "+T:class +test:class{purpose:\"\"}")]
         public void ComponentParsedToCorrectPosition(string componentName, 
                                                      int firstCharIndex,
                                                      int lastCharIndex,
