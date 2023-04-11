@@ -244,6 +244,7 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase("test", 11, 33, "+T:class   +test:class{purpose:\"\"}")]
         [TestCase("test", 12, 34, "+T:class   \n+test:class{purpose:\"\"}")]
         [TestCase("test", 12, 51, "+T:class   \n+test:class{purpose:\"\"\n\ttags { \"tag2\" }}")]
+        [TestCase("test2", 53, 64, "+T:class   \n+test:class{purpose:\"\"\n\ttags { \"tag2\" }} +test2:class")]
         public void ComponentParsedToCorrectPosition(string componentName, 
                                                      int firstCharIndex,
                                                      int lastCharIndex,
