@@ -10,25 +10,16 @@ using System.Threading.Tasks;
 
 namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 {
-    public class CSharpGenerator_Tests : CodeGenieTestBase
+    public class CSharpComponentGenerator_Tests : Generator_TestBase<CSharpComponentGenerator>
     {
         public IComponentGenerator Generator { get; set; }
 
         public IComponentDefinitionParser Parser { get; set; }
 
-        public IComponentGenerator CreateGenerator()
-        {
-            return new CSharpGenerator();
-        }
-
         [SetUp]
         public void SetUp()
         {
-            Generator = CreateGenerator();
-
-            ServiceProvider = BuildServiceProvider();
-            Parser = ServiceProvider?.GetService<IComponentDefinitionParser>();
-            Assert.IsNotNull(Parser, "The parser could not be injected");
+            SetUpGeneratorAndParser();
         }
 
         //[TestCase("+T:class", 

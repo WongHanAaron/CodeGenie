@@ -1,4 +1,5 @@
 ﻿using CodeGenie.Core.Models.Configuration;
+using CodeGenie.Core.Services.Generators.ComponentGenerators;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.SemanticValidation;
@@ -14,7 +15,7 @@ using System.Text;
 
 namespace CodeGenie.Core.Services
 {
-    public static class ServiceExtensions
+    public static class DependencyInjection
     {
         /// <summary> Add the dependencies required for CodeGenie </summary>
         public static void AddCodeGenie(this IServiceCollection serviceCollection, Action<ServiceCreationOptions> creationOptions = null)
@@ -25,6 +26,7 @@ namespace CodeGenie.Core.Services
             serviceCollection.AddDefinitionParserDependencies();
             serviceCollection.AddSemanticValidatorDependencies();
             serviceCollection.AddSyntaxDescribingDependencies();
+            serviceCollection.AddGeneratorDependencies();
             serviceCollection.AddTransient<IComponentCompiler, ComponentCompiler>();
         }
 
@@ -62,6 +64,23 @@ namespace CodeGenie.Core.Services
         {
             serviceCollection.AddTransient<ISyntaxDescriber, SyntaxDescriber>();
             serviceCollection.AddTransient<ISyntaxDescriberTreeSearcher, SyntaxDescriberTreeSearcher>();
+        }
+
+        private static void AddGeneratorDependencies(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IComponentGeneratorFactory, ComponentGeneratorFactory>();
+            serviceCollection.AddCodeGenieGeneratorDependencies();
+            serviceCollection.AddCSharpGeneratorDependencies();
+        }
+
+        private static void AddCodeGenieGeneratorDependencies(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IComponentGenerator, CodeGenieComponentGenerator>();
+        }
+
+        private static void AddCSharpGeneratorDependencies(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IComponentGenerator, CSharpComponentGenerator>();
         }
     }
 }

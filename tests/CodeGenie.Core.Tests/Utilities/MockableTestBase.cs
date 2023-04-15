@@ -12,6 +12,7 @@ namespace CodeGenie.Core.Tests.Utilities
         protected IServiceProvider? ServiceProvider { get; set; }
         public virtual IServiceProvider BuildServiceProvider(Action<MockableServiceCollection>? mockServicesMethod = null)
         {
+            MockableServiceCollection = new MockableServiceCollection();
             InjectMockedServices(MockableServiceCollection);
             mockServicesMethod?.Invoke(MockableServiceCollection);
             return MockableServiceCollection.BuildMockedServiceProvider();

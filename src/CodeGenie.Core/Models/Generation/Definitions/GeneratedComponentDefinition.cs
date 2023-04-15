@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeGenie.Core.Models.GeneratedDefinitions
+namespace CodeGenie.Core.Models.Generation.Definitions
 {
     /// <summary> The representation of the generated code for the component </summary>
     public class GeneratedComponentDefinition
