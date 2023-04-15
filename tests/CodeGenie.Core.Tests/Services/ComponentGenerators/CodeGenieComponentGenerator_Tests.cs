@@ -1,4 +1,5 @@
-﻿using CodeGenie.Core.Services.Generators.ComponentGenerators;
+﻿using CodeGenie.Core.Models.Generation.Contexts;
+using CodeGenie.Core.Services.Generators.ComponentGenerators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,22 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
             SetUpGeneratorAndParser();
         }
 
+        [TestCase("T", "+T:class", "+ T : class")]
+        [TestCase("TestClass", "+TestClass:class", "+ TestClass : class")]
+        [TestCase("ITest", "+ITest:interface", "+ ITest : interface")]
+        public void ComponentDefinition_Creates_Accurately(string targetComponent, string inputScript, string expectedOutputScript)
+        {
+            var context = new GenerationContext();
 
+            var result = ParseAndAssertNoErrors(inputScript);
+
+            var component = result.Components.FirstOrDefault(c => c.Name == targetComponent);
+
+            Assert.That(component, Is.Not.Null);
+
+            var generated = TypedGenerator.GenerateComponentDefinition(context, component);
+
+            Assert.That(generated, Is.EqualTo(expectedOutputScript));
+        }
     }
 }

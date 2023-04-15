@@ -1,4 +1,5 @@
 ﻿using CodeGenie.Core.Models.Configuration;
+using CodeGenie.Core.Services.Generators;
 using CodeGenie.Core.Services.Generators.ComponentGenerators;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
@@ -68,6 +69,7 @@ namespace CodeGenie.Core.Services
 
         private static void AddGeneratorDependencies(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddSingleton<IWhitespaceGenerator, WhitespaceGenerator>();
             serviceCollection.AddSingleton<IComponentGeneratorFactory, ComponentGeneratorFactory>();
             serviceCollection.AddCodeGenieGeneratorDependencies();
             serviceCollection.AddCSharpGeneratorDependencies();

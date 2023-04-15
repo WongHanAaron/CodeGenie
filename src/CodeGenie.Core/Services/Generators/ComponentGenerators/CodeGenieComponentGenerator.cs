@@ -10,6 +10,12 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
 {
     public class CodeGenieComponentGenerator : IComponentGenerator
     {
+        protected readonly IWhitespaceGenerator _whitespaceGenerator;
+        public CodeGenieComponentGenerator(IWhitespaceGenerator whitespaceGenerator) 
+        {
+            _whitespaceGenerator = whitespaceGenerator;
+        }
+
         public GeneratedComponentDefinition Generate(ComponentDefinition component)
         {
             var context = new GenerationContext();
@@ -19,12 +25,12 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
         /// <summary> Generate a component definition </summary>
         public string GenerateComponentDefinition(GenerationContext context, ComponentDefinition component)
         {
-            return $"";
+            return _whitespaceGenerator.GenerateTabs(context) + GetDefinition(component.Scope, component.Name, GetComponentType(component.IsInterface));
         }
 
         /// <summary> Generate a generic definition. Usually of format "[Scope] [DefinitionName] : [DefinitionType]"</summary>
         public string GetDefinition(Scope scope, string definitionName, string definitionType)
-            => $"{GetScope(scope)} {definitionName} {definitionType}";
+            => $"{GetScope(scope)} {definitionName} : {definitionType}";
 
         public string GetScope(Scope scope)
         {
@@ -40,5 +46,8 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
 
             throw new ArgumentException($"The scope is '{scope}' and is invalid");
         }
+
+        public string GetComponentType(bool isInterface)
+            => isInterface ? "interface" : "class";
     }
 }

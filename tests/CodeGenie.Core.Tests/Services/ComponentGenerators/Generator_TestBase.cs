@@ -1,4 +1,5 @@
-﻿using CodeGenie.Core.Services.Generators.ComponentGenerators;
+﻿using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
+using CodeGenie.Core.Services.Generators.ComponentGenerators;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
 using CodeGenie.Core.Tests.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +37,15 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
             Assert.IsNotNull(Generator, $"The {typeof(TGenerator).Name} could not be injected");
 
             Assert.IsNotNull(Parser, "The parser could not be injected");
+        }
+
+        public ParsingResult ParseAndAssertNoErrors(string script)
+        {
+            var result = Parser.Parse(script);
+
+            Assert.That(result.HasErrors, Is.False, $"Do not expect any errors in script '{script}'");
+
+            return result;
         }
     }
 }
