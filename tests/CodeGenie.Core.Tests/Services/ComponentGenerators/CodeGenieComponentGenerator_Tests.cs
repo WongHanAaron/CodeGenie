@@ -20,6 +20,8 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
         [TestCase("T", "+T:class", "+ T : class")]
         [TestCase("TestClass", "+TestClass:class", "+ TestClass : class")]
         [TestCase("ITest", "+ITest:interface", "+ ITest : interface")]
+        [TestCase("T", "+T:class{purpose:\"test\"}", "+ T : class { purpose : \"test\" }")]
+        [TestCase("T", "+T:class{purpose:\"test2\"}", "+ T : class { purpose : \"test2\" }")]
         public void ComponentDefinition_Creates_Accurately(string targetComponent, string inputScript, string expectedOutputScript)
         {
             var context = new GenerationContext();
