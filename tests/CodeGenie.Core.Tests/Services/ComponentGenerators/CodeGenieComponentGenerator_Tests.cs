@@ -32,7 +32,9 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 
             Assert.That(component, Is.Not.Null);
 
-            var generated = TypedGenerator.GenerateComponentDefinition(context, component);
+            TypedGenerator.AppendComponentDefinition(context, component);
+
+            var generated = context.ContentBuilder.ToString();
 
             Assert.That(generated, Is.EqualTo(expectedOutputScript));
         }

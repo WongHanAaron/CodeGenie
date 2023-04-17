@@ -24,30 +24,28 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
         }
 
         /// <summary> Generate a component definition </summary>
-        public string GenerateComponentDefinition(GenerationContext context, ComponentDefinition component)
-        {
-            var b = new StringBuilder();
-            b.Append(_whitespaceGenerator.GenerateTabs(context));
-            b.Append(GetDefinition(component.Scope, component.Name, GetComponentType(component.IsInterface)));
+        public void AppendComponentDefinition(GenerationContext context, ComponentDefinition component)
+        {            
+            context.ContentBuilder.Append(_whitespaceGenerator.GenerateTabs(context));
+            context.ContentBuilder.Append(GetDefinition(component.Scope, component.Name, GetComponentType(component.IsInterface)));
 
             var hasPurpose = HasPurpose(component);
             var hasTags = HasTags(component);
             var hasNonPurposeOrTags = HasNonPurposeOrTagComponentDetails(component);
 
-            if (!WillNeedDetails(hasPurpose, hasTags, hasNonPurposeOrTags)) return b.ToString();
+            if (!WillNeedDetails(hasPurpose, hasTags, hasNonPurposeOrTags)) return;
             
             if (!ComponentNeedsNewLineDetails(hasPurpose, hasTags, hasNonPurposeOrTags))
             {
-                b.Append(" { ");
-                if (hasPurpose) b.Append(GetPurpose(component.Purpose));
-                if (hasTags) b.Append(GetTags(component.Tags));
-                b.Append(" }");
+                context.ContentBuilder.Append(" { ");
+                if (hasPurpose) context.ContentBuilder.Append(GetPurpose(component.Purpose));
+                if (hasTags) context.ContentBuilder.Append(GetTags(component.Tags));
+                context.ContentBuilder.Append(" }");
             }
             else
             {
 
             }
-            return b.ToString();
         }
 
         public bool WillNeedDetails(bool hasPurpose, bool hasTags, bool hasNonPurposeOrTags)

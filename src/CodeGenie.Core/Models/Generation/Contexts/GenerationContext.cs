@@ -9,5 +9,8 @@ namespace CodeGenie.Core.Models.Generation.Contexts
     {
         /// <summary> The current number of tabs that the previous line was writing from </summary>
         public int CurrentNumberOfTabs { get; set; } = 0;
+
+        /// <summary> The content builder for this generation </summary>
+        public StringBuilder ContentBuilder { get; set; } = new StringBuilder();
     }
 }
