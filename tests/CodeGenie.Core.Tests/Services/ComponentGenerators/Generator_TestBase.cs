@@ -1,4 +1,5 @@
-﻿using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
+﻿using CodeGenie.Core.Models.ComponentDefinitions.Definitions;
+using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using CodeGenie.Core.Services.Generators.ComponentGenerators;
 using CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing;
 using CodeGenie.Core.Tests.Utilities;
@@ -46,6 +47,26 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
             Assert.That(result.HasErrors, Is.False, $"Do not expect any errors in script '{script}'");
 
             return result;
+        }
+
+        public ComponentDefinition GetComponentAndAssertNotNull(ParsingResult parsedResult, string targetComponentName)
+        {
+            var component = parsedResult.Components.FirstOrDefault(c => c.Name == targetComponentName);
+
+            Assert.That(component, Is.Not.Null, $"Expect there to be a component named '{targetComponentName}' in result");
+
+            return component;
+        }
+
+        public AttributeDefinition GetAttributeAndAssertNotNull(ParsingResult parsedResult, string targetComponentName, string targetAttributeName)
+        {
+            var component = GetComponentAndAssertNotNull(parsedResult, targetComponentName);
+
+            var attribute = component.Attributes.FirstOrDefault(a => a.Name == targetAttributeName);
+
+            Assert.That(attribute, Is.Not.Null, $"Expect there to be an attribute named '{targetAttributeName}' in result");
+
+            return attribute;
         }
     }
 }

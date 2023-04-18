@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 {
     [TestFixture]
-    public class CodeGenieComponentGenerator_Tests : Generator_TestBase<CodeGenieComponentGenerator>
+    public class CodeGenieComponentGenerator_Tests : 
+                    Generator_TestBase<CodeGenieComponentGenerator>
     {
         [SetUp]
         public void SetUp()
@@ -28,15 +29,30 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 
             var result = ParseAndAssertNoErrors(inputScript);
 
-            var component = result.Components.FirstOrDefault(c => c.Name == targetComponent);
-
-            Assert.That(component, Is.Not.Null);
+            var component = GetComponentAndAssertNotNull(result, targetComponent);
 
             TypedGenerator.AppendComponentDefinition(context, component);
 
             var generated = context.ContentBuilder.ToString();
 
             Assert.That(generated, Is.EqualTo(expectedOutputScript));
+        }
+
+        [TestCase("T", "A", "+T:class{attributes{+A:string}}", "+ A : string")]
+        [TestCase("T", "B", "+T:class{attributes{+A:string +B:int}}", "+ B : int")]
+        public void AttributeDefinition_Creates_Accurately(string targetComponent, string targetAttribute, string inputScript, string expectedAttributeScript)
+        {
+            var context = new GenerationContext();
+
+            var result = ParseAndAssertNoErrors(inputScript);
+
+            var attribute = GetAttributeAndAssertNotNull(result, targetComponent, targetAttribute);
+
+            TypedGenerator.AppendAttribute(context, attribute);
+
+            var generated = context.ContentBuilder.ToString();
+
+            Assert.That(generated, Is.EqualTo(expectedAttributeScript));
         }
     }
 }
