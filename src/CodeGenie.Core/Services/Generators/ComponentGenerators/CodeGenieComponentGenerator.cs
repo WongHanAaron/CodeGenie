@@ -38,7 +38,7 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
 
             if (!WillNeedDetails(hasPurpose, hasTags, hasNonPurposeOrTags)) return;
             
-            if (!NeedSinglelineDetails(hasPurpose, hasTags, hasNonPurposeOrTags))
+            if (!NeedMultilineDetails(hasPurpose, hasTags, hasNonPurposeOrTags))
             {
                 AppendSinglelinePurposeOrTag(context, hasPurpose, hasTags, component.Purpose, component.Tags);
             }
@@ -88,7 +88,9 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
                 AppendAttributes(context, component.Attributes);
             }
 
-            context.CurrentNumberOfTabs -= 1;
+            AppendLineToTab(context, -1);
+
+            context.ContentBuilder.Append("}");
         }
 
         public void AppendPurpose(GenerationContext context, string purpose)
@@ -103,7 +105,10 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
 
         public void AppendAttributes(GenerationContext context, IEnumerable<AttributeDefinition> attributes)
         {
-            context.ContentBuilder.AppendLine("attributes");
+            context.ContentBuilder.Append("attributes");
+
+            AppendLineToTab(context);
+
             context.ContentBuilder.Append("{");
             
             context.CurrentNumberOfTabs += 1;
@@ -155,6 +160,6 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
         }
 
         public static bool WillNeedDetails(bool hasPurpose, bool hasTags, bool hasNonPurposeOrTags) => hasPurpose || hasTags || hasNonPurposeOrTags;
-        public static bool NeedSinglelineDetails(bool hasPurpose, bool hasTags, bool hasNonPurposeOrTags) => (hasPurpose && hasTags) || (hasPurpose && hasNonPurposeOrTags) || (hasTags && hasNonPurposeOrTags);
+        public static bool NeedMultilineDetails(bool hasPurpose, bool hasTags, bool hasNonPurposeOrTags) => (hasPurpose && hasTags) || hasNonPurposeOrTags;
     }
 }
