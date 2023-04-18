@@ -2,6 +2,7 @@
 using CodeGenie.Core.Models.Generation;
 using CodeGenie.Core.Models.Generation.Contexts;
 using CodeGenie.Core.Models.Generation.Definitions;
+using CodeGenie.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,19 +28,22 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
         public void AppendComponentDefinition(GenerationContext context, ComponentDefinition component)
         {            
             context.ContentBuilder.Append(_whitespaceGenerator.GenerateTabs(context));
-            context.ContentBuilder.Append(GetDefinition(component.Scope, component.Name, GetComponentType(component.IsInterface)));
-
-            var hasPurpose = HasPurpose(component);
-            var hasTags = HasTags(component);
-            var hasNonPurposeOrTags = HasNonPurposeOrTagComponentDetails(component);
-
-            if (!WillNeedDetails(hasPurpose, hasTags, hasNonPurposeOrTags)) return;
             
-            if (!ComponentNeedsNewLineDetails(hasPurpose, hasTags, hasNonPurposeOrTags))
+            AppendDefinition(context, component.Scope, component.Name, GetComponentType(component.IsInterface));
+
+            var hasPurpose = component.HasPurpose();
+            var hasTags = component.HasTags();
+            var hasNonPurposeOrTags = component.HasNonPurposeOrTagComponentDetails();
+
+            if (!ComponentDefinitionGeneratorExtensions
+                    .WillNeedDetails(hasPurpose, hasTags, hasNonPurposeOrTags)) return;
+            
+            if (!ComponentDefinitionGeneratorExtensions
+                    .ComponentNeedsNewLineDetails(hasPurpose, hasTags, hasNonPurposeOrTags))
             {
                 context.ContentBuilder.Append(" { ");
-                if (hasPurpose) context.ContentBuilder.Append(GetPurpose(component.Purpose));
-                if (hasTags) context.ContentBuilder.Append(GetTags(component.Tags));
+                if (hasPurpose) AppendPurpose(context, component.Purpose);
+                if (hasTags) AppendTags(context, component.Tags);
                 context.ContentBuilder.Append(" }");
             }
             else
@@ -48,33 +52,18 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
             }
         }
 
-        public bool WillNeedDetails(bool hasPurpose, bool hasTags, bool hasNonPurposeOrTags)
-            => hasPurpose || hasTags || hasNonPurposeOrTags;
-
-        public bool ComponentNeedsNewLineDetails(bool hasPurpose, bool hasTags, bool hasNonPurposeOrTags)
-        => (hasPurpose && hasTags) || (hasPurpose && hasNonPurposeOrTags) || (hasTags && hasNonPurposeOrTags);
-        
-
-        public bool HasPurpose(ComponentDefinition component) => !string.IsNullOrWhiteSpace(component.Purpose);
-
-        public bool HasTags(ComponentDefinition component) => component.Tags?.Any() ?? false;
-
-        public bool HasNonPurposeOrTagComponentDetails(ComponentDefinition component) 
-            => (component.Attributes?.Any() ?? false) || 
-               (component.MethodDefinitions?.Any() ?? false) || 
-               (component.RelationshipDefinitions?.Any() ?? false);
-
         /// <summary> Generate a generic definition. Usually of format "[Scope] [DefinitionName] : [DefinitionType]"</summary>
-        public string GetDefinition(Scope scope, string definitionName, string definitionType)
-            => $"{GetScope(scope)} {definitionName} : {definitionType}";
+        public void AppendDefinition(GenerationContext context, Scope scope, string definitionName, string definitionType)
+            => context.ContentBuilder.Append($"{GetScope(scope)} {definitionName} : {definitionType}");
 
-        public string GetPurpose(string purpose)
-            => $"purpose : \"{purpose}\"";
+        public void AppendPurpose(GenerationContext context, string purpose)
+            => context.ContentBuilder.Append($"purpose : \"{purpose}\"");
 
-        public string GetTags(IEnumerable<string> tags)
+        public void AppendTags(GenerationContext context, IEnumerable<string> tags)
         {
-            var joinedTags = string.Join(" ", tags);
-            return $"tags {{ {joinedTags} }}";
+            context.ContentBuilder.Append("tags { ");
+            context.ContentBuilder.Append(string.Join(" ", tags));
+            context.ContentBuilder.Append(" }");
         }
 
         public string GetScope(Scope scope)
