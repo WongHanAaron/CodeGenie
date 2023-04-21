@@ -68,5 +68,16 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 
             return attribute;
         }
+
+        public MethodDefinition GetMethodAndAssertNotNull(ParsingResult parsedResult, string targetComponentName, string targetMethodName)
+        {
+            var component = GetComponentAndAssertNotNull(parsedResult, targetComponentName);
+
+            var method = component.MethodDefinitions.FirstOrDefault(a => a.Name == targetMethodName);
+
+            Assert.That(method, Is.Not.Null, $"Expect there to be an method named '{targetMethodName}' in result");
+
+            return method;
+        }
     }
 }

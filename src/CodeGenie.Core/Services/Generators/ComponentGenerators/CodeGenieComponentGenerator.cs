@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Xml.Linq;
 
 namespace CodeGenie.Core.Services.Generators.ComponentGenerators
 {
@@ -48,10 +50,6 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
             }
         }
 
-        /// <summary> Generate a generic definition. Usually of format "[Scope] [DefinitionName] : [DefinitionType]"</summary>
-        public void AppendDefinition(GenerationContext context, Scope scope, string definitionName, string definitionType)
-            => context.ContentBuilder.Append($"{GetScope(scope)} {definitionName} : {definitionType}");
-
         public void AppendSinglelinePurposeOrTag(GenerationContext context, bool hasPurpose, bool hasTags, string purpose, IEnumerable<string> tags)
         {
             context.ContentBuilder.Append(" { ");
@@ -86,6 +84,12 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
             {
                 AppendLineToTab(context);
                 AppendAttributes(context, component.Attributes);
+            }
+            
+            if (component.HasMethods())
+            {
+                AppendLineToTab(context);
+                AppendMethods(context, component.MethodDefinitions);
             }
 
             AppendLineToTab(context, -1);
@@ -127,6 +131,42 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
         public void AppendAttribute(GenerationContext context, AttributeDefinition attribute)
         {
             AppendDefinition(context, attribute.Scope, attribute.Name, attribute.Type);
+        }
+
+        public void AppendMethods(GenerationContext context, IEnumerable<MethodDefinition> methods)
+        {
+            context.ContentBuilder.Append("attributes");
+
+            AppendLineToTab(context);
+
+            context.ContentBuilder.Append("{");
+
+            context.CurrentNumberOfTabs += 1;
+
+            foreach (var method in methods)
+            {
+                AppendLineToTab(context);
+                AppendMethod(context, method);
+            }
+
+            AppendLineToTab(context, -1);
+
+            context.ContentBuilder.Append("}");
+        }
+
+        public void AppendMethod(GenerationContext context, MethodDefinition method)
+        {
+            AppendMethodDefinition(context, method.Scope, method.Name, method.ReturnTypeName, method.Parameters);
+        }
+
+        /// <summary> Generate a generic definition. Usually of format "[Scope] [DefinitionName] : [DefinitionType]"</summary>
+        public void AppendDefinition(GenerationContext context, Scope scope, string definitionName, string definitionType)
+            => context.ContentBuilder.Append($"{GetScope(scope)} {definitionName} : {definitionType}");
+
+        public void AppendMethodDefinition(GenerationContext context, Scope scope, string definitionName, string returnType, IEnumerable<ParameterDefinition> parameters)
+        {
+            var parametersString = string.Join(", ", parameters.Select(p => $"{p.Name} : {p.TypeName}"));
+            context.ContentBuilder.Append($"{GetScope(scope)} {definitionName} ({parametersString}) : {returnType}");
         }
 
         public string GetScope(Scope scope)

@@ -56,5 +56,21 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 
             Assert.That(generated, Is.EqualTo(expectedAttributeScript));
         }
+
+        [TestCase("T", "A", "+T:class{methods{+A(B:string):string}}", "+ A (B : string) : string")]
+        public void MethodDefinition_Creates_Accurately(string targetComponent, string targetMethod, string inputScript, string expectedMethodScript)
+        {
+            var context = new GenerationContext();
+
+            var result = ParseAndAssertNoErrors(inputScript);
+
+            var method = GetMethodAndAssertNotNull(result, targetComponent, targetMethod);
+
+            TypedGenerator.AppendMethod(context, method);
+
+            var generated = context.ContentBuilder.ToString();
+
+            Assert.That(generated, Is.EqualTo(expectedMethodScript));
+        }
     }
 }
