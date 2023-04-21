@@ -25,6 +25,7 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
         [TestCase("T", "+T:class{purpose:\"test2\"}", "+ T : class { purpose : \"test2\" }")]
         [TestCase("T", "+T:class{attributes{+A:string}}", "+ T : class\r\n{\r\n\tattributes\r\n\t{\r\n\t\t+ A : string\r\n\t}\r\n}")]
         [TestCase("T", "+T:class{attributes{+A:string +B:type}}", "+ T : class\r\n{\r\n\tattributes\r\n\t{\r\n\t\t+ A : string\r\n\t\t+ B : type\r\n\t}\r\n}")]
+        [TestCase("T", "+T:class{methods{+M(A:string):integer}}", "+ T : class\r\n{\r\n\tmethods\r\n\t{\r\n\t\t+ M (A : string) : integer\r\n\t}\r\n}")]
         public void ComponentDefinition_Creates_Accurately(string targetComponent, string inputScript, string expectedOutputScript)
         {
             var context = new GenerationContext();
@@ -58,6 +59,7 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
         }
 
         [TestCase("T", "A", "+T:class{methods{+A(B:string):string}}", "+ A (B : string) : string")]
+        [TestCase("T", "A", "+T:class{methods{+A(B:string, C:integer):string}}", "+ A (B : string, C : integer) : string")]
         public void MethodDefinition_Creates_Accurately(string targetComponent, string targetMethod, string inputScript, string expectedMethodScript)
         {
             var context = new GenerationContext();

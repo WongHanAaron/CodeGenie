@@ -135,7 +135,7 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
 
         public void AppendMethods(GenerationContext context, IEnumerable<MethodDefinition> methods)
         {
-            context.ContentBuilder.Append("attributes");
+            context.ContentBuilder.Append("methods");
 
             AppendLineToTab(context);
 
