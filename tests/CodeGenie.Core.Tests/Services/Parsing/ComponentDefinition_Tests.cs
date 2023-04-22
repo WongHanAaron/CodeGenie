@@ -47,10 +47,11 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.That(components?.FirstOrDefault()?.Attributes.Count(), Is.EqualTo(expectedAttributeCount));
         }
 
-        [TestCase("Attribute", "string", Scope.Public, "+ TestClass : class { attributes { + Attribute : string} }")]
-        [TestCase("Attribute", "string", Scope.Protected, "+ TestClass : class { attributes { # Attribute : string} }")]
-        [TestCase("Attribute", "string", Scope.Private, "+ TestClass : class { attributes { - Attribute : string} }")]
-        public void Component_Parse_Attribute_Name_Type_And_Scope_Matches(string expectedName, string expectedType, Scope expectedScope,  string script)
+        [TestCase("Attribute", "string", Scope.Public, null, "", "+ TestClass : class { attributes { + Attribute : string} }")]
+        [TestCase("Attribute", "string", Scope.Protected, null, "", "+ TestClass : class { attributes { # Attribute : string} }")]
+        [TestCase("Attribute", "string", Scope.Private, null, "", "+ TestClass : class { attributes { - Attribute : string} }")]
+        [TestCase("Attribute", "string", Scope.Private, "test", "", " + TestClass : class { attributes { - Attribute : string { purpose : \"test\" } } }")]
+        public void Component_Parse_Attribute_Name_Type_Scope_Purpose_And_Tags_Matches(string expectedName, string expectedType, Scope expectedScope, string expectedPurpose, string expectedTagsCsv, string script)
         {
             var components = Parser?.Parse(script).Components;
             var first = components?.FirstOrDefault();
@@ -58,6 +59,16 @@ namespace CodeGenie.Core.Tests.Services.Parsing
             Assert.That(attribute?.Name, Is.EqualTo(expectedName));
             Assert.That(attribute?.Type, Is.EqualTo(expectedType));
             Assert.That(attribute?.Scope, Is.EqualTo(expectedScope));
+            Assert.That(attribute?.Purpose, Is.EqualTo(expectedPurpose));
+            var expectedTags = expectedTagsCsv.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            if (expectedTags.Any())
+            {
+                Assert.That(attribute?.Tags ?? new List<string>(), Is.EqualTo(expectedTags.ToList()));
+            }
+            else
+            {
+                Assert.That(attribute?.Tags, Is.EqualTo(new List<string>()));
+            }
         }
 
         [TestCase("+ Testclass : something", true)]

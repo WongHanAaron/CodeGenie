@@ -7,5 +7,6 @@ namespace CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions
     public class ParsedAttributeDetails
     {
         public string Purpose { get; set; }
+        public List<string> Tags { get; set; }
     }
 }

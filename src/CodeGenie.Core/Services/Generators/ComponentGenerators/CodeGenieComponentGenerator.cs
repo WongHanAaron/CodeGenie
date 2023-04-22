@@ -157,6 +157,8 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
         public void AppendMethod(GenerationContext context, MethodDefinition method)
         {
             AppendMethodDefinition(context, method.Scope, method.Name, method.ReturnTypeName, method.Parameters);
+        
+            
         }
 
         /// <summary> Generate a generic definition. Usually of format "[Scope] [DefinitionName] : [DefinitionType]"</summary>

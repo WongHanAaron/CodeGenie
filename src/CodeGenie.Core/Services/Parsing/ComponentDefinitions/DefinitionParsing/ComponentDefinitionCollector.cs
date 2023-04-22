@@ -5,6 +5,7 @@ using CodeGenie.Core.Models.ComponentDefinitions.Definitions;
 using CodeGenie.Core.Models.ComponentDefinitions.ParsedDefinitions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using static CodeGenieParser;
@@ -186,7 +187,37 @@ namespace CodeGenie.Core.Services.Parsing.ComponentDefinitions.DefinitionParsing
             parsedAttribute.Name = context.NAME().GetText();
             parsedAttribute.Type = context.type().GetText();
             parsedAttribute.Scope = LoadScope(context.access_scope());
+
+            var attributeDetails = context.attribute_details();
+            var details = VisitAttribute_details(attributeDetails) as ParsedAttributeDetails;
+            if (details != null)
+            {
+                parsedAttribute.Purpose = details.Purpose;
+                parsedAttribute.Tags = details.Tags;
+            };
             return parsedAttribute;
+        }
+
+        public override object VisitAttribute_details([NotNull] CodeGenieParser.Attribute_detailsContext context)
+        {
+            if (context == null) return null;
+
+            var attributeDetails = new ParsedAttributeDetails();
+
+            // Parse Tags
+            var collectedTags = new List<string>();
+            var t = VisitTags(context.tags()) as List<string>;
+            if (t != null && t.Any())
+            {
+                collectedTags.AddRange(t);
+            }
+            attributeDetails.Tags = collectedTags;
+
+            // Parse Purpose
+            var purpose = context.purpose();
+            attributeDetails.Purpose = VisitPurpose(purpose) as string;
+
+            return attributeDetails;
         }
 
         protected ParsedMethodDefinition LoadMethodDefinition([NotNull] CodeGenieParser.MethodContext context)
