@@ -51,6 +51,9 @@ namespace CodeGenie.Core.Tests.Services.Parsing
         [TestCase("Attribute", "string", Scope.Protected, null, "", "+ TestClass : class { attributes { # Attribute : string} }")]
         [TestCase("Attribute", "string", Scope.Private, null, "", "+ TestClass : class { attributes { - Attribute : string} }")]
         [TestCase("Attribute", "string", Scope.Private, "test", "", " + TestClass : class { attributes { - Attribute : string { purpose : \"test\" } } }")]
+        [TestCase("Attribute", "string", Scope.Private, null, "test", " + TestClass : class { attributes { - Attribute : string { tags { \"test\" } } } }")]
+        [TestCase("Attribute", "string", Scope.Private, null, "test,test2", " + TestClass : class { attributes { - Attribute : string { tags { \"test\" \"test2\" } } } }")]
+        [TestCase("Attribute", "string", Scope.Private, null, "test,test2,test3", " + TestClass : class { attributes { - Attribute : string { tags { \"test\" \"test2\" \"test3\"} } } }")]
         public void Component_Parse_Attribute_Name_Type_Scope_Purpose_And_Tags_Matches(string expectedName, string expectedType, Scope expectedScope, string expectedPurpose, string expectedTagsCsv, string script)
         {
             var components = Parser?.Parse(script).Components;
