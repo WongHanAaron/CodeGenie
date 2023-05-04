@@ -74,5 +74,24 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 
             Assert.That(generated, Is.EqualTo(expectedMethodScript));
         }
+
+        // [TestCase("T", "R", "+T:class{relationships{depends T}}", "depends T")]
+        // [TestCase("T", "R", "+T:class{relationships{composes T}}", "composes T")]
+        // [TestCase("T", "R", "+T:class{relationships{aggregates T}}", "aggregates T")]
+        // [TestCase("T", "R", "+T:class{relationships{realizes T}}", "realizes T")]
+        public void RelationDefinition_Creates_Accurately(string targetComponent, string targetMethod, string inputScript, string expectedMethodScript)
+        {
+            var context = new GenerationContext();
+
+            var result = ParseAndAssertNoErrors(inputScript);
+
+            var method = GetRelationshipAndAssertNotNull(result, targetComponent, targetMethod);
+
+            TypedGenerator.AppendRelationship(context, method);
+
+            var generated = context.ContentBuilder.ToString();
+
+            Assert.That(generated, Is.EqualTo(expectedMethodScript));
+        }
     }
 }

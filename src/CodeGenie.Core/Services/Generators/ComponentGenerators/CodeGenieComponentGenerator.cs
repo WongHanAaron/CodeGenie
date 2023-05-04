@@ -161,6 +161,11 @@ namespace CodeGenie.Core.Services.Generators.ComponentGenerators
             
         }
 
+        public void AppendRelationship(GenerationContext context, RelationshipDefinition relationship)
+        {
+
+        }
+
         /// <summary> Generate a generic definition. Usually of format "[Scope] [DefinitionName] : [DefinitionType]"</summary>
         public void AppendDefinition(GenerationContext context, Scope scope, string definitionName, string definitionType)
             => context.ContentBuilder.Append($"{GetScope(scope)} {definitionName} : {definitionType}");

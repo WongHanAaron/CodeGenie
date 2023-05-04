@@ -79,5 +79,16 @@ namespace CodeGenie.Core.Tests.Services.ComponentGenerators
 
             return method;
         }
+
+        public RelationshipDefinition GetRelationshipAndAssertNotNull(ParsingResult parsedResult, string targetComponentName, string targetMethodName)
+        {
+            var component = GetComponentAndAssertNotNull(parsedResult, targetComponentName);
+
+            var relationship = component.RelationshipDefinitions.FirstOrDefault(a => a.RelatedComponentName == targetMethodName);
+
+            Assert.That(relationship, Is.Not.Null, $"Expect there to be a relation related to component named '{targetMethodName}' in result");
+
+            return relationship;
+        }
     }
 }
